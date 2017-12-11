@@ -19,13 +19,13 @@
                  :column="column" :data="data" :key="index">
               <div @click="onTdClick(data,column)"
                    style="display:flex;flex-direction: row;align-items:center;justify-content:left;width:100%;height:100%;">
-                <div v-if="column.expand" style="height: 2px;display: block;background: #a9ffde;border-radius: 5px;"
+                <div v-if="column.expand"
+                     style="height: 2px;display: block;border-bottom:1px dotted #BA0FFF;border-top: 1px dotted #BA0FFF;border-radius: 5px;"
                      :style="{width: data.deep*deepWidth+'px'}"></div>
-                <Icon :type="data.expand?'minus-round':'plus-round'" v-if="column.expand"
-                      @click="onExpand(data)"></Icon>
+                <img v-if="column.expand&&data.nodes!==false" @click="onExpandIconClick(data)"
+                     :src="data.expand?image.expand_open:image.expand_close"/>
                 <div style="display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                   <RenderDiv :render="column.render" :data="data" :column="column" style="display: block;">
-                    {{data[column.key]}}
                   </RenderDiv>
                 </div>
               </div>
@@ -36,6 +36,8 @@
     </div>
     <input type="button" value="原始" @click="printDatas"/>
     <input type="button" value="转换后" @click="printFormated"/>
+    <input type="button" value="重新格式化" @click="formatNode(datas)"/>
+    <input type="button" value="刷新" @click="refresh"/>
   </div>
 </template>
 <script>
@@ -45,6 +47,8 @@
   import Message from 'iview/src/components/message/index.js'
   import 'iview/dist/styles/iview.css'
   import RenderDiv from './renderDiv.js'
+  import expand_open from './image/expand_open.gif'
+  import expand_close from './image/expand_close.gif'
 
   export default {
     name: "LjsTreeTable",
@@ -69,10 +73,30 @@
         default() {
           return []
         }
+      },
+      //展开事件
+      onExpand: {
+        type: Function,
+        default: undefined
+      },
+      //收起事件
+      onClose: {
+        type: Function,
+        default: undefined
+      },
+      //判断是否root节点
+      isRoot: {
+        type: Function,
+        default: undefined
+      }
+    },
+    watch: {
+      datas(newVal, oldVal) {
+        this.formatNode(this.datas)
+        this.refresh()
       }
     },
     components: {'Icon': Icon, RenderDiv, 'DatePicker': DatePicker},
-    methods: {},
     computed: {
       allData: {
         get() {
@@ -86,26 +110,56 @@
     data() {
       return {
         deepWidth: 30,
+        image: {
+          expand_open: expand_open,
+          expand_close: expand_close
+        },
         //格式化数据
         expandData: [],
       }
     },
     methods: {
+      onExpandIconClick(data) {
+        var setExpand = this.setExpand
+        var goOn = function () {
+          setExpand(data, !data.expand)
+        }
+        //收起
+        if (data.expand) {
+          if (this.onClose) {
+            this.onClose(data, goOn)
+            return
+          }
+        }
+        //展开
+        else {
+          if (this.onExpand) {
+            this.onExpand(data, goOn)
+            return
+          }
+        }
+        goOn()
+      },
       isExpand(data) {
-        var re
-        if (data.root === true)
-          re = true
-        else if (data.father.expand === true)
-          re = true
-        else
-          re = false
-        return re
+        try {
+          var re
+          if (this.isRoot(data))
+            re = true
+          else if (data.father.expand === true)
+            re = true
+          else
+            re = false
+          return re
+        }
+        catch (e) {
+          console.log('error:', data.name)
+        }
       },
       getAllData(datas) {
         var isExpand = this.isExpand
         var getAllData = this.getAllData
         var array = []
-        if (datas)
+        if (datas instanceof Array)
           datas.map(function (data) {
             if (isExpand(data))
               array.push(data)
@@ -116,70 +170,69 @@
       },
       onTdClick(node, column) {
         if (node) {
-          if (column.expand)
-            this.setExpand(node, !node.expand)
-          else if (column.key === 'name') {
-            this.addData(node)
-          }
           this.refresh()
         }
       },
       //设置某个节点是否展开
       setExpand(node, expand) {
-        var formatChild = this.formatChild
+        var formatNode = this.formatNode
+        var refresh = this.refresh
         var open = expand === true
+        var loader = this.loader
         if (node) {
           node.expand = open
-          if (node.nodes)
+          if (node.nodes instanceof Array)
             node.nodes.map(function (v) {
-              formatChild(v, node, node.deep + 1)
+              formatNode(v, node)
             })
+          //异步加载子节点
+          else if (open === true && node.nodes === true && typeof node.pojo === 'string') {
+            var loadFunction = loader[node.pojo]
+            if (loadFunction instanceof Function) {
+              var okDo = function () {
+                formatNode(node.nodes, node)
+                refresh()
+              }
+              loadFunction(node, okDo)
+            }
+          }
         }
         if (node.expand)
           Message.success('展开:' + node.name)
         else
           Message.success('收起:' + node.name)
       },
-      //格式化根节点数据格式
-      formatRootData() {
-        for (var rootItem of this.datas) {
-          if (rootItem) {
-            //深度
-            rootItem['deep'] = 0
-            //未展开
-            rootItem['expand'] = false
-            //未展开
-            rootItem['root'] = true
+      //递归格式化节点
+      formatNode(node, father) {
+        var formatNode = this.formatNode
+        father = (father === undefined) ? false : father
+        if (node instanceof Array) {
+          node.map(function (v) {
+            formatNode(v, father)
+          })
+        } else if (node instanceof Object) {
+          //格式化root节点
+          if (this.isRoot(node)) {
+            node['father'] = false
+            node['deep'] = 0
+            if (node.expand === undefined)
+              node['expand'] = false
+          }
+          //格式化子节点
+          else {
+            node['father'] = father
+            node['deep'] = father.deep + 1
+            if (node.expand === undefined)
+              node['expand'] = false
+            else if (node.expand === true) {
+              if (node.nodes instanceof Array) {
+                node.nodes.map(function (value) {
+                  formatNode(value, node)
+                })
+              }
+            }
           }
         }
-      },
-      //递归格式化子节点数据格式
-      formatChild(node, father, deep) {
-        var formatChild = this.formatChild
-        if (node.deep === undefined)
-          node['deep'] = deep
-        if (node.expand === undefined)
-          node['expand'] = false
-        node['father'] = father
-        if (node.expand && node.nodes) {
-          node.nodes.map(function (v) {
-            formatChild(v, node, deep + 1)
-          })
-        }
-      },
-      //格式化非根节点数据
-      formatChildData() {
-        var formatChild = this.formatChild
-        this.datas.map(function (value) {
-          if (value.nodes)
-            value.nodes.map(function (v) {
-              formatChild(value, v, 1)
-            })
-        })
-      },
-      formatData() {
-        this.formatRootData()
-        this.formatChildData()
       },
       refresh() {
         this.allData = this.getAllData(this.datas)
@@ -206,7 +259,7 @@
       }
     },
     created() {
-      this.formatData()
+      this.formatNode(this.datas)
       this.refresh()
     }
   }

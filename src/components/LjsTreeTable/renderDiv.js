@@ -16,9 +16,14 @@ export default {
     }
   },
   render: function (h, ctx) {
-    if (ctx.props.render)
-      return ctx.props.render(h, ctx)
-    else
-      return h('div', ctx.props.data[ctx.props.column.key])
+    var column = ctx.props.column
+    var data = ctx.props.data
+    var value = data[column.key]
+    if (column.type === undefined || data.pojo === column.type) {
+      if (ctx.props.render)
+        return ctx.props.render(h, ctx)
+      else
+        return h('div', value)
+    }
   }
 };
