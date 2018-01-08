@@ -6,7 +6,14 @@
 
 <script>
   export default {
-    name: 'app'
+    name: 'app',
+    created() {
+      var obj = {}
+      obj['nodes'] = false
+      console.log(typeof obj.nodes)
+      obj['nodes'] = []
+      console.log(typeof obj.nodes)
+    }
   }
 </script>
 

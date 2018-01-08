@@ -1,29 +1,52 @@
 <template>
-  <LjsTreeTable :datas="datas" :columns="columns" :loader="loader" :onExpand="onExpand"
-                :onClose="onClose" :isRoot="isRoot"></LjsTreeTable>
+  <LjsTreeTable :datas="nodes" :columns="columns" :driver="driver" :rightMenu="rightMenu"
+                :onExpand="onExpand"
+                :onClose="onClose" :isRoot="isRoot" :bus="bus" :debug="true"></LjsTreeTable>
 </template>
 <script>
+  import LjsEditTd from '../components/LjsTreeTable/LjsEditTd.vue'
   import LjsTreeTable from '../components/LjsTreeTable/LjsTreeTable.vue'
   import axios from 'axios'
-  import Message from 'iview/src/components/message/index.js'
-  import DatePicker from 'iview/src/components/date-picker'
+  import Vue from 'vue'
 
   export default {
     components: {
-      LjsTreeTable,
-      'Message': Message,
-      'DatePicker': DatePicker
+      LjsTreeTable
     },
     data() {
+      const bus = new Vue()
       return {
-        //子节点加载器
-        loader: {
-          ProductLine(node, refresh) {
-            node['nodes'] = []
-            //加载子产品组
-            axios.put('/api/productline/search.do',
-              {superId: node.id})
-              .then(function (response) {
+        //事件总线(一个Vue实例)
+        bus: bus,
+        //数据驱动
+        driver: {
+          //子节点加载器
+          loader: {
+            ProductLine(node, refresh) {
+              node['nodes'] = []
+              //加载子产品组
+              axios({
+                method: 'put',
+                url: '/api/productline/search.do',
+                data: {superId: node.id}
+              })
+                .then(function (response) {
+                  var datas = response.data.page.data
+                  if (datas instanceof Array)
+                    datas.map(function (val) {
+                      node.nodes.push(val)
+                    })
+                  refresh()
+                })
+                .catch(function (error) {
+                  console.log(error);
+                });
+              //加载子产品
+              axios({
+                method: 'put',
+                url: '/api/product/search.do',
+                data: {productLineId: node.id}
+              }).then(function (response) {
                 var datas = response.data.page.data
                 if (datas instanceof Array)
                   datas.map(function (val) {
@@ -31,105 +54,316 @@
                   })
                 refresh()
               })
-              .catch(function (error) {
-                console.log(error);
-              });
-            //加载子产品
-            axios.put('/api/product/search.do',
-              {productLineId: node.id})
-              .then(function (response) {
-                var datas = response.data.page.data
-                if (datas instanceof Array)
-                  datas.map(function (val) {
-                    node.nodes.push(val)
-                  })
-                refresh()
+                .catch(function (error) {
+                  console.log(error);
+                })
+            },
+            Product(node, refresh) {
+              node['nodes'] = []
+              axios({
+                method: 'put',
+                url: '/api/product/search.do',
+                data: {superId: node.id}
               })
-              .catch(function (error) {
-                console.log(error);
-              })
+                .then(function (response) {
+                  var datas = response.data.page.data
+                  if (datas instanceof Array)
+                    datas.map(function (val) {
+                      node.nodes.push(val)
+                    })
+                  refresh()
+                })
+                .catch(function (error) {
+                  console.log(error);
+                })
+            }
           },
-          Product(node, refresh) {
-            node['nodes'] = []
-            axios.put('/api/product/search.do',
-              {superId: node.id})
-              .then(function (response) {
-                var datas = response.data.page.data
-                if (datas instanceof Array)
-                  datas.map(function (val) {
-                    node.nodes.push(val)
-                  })
-                refresh()
+          //更新器
+          updater: {
+            ProductLine(data, column) {
+              var params = {id: data.id}
+              params[column.key] = data[column.key]
+              axios({
+                method: 'put',
+                url: '/api/productline/update.do',
+                data: params
               })
-              .catch(function (error) {
-                console.log(error);
+                .then(function (response) {
+                  var msg = response.data.msg
+                  console.log(msg)
+                })
+                .catch(function (error) {
+                  console.log(error);
+                })
+            },
+            Product(data, column) {
+              var params = {id: data.id}
+              params[column.key] = data[column.key]
+              axios({
+                method: 'put',
+                url: '/api/product/update.do',
+                data: params
               })
+                .then(function (response) {
+                  var msg = response.data.msg
+                  console.log(msg)
+                })
+                .catch(function (error) {
+                  console.log(error);
+                })
+            }
+          },
+          //添加器
+          adder: {
+            Product(data, cb) {
+              axios({
+                method: 'put',
+                url: '/api/product/add.do',
+                data: data
+              })
+                .then(cb)
+                .catch(function (error) {
+                  console.log(error)
+                })
+            },
+            ProductLine(data, cb) {
+              axios({
+                method: 'put',
+                url: '/api/productline/add.do',
+                data: data
+              })
+                .then(cb)
+                .catch(function (error) {
+                  console.log(error)
+                })
+            }
+          },
+          //删除器
+          deleter: {
+            Product(data, cb) {
+              axios({
+                method: 'delete',
+                url: '/api/product/delete.do',
+                data: [data.id]
+              })
+                .then(cb)
+                .catch(function (error) {
+                  console.log(error);
+                })
+            },
+            ProductLine(data, cb) {
+              axios({
+                method: 'delete',
+                url: '/api/productline/delete.do',
+                data: [data.id]
+              })
+                .then(cb)
+                .catch(function (error) {
+                  console.log(error);
+                })
+            },
+
           }
+        },
+        //右键菜单定义
+        rightMenu: {
+          ProductLine: [
+            {
+              label: '删除产品线',
+              click(context) {
+                var driver = context.driver
+                var data = context.data
+                var _delete = driver.deleter['ProductLine']
+                _delete(data, function (response) {
+                  if (response.data.ok)
+                    context.remove(data)
+                })
+              }
+            },
+            {
+              label: '添加同级产品线',
+              click(context) {
+                var data = context.data
+                var adder = context.driver.adder
+                var add = adder['ProductLine']
+                var addData = {
+                  name: '请输入产品线名称',
+                  pojo: 'ProductLine',
+                  nodes: false,
+                  superId: data.superId
+                }
+                add(addData, function (response) {
+                  if (response.data.ok)
+                    addData.id = response.data.id
+                  context.brother(data, addData)
+                })
+              }
+            },
+            {
+              label: '添加子级产品线',
+              click(context) {
+                var adder = context.driver.adder
+                var data = context.data
+                var add = adder['ProductLine']
+                var addData = {
+                  name: '请输入产品线名称',
+                  pojo: 'ProductLine',
+                  superId: data.id,
+                  nodes: false
+                }
+                add(addData, function (response) {
+                  if (response.data.ok) {
+                    addData.id = response.data.id
+                    context.son(data, addData)
+                  }
+                })
+              }
+            },
+            {
+              label: '添加子级产品',
+              click(context) {
+                var data = context.data
+                var adder = context.driver.adder
+                var add = adder['Product']
+                var addData = {
+                  name: '请输入产品名称',
+                  pojo: 'Product',
+                  productLineId: data.id,
+                  nodes: false
+                }
+                add(addData, function (response) {
+                  if (response.data.ok)
+                    addData.id = response.data.id
+                  context.son(data, addData)
+                })
+              }
+            }
+          ],
+          Product: [
+            {
+              label: '删除产品',
+              click(context) {
+                var driver = context.driver
+                var data = context.data
+                var _delete = driver.deleter['Product']
+                _delete(data, function (response) {
+                  if (response.data.ok)
+                    context.remove(data)
+                })
+              }
+            },
+            {
+              label: '添加同级产品',
+              click(context) {
+                var data = context.data
+                var adder = context.driver.adder
+                var add = adder['Product']
+                var addData = {
+                  name: '请输入产品名称',
+                  pojo: 'Product',
+                  productLineId: data.productLineId,
+                  nodes: false
+                }
+                add(addData, function (response) {
+                  if (response.data.ok)
+                    addData.id = response.data.id
+                  context.brother(data, addData)
+                })
+              }
+            }
+          ]
         },
         //列定义
         columns: [
           {
+            expand: true,
+            check: true,
             label: '名称',
             key: 'name',
-            expand: true
+            style: {
+              width: '150px'
+            },
+            render(h, ctx) {
+              var data = ctx.props.data
+              var column = ctx.props.column
+              var text = function () {
+                return data.kids > 0 ? data[column.key] + '(' + data.kids + ')' : data[column.key]
+              }
+              return h(LjsEditTd, {props: {data: data, column: column, text: text, bus: bus}})
+            }
           },
           {
-            label: '产品组编号',
+            edit: false,
+            label: '编号',
             key: 'id',
+            style: {width: '100px'}
+          },
+          {
             type: 'ProductLine',
-            style: {'min-width': '50px', 'max-width': '200px'}
-          },
-          {
-            label: '产品编号',
-            key: 'id',
-            type: 'Product',
-            style: {'min-width': '50px', 'max-width': '200px'}
+            label: '经理',
+            key: 'managerId',
+            style: {width: '100px'}
           },
           {
             label: '详情',
             key: 'info',
-            style: {'min-width': '50px', 'max-width': '200px'}
+            style: {width: '150px'}
           },
           {
-            label: '产品创建日期',
-            key: 'id',
+            label: '生产厂家',
+            key: 'factory',
             type: 'Product',
-            style: {'min-width': '50px', 'max-width': '200px'},
+            style: {width: '150px'}
+          },
+          {
+            label: '计划发布日期',
+            key: 'planPublish',
+            type: 'Product',
+            style: {width: '100px'},
             render(h, ctx) {
-              return h('DatePicker', {props: {value: '2017-12-12'}})
+              var date = ctx.props.data[ctx.props.column.key]
+              console.log('date is:', date)
+              return h('DatePicker', {props: {value: date}})
+            }
+          },
+          {
+            label: '实际发布日期',
+            key: 'publish',
+            type: 'Product',
+            style: {width: '100px'},
+            render(h, ctx) {
+              var date = ctx.props.data[ctx.props.column.key]
+              console.log('date is:', date)
+              return h('DatePicker', {
+                props: {
+                  value: date
+                },
+                on: {
+                  change(newVal) {
+                    console.log('changed:', newVal)
+                  }
+                }
+              })
             }
           }
         ],
         //数据
         nodes: [],
         onExpand(data, go) {
-          Message.info('允许展开:' + data.name)
           go()
         },
         onClose(data, go) {
-          Message.info('允许收起:' + data.name)
           go()
         },
-        isRoot(node) {
-          return node && node.superId === -1
-        }
-      }
-    },
-    computed: {
-      datas: {
-        get() {
-          console.log(this.nodes)
-          return this.nodes
-        },
-        set(datas) {
-          this.nodes = datas
+        isRoot(data) {
+          return data && data.superId === -1
         }
       }
     },
     methods: {
       loginCB(response) {
         if (response.data.ok)
-          Message.success('登录成功')
+          console.log('登录成功')
       },
       login(cb) {
         axios.put('/api/user/login.do',
@@ -144,8 +378,8 @@
       },
       loadRootCB(response) {
         if (response.data.ok) {
-          this.datas = response.data.page.data
-          Message.success('数据获取成功')
+          this.nodes = response.data.page.data
+          console.log('数据获取成功')
         }
       },
       loadRoot(cb) {

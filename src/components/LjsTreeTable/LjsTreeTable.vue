@@ -1,60 +1,69 @@
 <template>
-  <div>
+  <div style="width: 100%;height: 100%;">
     <div style="width: 100%;height: 500px;overflow: scroll;">
+      <LjsContextMenu ref="menu" :context="this"></LjsContextMenu>
       <div style="display: table;width: 100%;">
         <!--表头-->
-        <div style="display: table-header-group;">
+        <div class="th">
           <div
-            style="display: table-cell;padding-left:10px;border-bottom:1px solid #ddd;height:34px;vertical-align:middle;line-height:34px;"
+            class="thd"
             :style="column.style"
-            v-for="column in columns">{{column.label}}
+            v-for="column in columns" v-html="column.label">
           </div>
         </div>
         <!--表内容-->
         <template v-for="data in allData">
-          <div style="display: table-row;" v-if="isExpand(data)">
-            <div :style="column.style"
-                 style="padding-left:10px;display: table-cell;border-bottom: 1px solid #ebebeb;height: 34px;vertical-align:middle;line-height: 34px;"
+          <div v-if="isExpand(data)"
+               :data="data" class="tr" tabindex="0"
+               @contextmenu.prevent="$refs.menu.open($event,getContextItems(data),{data:data,driver:driver,brother:brother,son:son,remove:remove})">
+            <div class="td"
                  v-for="(column,index) in columns"
-                 :column="column" :data="data" :key="index">
-              <div @click="onTdClick(data,column)"
-                   style="display:flex;flex-direction: row;align-items:center;justify-content:left;width:100%;height:100%;">
-                <div v-if="column.expand"
-                     style="height: 2px;display: block;border-bottom:1px dotted #BA0FFF;border-top: 1px dotted #BA0FFF;border-radius: 5px;"
-                     :style="{width: data.deep*deepWidth+'px'}"></div>
-                <img v-if="column.expand&&data.nodes!==false" @click="onExpandIconClick(data)"
-                     :src="data.expand?image.expand_open:image.expand_close"/>
-                <div style="display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                  <RenderDiv :render="column.render" :data="data" :column="column" style="display: block;">
-                  </RenderDiv>
-                </div>
-              </div>
+                 :column="column" :data="data" :key="index" @click="onTdClick(data,column)" :style="column.style">
+              <template v-if="!column.type||column.type===data.pojo">
+                <!--自定义渲染-->
+                <RenderDiv v-if="column.render" :driver="driver" :render="column.render" :data="data" :column="column">
+                </RenderDiv>
+                <LjsEditTd v-if="!column.render" :data="data" :column="column" :bus="bus"
+                           v-on:onExpandIconClick="onExpandIconClick"></LjsEditTd>
+              </template>
             </div>
           </div>
         </template>
       </div>
     </div>
-    <input type="button" value="原始" @click="printDatas"/>
-    <input type="button" value="转换后" @click="printFormated"/>
-    <input type="button" value="重新格式化" @click="formatNode(datas)"/>
-    <input type="button" value="刷新" @click="refresh"/>
+    <template v-if="debug">
+      <div>
+        <input type="button" value="原始数据" @click="printDatas"/>
+        <input type="button" value="转换后的数据" @click="printFormated"/>
+        <input type="button" value="重新格式化数据" @click="formatNode(datas)"/>
+        <input type="button" value="刷新" @click="refresh"/>
+        <input type="button" value="当前焦点行" @click="nowFocus"/>
+        <input type="button" value="查看右键菜单定义" @click="showRightMenu"/>
+      </div>
+      <div>
+        <h4>v1.0</h4>
+        <div></div>
+      </div>
+    </template>
   </div>
 </template>
 <script>
-  import axios from 'axios'
-  import DatePicker from 'iview/src/components/date-picker/index.js'
-  import Icon from 'iview/src/components/icon/index.js'
-  import Message from 'iview/src/components/message/index.js'
-  import 'iview/dist/styles/iview.css'
   import RenderDiv from './renderDiv.js'
-  import expand_open from './image/expand_open.gif'
-  import expand_close from './image/expand_close.gif'
+  import LjsEditTd from './LjsEditTd.vue'
+  import LjsContextMenu from './LjsContextMenu.vue'
 
   export default {
     name: "LjsTreeTable",
     props: {
       //子节点加载器
-      loader: {
+      driver: {
+        type: Object,
+        default() {
+          return {}
+        }
+      },
+      //右键菜单定义
+      rightMenu: {
         type: Object,
         default() {
           return {}
@@ -88,6 +97,15 @@
       isRoot: {
         type: Function,
         default: undefined
+      },
+      //事件总线
+      bus: {
+        type: Object
+      },
+      //是否显示debug视图
+      debug: {
+        type: Boolean,
+        default: false
       }
     },
     watch: {
@@ -96,7 +114,7 @@
         this.refresh()
       }
     },
-    components: {'Icon': Icon, RenderDiv, 'DatePicker': DatePicker},
+    components: {RenderDiv, LjsEditTd, LjsContextMenu},
     computed: {
       allData: {
         get() {
@@ -109,16 +127,18 @@
     },
     data() {
       return {
-        deepWidth: 30,
-        image: {
-          expand_open: expand_open,
-          expand_close: expand_close
-        },
         //格式化数据
         expandData: [],
+        focusStatus: {
+          data: {},
+          column: {},
+        }
       }
     },
     methods: {
+      getContextItems(data) {
+        return this.rightMenu[data.pojo]
+      },
       onExpandIconClick(data) {
         var setExpand = this.setExpand
         var goOn = function () {
@@ -177,16 +197,15 @@
       setExpand(node, expand) {
         var formatNode = this.formatNode
         var refresh = this.refresh
-        var open = expand === true
-        var loader = this.loader
+        var loader = this.driver.loader
         if (node) {
-          node.expand = open
+          node.expand = expand
           if (node.nodes instanceof Array)
             node.nodes.map(function (v) {
               formatNode(v, node)
             })
           //异步加载子节点
-          else if (open === true && node.nodes === true && typeof node.pojo === 'string') {
+          else if (expand && node.nodes === true && typeof node.pojo === 'string') {
             var loadFunction = loader[node.pojo]
             if (loadFunction instanceof Function) {
               var okDo = function () {
@@ -197,10 +216,6 @@
             }
           }
         }
-        if (node.expand)
-          Message.success('展开:' + node.name)
-        else
-          Message.success('收起:' + node.name)
       },
       //递归格式化节点
       formatNode(node, father) {
@@ -234,6 +249,12 @@
           }
         }
       },
+      showRightMenu() {
+        console.log(this.rightMenu)
+      },
+      nowFocus() {
+        console.log(this.focusStatus)
+      },
       refresh() {
         this.allData = this.getAllData(this.datas)
       },
@@ -243,24 +264,94 @@
       printFormated() {
         console.log(this.allData)
       },
-      addData(fatherNode) {
-        if (fatherNode) {
-          if (fatherNode.nodes === undefined)
-            fatherNode.nodes = []
-          var addObj = {id: '1', name: ''}
-          for (var v = 0; v < fatherNode.deep; v++) {
-            addObj.id += '.1'
-            addObj.name += (v + '_')
+      //添加兄弟节点
+      brother(data, brother) {
+        this.formatNode(brother, data.father)
+        if (this.isRoot(data))
+          this.datas.push(brother)
+        else
+          data.father.nodes.push(brother)
+        this.refresh()
+      },
+      //添加子节点
+      son(data, son) {
+        this.formatNode(son, data)
+        data.kids++
+        //节点已经展开
+        if (data.expand) {
+          data.nodes.push(son)
+          this.refresh()
+        }
+        else
+          data.nodes = true
+      },
+      //删除节点
+      remove(data) {
+        var nodes;
+        var father
+        if (this.isRoot(data))
+          nodes = this.datas
+        else if (data.father) {
+          father = data.father
+          nodes = data.father.nodes
+        }
+        if (nodes instanceof Array) {
+          for (var v = 0; v < nodes.length; v++) {
+            if (nodes[v] === data) {
+              console.log('delete')
+              nodes.splice(v, v + 1)
+              if (father)
+                father.kids--
+              this.refresh()
+              break
+            }
           }
-          this.formatChild(addObj, fatherNode, fatherNode.deep + 1)
-          fatherNode.nodes.push(addObj)
-          Message.success('添加成功:' + addObj.name)
         }
       }
     },
     created() {
       this.formatNode(this.datas)
       this.refresh()
+      this.bus.$on('onExpandIconClick', this.onExpandIconClick)
     }
   }
 </script>
+<style scoped>
+  .th {
+    display: table-header-group;
+    background-color: #F2F2F2;
+    height: 30px;
+  }
+
+  .tr {
+    display: table-row;
+    outline: 0;
+    height: 28px;
+    background-color: white;
+  }
+
+  .tr:hover {
+    background-color: #fafafa;
+  }
+
+  .tr:focus {
+    background-color: #f5f5f5;
+  }
+
+  .thd {
+    display: table-cell;
+    border-bottom: 1px solid #E4E4E4;
+    height: 30px;
+    vertical-align: middle;
+    line-height: 30px;
+  }
+
+  .td {
+    display: table-cell;
+    border-bottom: 1px solid #E4E4E4;
+    height: 28px;
+    vertical-align: middle;
+    line-height: 28px;
+  }
+
+</style>
