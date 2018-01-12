@@ -17,7 +17,7 @@
                 <template v-for="data in expandDatas">
                     <div v-if="isExpand(data)" class="tr" tabindex="0"
                          @contextmenu.prevent="$refs.menu.open($event,getContextItems(data),getMenuContext(data))">
-                        <div class="td" v-for="column in columns" :style="column.style">
+                        <div class="td" v-for="column in columns">
                             <template v-if="!column.type||column.type===data.pojo">
                                 <!--自定义渲染-->
                                 <RenderDiv v-if="column.render" :driver="driver" :render="column.render" :data="data"
@@ -26,9 +26,14 @@
                                 <LjsEditTd v-if="!column.render" :data="data" :column="column"
                                            :text="column.text" @on-check="onCheck">
                                     <template v-if="column.expand">
-                                        <div slot="deep" style="height: 2px;display: block;"
-                                             :style="{width: data.deep*deepWidth+'px'}"></div>
-                                        <LjsExpand slot="expand" :show="data.kids!==0" :expand="data.expand"
+                                        <div slot="deep"
+                                             style="margin-left:4px;height: 100%;display: flex;flex-direction: row;align-items: center;">
+                                            <div style="width: 1px;height: 100%;display: block;border-left: 1px #66CC66 solid;"></div>
+                                            <div style="height: 1px;display: block;border-bottom: 1px #66CC66 solid;"
+                                                 :style="{width: data.deep*deepWidth+'px'}"></div>
+                                        </div>
+                                        <LjsExpand slot="expand" :show="(typeof data.kids)==='number'&&data.kids>0"
+                                                   :expand="data.expand"
                                                    @on-expand="onExpandIconClick(data)"/>
                                     </template>
                                     <Checkbox slot="checkbox" v-if="column.check" type="checkbox" v-model="data.check"
@@ -54,6 +59,7 @@
                 <input type="button" value="刷新" @click="refresh"/>
                 <input type="button" value="当前焦点行" @click="nowFocus"/>
                 <input type="button" value="查看右键菜单定义" @click="showRightMenu"/>
+                <input type="button" value="查看列定义" @click="showColunm"/>
             </div>
             <div>
                 <div style="border: 1px red solid">
@@ -76,6 +82,8 @@
                         <p>4.取消使用事件总线bus</p>
                         <p>5.优化可展开图标组件</p>
                         <p>6.实现点击单元格直接编辑</p>
+                        <p>7.修复删除节点时一次删除多个节点(Array.splice(index,count))</p>
+                        <p>8.添加线条</p>
                     </div>
                 </div>
             </div>
@@ -304,6 +312,9 @@
             showRightMenu() {
                 console.log(this.rightMenu)
             },
+            showColunm() {
+                console.log(this.columns)
+            },
             nowFocus() {
                 console.log(this.focusStatus)
             },
@@ -355,8 +366,9 @@
                 if (nodes instanceof Array) {
                     for (var v = 0; v < nodes.length; v++) {
                         if (nodes[v] === data) {
-                            console.log('delete')
-                            nodes.splice(v, v + 1)
+                            console.log('删除前:', nodes.length)
+                            nodes.splice(v, 1)
+                            console.log('删除后:', nodes.length)
                             if (father)
                                 father.kids--
                             this.refresh()
