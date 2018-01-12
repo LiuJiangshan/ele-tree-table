@@ -75,6 +75,7 @@
                         <p>3.column定义添加属性text(data,column),用于获取当前显示文字</p>
                         <p>4.取消使用事件总线bus</p>
                         <p>5.优化可展开图标组件</p>
+                        <p>6.实现点击单元格直接编辑</p>
                     </div>
                 </div>
             </div>
@@ -83,7 +84,7 @@
 </template>
 <script>
     import RenderDiv from './renderDiv.js'
-    import LjsEditTd from './LjsEditTd.vue'
+    import LjsEditTd from './LjsEdit.vue'
     import LjsContextMenu from './LjsContextMenu.vue'
     import LjsExpand from './LjsExpand.vue'
 
@@ -141,7 +142,6 @@
         },
         watch: {
             datas(newVal) {
-                console.log('观察到变化', newVal)
                 this.formatNode(this.datas)
                 this.refresh()
             }
@@ -243,28 +243,31 @@
                 let formatNode = this.formatNode
                 let refresh = this.refresh
                 let loader = this.driver.loader;
-                if (node) {
-                    node.expand = expand
-                    //格式化待展开节点
-                    if (node.nodes instanceof Array)
-                        for (let v = 0; v < node.nodes.length; v++)
-                            formatNode(node.nodes[v], node)
-                    //在展开前,异步加载子节点
-                    else if (expand && node.nodes === true && typeof node.pojo === 'string') {
-                        var loadFunction = loader[node.pojo]
+
+                node.expand = expand
+                //格式化待展开节点
+                if (node.nodes instanceof Array)
+                    for (let v = 0; v < node.nodes.length; v++)
+                        formatNode(node.nodes[v], node)
+
+                //展开
+                if (expand) {
+                    //加载子节点
+                    if (node.nodes === true) {
+                        let loadFunction = loader[node.pojo]
                         if (loadFunction instanceof Function) {
-                            var okDo = function () {
+                            let okDo = function () {
                                 formatNode(node.nodes, node)
                                 refresh()
                             }
                             loadFunction(node, okDo)
                         }
                     }
-                    else if (!expand) {
+                    else
                         refresh()
-                        console.log('关闭', '以刷新')
-                    }
                 }
+                else
+                    refresh()
             },
             //递归格式化节点
             formatNode(node, father) {
@@ -306,7 +309,6 @@
             },
             refresh() {
                 this.expandDatas = this.getAllData(this.datas)
-                console.log('刷新完成')
             },
             printDatas() {
                 console.log(this.datas)
@@ -365,7 +367,6 @@
             }
         },
         created() {
-            console.log('初始数据', this.datas)
             this.formatNode(this.datas)
             this.refresh()
         }

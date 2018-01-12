@@ -1,15 +1,15 @@
 <template>
-    <div class="ljsEdit" ref="edit" @focus="onTdFocus" @keyup.enter="onEnter($event)">
+    <div class="ljsEdit" ref="edit" @keyup.enter="onEnter($event)">
         <div style="display: flex;flex-direction: row;align-items: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;width: 100%;height: 100%;">
             <!--深度-->
             <slot name="deep"/>
             <!--图标-->
             <slot name="expand"/>
             <slot name="checkbox"/>
-            <div v-html="text(data,column)" v-if="!isEdit" class="text" style="overflow: hidden;"
-                 v-on:dblclick.stop="dbClick"></div>
-            <input :type="text" ref="input" v-if="isEdit" @blur.stop="onBlur" @focus.stop="onInputFocus($event)"
+            <input v-if="isEdit" :type="text" ref="input" @blur.stop="onBlur" @focus.stop="onInputFocus($event)"
                    v-model="data[column.key]" class="input"/>
+            <div v-else v-html="text(data,column)" class="text" style="overflow: hidden;"
+                 @click.stop="onClick"></div>
         </div>
     </div>
 </template>
@@ -59,27 +59,20 @@
                 }, 1)
             },
             onInputFocus(event) {
-                if (this.column.edit === false) {
-                    console.log(this.column.label + ' 不允许编辑')
-                    this.edit = false
+                event.currentTarget.select();
+            },
+            onClick() {
+                if (this.column.edit === false)
+                    console.log('该列不允许编辑')
+                else {
+                    this.focusStatus.data = this.data
+                    this.focusStatus.column = this.column
+                    this.isEdit = !this.isEdit
                     var _this = this
                     setTimeout(function () {
-                        _this.$refs.edit.focus()
+                        _this.$refs.input.focus()
                     }, 1)
-                    return
                 }
-                //event.currentTarget.select();
-            },
-            onTdFocus() {
-                this.focusStatus.data = this.data
-                this.focusStatus.column = this.column
-            },
-            dbClick() {
-                this.isEdit = !this.isEdit
-                var _this = this
-                setTimeout(function () {
-                    _this.$refs.input.focus()
-                }, 1)
             },
             onBlur() {
                 if (this.column.edit === false)
