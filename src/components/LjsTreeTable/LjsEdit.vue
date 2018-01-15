@@ -6,11 +6,11 @@
         <slot name="expand"/>
         <slot name="checkbox"/>
         <div @click.stop="onClick" style="width: 100%;height: 100%;">
-            <input type="text" ref="input" @blur.stop="onBlur" @focus.stop="onInputFocus($event)"
-                   v-model="value"
-                   class="input"
-                   @input="onInput"
-                   :disabled="!edit"/>
+            <textarea ref="textare" @blur.stop="onBlur" @focus.stop="onFocus($event)"
+                      v-model="value"
+                      class="textare"
+                      @input="onInput"
+                      :disabled="!focus"></textarea>
         </div>
     </div>
 </template>
@@ -43,7 +43,7 @@
             value:
                 {
                     get() {
-                        if (this.edit)
+                        if (this.focus)
                             return this.data[this.column.key]
                         else
                             return this.text(this.data, this.column)
@@ -65,44 +65,49 @@
         methods: {
             onInput(evt) {
                 this.inputChange = true
-                if (this.canEdit) {
+                //该列允许编辑
+                if (this.canEdit)
                     this.valueBak = this.value
-                } else {
+                //该列不允许编辑
+                else {
                     this.value = this.valueBak
+                    console.log('该列不允许编辑!')
                 }
             },
             getThis() {
                 return this
             },
             onEnter(event) {
-                this.edit = true
+                this.focus = true
                 var _this = this
                 setTimeout(function () {
-                    _this.$refs.input.focus()
+                    _this.$refs.textare.focus()
                 }, 1)
             },
-            onInputFocus(event) {
+            onFocus(event) {
+                this.focus = true
                 if (this.canEdit) {
                     //event.currentTarget.select()
                 }
             },
             onClick() {
-                if (!this.edit) {
+                //未获取焦点
+                if (this.focus === false) {
                     this.focusStatus.data = this.data
                     this.focusStatus.column = this.column
-                    this.edit = !this.edit
+                    this.focus = true
                     var _this = this
                     setTimeout(function () {
-                        _this.$refs.input.focus()
+                        _this.$refs.textare.focus()
                     }, 1)
                 }
             },
             onBlur() {
+                this.focus = false
                 if (this.canEdit) {
                     if (this.inputChange) {
                         let update = this.driver.updater[this.data.pojo]
                         update(this.data, this.column)
-                        this.edit = false
                         this.inputChange = false
                     } else
                         console.log('内容未改变,未更新')
@@ -111,13 +116,14 @@
         },
         data() {
             return {
+                /**是否处于焦点*/
+                focus: false,
                 /**文本框内容是否改变*/
                 inputChange: false,
                 /**上次输入的值*/
                 valueBak: this.data[this.column.key],
                 items: this.$parent.rightMenu[this.data.pojo],
                 driver: this.$parent.driver,
-                edit: false,
                 focusStatus: this.$parent.focusStatus,
                 position: {x: 0, y: 0}
             }
@@ -133,41 +139,31 @@
         align-items: center;
         width: 100%;
         height: 100%;
-        overflow: hidden;
+        overflow-x: hidden;
     }
 
-    .input {
+    .textare {
         white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        width: 100%;
-        height: 100%;
-        outline: none;
-        border: none;
-        background: none;
-        color: #333333;
-    }
-
-    .input:focus {
-        border: 1px #66CC66 solid;
-        width: 100%;
-        height: 100%;
-    }
-
-    .input:disabled {
-        width: 100%;
-        height: 100%;
-        border: none;
-
-    }
-
-    .text {
-        color: #333333;
-        width: 200px;
-        white-space: nowrap;
+        resize: none;
         overflow: hidden;
         font-family: Arial, 微软雅黑, serif;
         font-size: 11px;
+        display: block;
         text-overflow: ellipsis;
+        border: 1px Transparent solid;
+        width: 100%;
+        height: 28px;
+        background: none;
+        color: #333333;
+        box-sizing: border-box;
+        outline: none;
+    }
+
+    .textare:focus {
+        border: 1px #66CC66 solid;
+    }
+
+    .textare:disabled {
+        border: 1px Transparent solid;
     }
 </style>
