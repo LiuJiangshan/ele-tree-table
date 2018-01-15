@@ -6,7 +6,7 @@
                 <!--表头-->
                 <div class="th">
                     <div class="thd" :style="column.style" v-for="column in columns">
-                        <Checkbox v-if="column.check" style="padding-left: 23px;" @on-change="selectAll"
+                        <Checkbox v-if="column.check" style="padding-left: 27px;" @on-change="selectAll"
                                   v-model="check">
                             <span v-html="column.label"></span>
                         </Checkbox>
@@ -394,7 +394,7 @@
     .tr {
         display: table-row;
         outline: 0;
-        height: 28px;
+        min-height: 28px;
         background-color: white;
     }
 
