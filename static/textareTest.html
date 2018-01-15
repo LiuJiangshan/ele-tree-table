@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style type="text/css">
+        .textarea {
+            width: 100px;
+            box-sizing: border-box;
+
+            border: 1px Transparent solid;
+            outline: none;
+            margin: 0;
+            padding: 0;
+            display: block;
+        }
+
+        .textarea:focus {
+            box-sizing: border-box;
+            border: 1px red solid;
+        }
+
+        div {
+            border: 1px red solid;
+        }
+    </style>
+    <script type="application/javascript">
+        function autoWrap() {
+            return
+            let textarea = document.getElementById("textarea")
+            textarea.style.height = textarea.scrollHeight + "px";
+        }
+    </script>
+</head>
+<body>
+<input type="button" value="自动高度" onclick="autoWrap()"/>
+<div>
+    <textarea class="textarea" id="textarea"></textarea>
+</div>
+</body>
+</html>

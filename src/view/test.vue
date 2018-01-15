@@ -315,7 +315,13 @@
                     {
                         label: '详情',
                         key: 'info',
-                        style: {width: '150px'}
+                        style: {
+                            width: '150px',
+                            /**该列将自动换行*/
+                            height: 'auto'
+                        },
+                        /**最大显示行数*/
+                        maxLine: 10
                     },
                     {
                         label: '生产厂家',
