@@ -1,28 +1,23 @@
 <template>
-  <div id="app">
-    <router-view/>
-  </div>
+    <div id="app">
+        <router-view/>
+    </div>
 </template>
 
-<script>
-  export default {
-    name: 'app',
-    created() {
-      var obj = {}
-      obj['nodes'] = false
-      console.log(typeof obj.nodes)
-      obj['nodes'] = []
-      console.log(typeof obj.nodes)
+<style lang="less">
+    html,
+    body {
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        font-family: Microsoft Yahei, serif;
     }
-  }
-</script>
 
-<style>
-  #app {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    overflow: hidden;
-    height: 100%;
-  }
+    #app {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        height: 100%;
+    }
 </style>

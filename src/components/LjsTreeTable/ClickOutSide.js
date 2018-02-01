@@ -1,4 +1,4 @@
-function validate(binding) {
+function validate (binding) {
   if (typeof binding.value !== 'function') {
     console.warn('[Vue-click-outside:] provided expression', binding.expression, 'is not a function.')
     return false
@@ -7,11 +7,12 @@ function validate(binding) {
   return true
 }
 
-function isPopup(popupItem, elements) {
-  if (!popupItem || !elements)
+function isPopup (popupItem, elements) {
+  if (!popupItem || !elements) {
     return false
+  }
 
-  for (var i = 0, len = elements.length; i < len; i++) {
+  for (let i = 0, len = elements.length; i < len; i++) {
     try {
       if (popupItem.contains(elements[i])) {
         return true
@@ -27,7 +28,7 @@ function isPopup(popupItem, elements) {
   return false
 }
 
-function isServer(vNode) {
+function isServer (vNode) {
   return typeof vNode.componentInstance !== 'undefined' && vNode.componentInstance.$isServer
 }
 
@@ -36,11 +37,11 @@ exports = module.exports = {
     if (!validate(binding)) return
 
     // Define Handler and cache it on the element
-    function handler(e) {
+    function handler (e) {
       if (!vNode.context) return
 
       // some components may have related popup item, on which we shall prevent the click outside event handler.
-      var elements = e.path || (e.composedPath && e.composedPath())
+      let elements = e.path || (e.composedPath && e.composedPath())
       elements && elements.length > 0 && elements.unshift(e.target)
 
       if (el.contains(e.target) || isPopup(vNode.context.popupItem, elements)) return

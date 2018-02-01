@@ -1,73 +1,64 @@
 <template>
-  <div v-click-outside="close" v-if="show" class="menu" ref="menu" @click.prevent.stop="close"
-       :style="{top:y+'px',left:x+'px'}"
-       @blur.prevent="onBlur">
-    <template v-for="item in items">
-      <div class="item" @click.prevent="item.click(context)" v-html="item.label"></div>
-    </template>
-  </div>
+    <div v-click-outside="close" v-if="show" class="menu" ref="menu" @click.prevent.stop="close"
+         :style="{top:y+'px',left:x+'px'}"
+         @blur.prevent="onBlur">
+        <div v-for="(item,itemIndex) in items" :key="itemIndex" class="item" @click.prevent="item.click(context)"
+             v-html="item.label"></div>
+    </div>
 </template>
 <script>
   import ClickOutside from './ClickOutSide.js'
 
   export default {
-    name: "LjsContextMenu",
-    props: {}, directives: {
+    name: 'LjsContextMenu',
+    props: {},
+    directives: {
       ClickOutside
     },
     methods: {
-      onBlur() {
+      onBlur () {
       },
-      open(event, items, context) {
-        this.items = items
-        this.context = context
-        this.show = true
-        this.x = event.x
-        this.y = event.y
+      open (x, y, items, context) {
+        if (items && items.length > 0) {
+          this.items = items
+          this.context = context
+          this.show = true
+          this.x = x
+          this.y = y
+        }
       },
-      close() {
+      close () {
         this.show = false
       }
     },
-    data() {
-      return {show: false, x: 0, y: 0, context: undefined}
-    },
-    created() {
-      document.body.oncontextmenu = function () {
-        return false
-      }
-      document.click = this.close
-    },
-    destroyed() {
-      document.body.oncontextmenu = undefined
-      document.click = undefined
+    data () {
+      return {items: [], show: false, x: 0, y: 0, context: undefined}
     }
   }
 </script>
 <style scoped>
-  .menu {
-    border-radius: 4pt;
-    outline: 0;
-    color: #333333;
-    font-size: 12px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    position: absolute;
-    background-color: #ebebeb;
-    white-space: nowrap;
-    min-width: 100px;
-  }
+    .menu {
+        outline: 0;
+        font-size: 12px;
+        position: absolute;
+        z-index: 1;
+        border: 1px #E4E4E4 solid;
+        background-color: #ebebeb;
+        white-space: nowrap;
+        min-width: 100px;
+    }
 
-  .item {
-    font-family: sans-serif;
-    padding: 5px 35px 5px 10px;
-    cursor: pointer;
-    display: block;
-    user-select: none;
-  }
+    .item {
+        cursor: pointer;
+        display: block;
+        color: #444;
+        padding: 5px 7px;
+        font-family: "Segoe UI", Calibri, Thonburi, Arial, Verdana, sans-serif, "Mongolian Baiti", "Microsoft Yi Baiti", "Javanese Text";
+        font-size: 9pt;
+        user-select: none;
+    }
 
-  .item:hover {
-    background-color: #b4b4b4;
-    color: white;
-  }
+    .item:hover {
+        background-color: #d3f0e0;
+    }
 </style>

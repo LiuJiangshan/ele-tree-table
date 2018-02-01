@@ -1,33 +1,69 @@
 <template>
-    <div style="display: flex;flex-direction: row;align-items: center;cursor: pointer;" @click="$emit('on-expand')">
-        <img :style="{visibility:(show?'visible':'hidden'),width:'23px',height:'23px'}"
-             :src="expand===true?openIcon:closeIcon"/>
+    <div class="expand_warp">
+        <img class="image" @click.stop="table.onExpandIconClick(data)" :style="imageStyle"
+             :src="expand?openIcon:closeIcon"/>
     </div>
 </template>
 
 <script>
-    import closeIcon from './image/expand_close.gif'
-    import openIcon from './image/expand_open.gif'
+  import closeIcon from './image/expand_close.gif'
+  import openIcon from './image/expand_open.gif'
 
-    export default {
-        name: "LjsExpand",
-        props: {
-            show: {
-                type: Boolean
-            },
-            expand: {
-                type: Boolean
-            }
-        },
-        watch: {},
-        data() {
-            return {
-                openIcon, closeIcon
-            }
+  export default {
+    name: 'LjsExpand',
+    props: {
+      data: {
+        type: Object
+      },
+      table: {
+        type: Object
+      }
+    },
+    computed: {
+      expand: {
+        get () {
+          return this.data.expand === true
         }
+      },
+      imageStyle: {
+        set () {
+        },
+        get () {
+          return {visibility: (this.show ? 'visible' : 'hidden')}
+        }
+      },
+      show: {
+        set () {
+        },
+        get () {
+          return (typeof this.data.kids) === 'number' && this.data.kids > 0
+        }
+      }
+    },
+    data () {
+      return {
+        openIcon, closeIcon
+      }
     }
+  }
 </script>
 
 <style scoped>
+    .expand_warp {
+        width: 23px;
+        height: 23px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        justify-items: center;
+        align-content: center;
+        margin: 4px;
+    }
 
+    .image {
+        width: 15px;
+        height: 15px;
+        cursor: pointer;
+    }
 </style>

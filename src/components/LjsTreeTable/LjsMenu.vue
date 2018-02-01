@@ -1,13 +1,13 @@
 <template>
-  <ul>
-    <li>a</li>
-    <li>b</li>
-  </ul>
+    <ul>
+        <li>a</li>
+        <li>b</li>
+    </ul>
 </template>
 
 <script>
   export default {
-    name: "LjsMenu"
+    name: 'LjsMenu'
   }
 </script>
 
