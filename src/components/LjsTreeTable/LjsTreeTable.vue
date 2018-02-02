@@ -241,6 +241,7 @@
     methods: {
       formatColumns () {
         if (this.fullWidth < this.width) {
+          console.log('未充满')
           let fullWidth = this.fullWidth
           for (let i = 0; i < this.columns.length; i++) {
             let column = this.columns[i]
@@ -483,6 +484,7 @@
     mounted () {
       this.width = this.$refs.treetable.clientWidth
       this.isMounted = true
+      this.formatColumns()
       let _this = this
       window.addEventListener('resize', function () {
         _this.width = _this.$refs.treetable.clientWidth

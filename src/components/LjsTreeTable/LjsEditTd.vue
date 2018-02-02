@@ -157,7 +157,12 @@
             return 'select'
         }
       },
-      selectAll () { if (!this.column.render) this.$refs.input.select() },
+      selectAll () {
+        if (!this.column.render) {
+          this.$refs.input.select()
+          console.log('select all')
+        }
+      },
       getThis () { return this },
       onCheck () {
         this.data.check = true
@@ -171,7 +176,7 @@
         this.table.onTdFocus(this, States)
         this.input = false
         this.state = States.select
-        if (this.column.edit && !this.column.render) setTimeout(this.selectAll, 100)
+        if (this.column.edit !== false && !this.column.render) setTimeout(this.selectAll)
       },
       onEnter () {
         this.table.canMove = true
