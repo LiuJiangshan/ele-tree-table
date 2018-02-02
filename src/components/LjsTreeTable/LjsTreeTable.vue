@@ -1,8 +1,8 @@
 <template>
-    <div class="body" :style="{width:width+'px',height:height+'px'}" @keyup.up="up" @keyup.down="down"
+    <div class="body" @keyup.up="up" @keyup.down="down" :style="{width:width+'px'}"
          @keyup.left="left" @keyup.right="right" ref="treetable">
         <div v-if="debug"
-             style="position: absolute;border:1px red solid;font-size: xx-small;color: red;right: 0;bottom: 0;">
+             style="position: absolute;border:1px red solid;font-size: xx-small;color: red;right: 0;bottom: 50px;">
             <div v-html="'width:'+width"></div>
             <div v-html="'fullWidth:'+fullWidth"></div>
             <div v-html="'canMove:'+canMove"></div>
@@ -155,8 +155,14 @@
       }
     },
     watch: {
-      datas () { this.datasChanged() },
-      columns () { this.init() }
+      datas () {
+        this.formatRoot()
+        this.formatNode(this.datas)
+        this.refresh()
+      },
+      columns () {
+        this.formatColumns()
+      }
     },
     computed: {
       thisTable: {get () { return this }},
@@ -209,24 +215,19 @@
           return fullWidth
         }
       },
-      // 获取组件当前宽度
-      width: {
-        get () {
-          if (this.isMounted) return this.$refs.treetable.clientWidth
-          else return 0
-        }
-      },
       // 获取组件当前高度
       height: {
         get () {
           if (this.isMounted) return this.$refs.treetable.clientHeight
-          else return 0
-        }
+          else return this.treeTableWidth
+        },
+        set (val) { this.treeTableWidth = val }
       }
     },
     components: {LjsThead, LjsTbody, LjsTr, LjsTableFix, LjsEditTd, LjsContextMenu},
     data () {
       return {
+        width: 0,
         // 格式化数据
         expandDatas: [],
         // 当前焦点单元格vue对象
@@ -238,11 +239,15 @@
       }
     },
     methods: {
-      // datas被重新赋值,重新初始化
-      datasChanged () {
-        this.formatRoot()
-        this.formatNode(this.datas)
-        this.refresh()
+      formatColumns () {
+        if (this.fullWidth < this.width) {
+          console.log('未充满')
+          let fullWidth = this.fullWidth
+          for (let i = 0; i < this.columns.length; i++) {
+            let column = this.columns[i]
+            column.width = column.width / fullWidth * this.width
+          }
+        }
       },
       refresh () { this.expandDatas = this.getAllData(this.datas) },
       // 同步表头、固定列滚动
@@ -444,7 +449,7 @@
       },
       // td失去焦点
       onTdBlur (td, States) {
-        // td.state = States.normal
+        td.state = States.normal
       },
       // 移动
       move (x, y) {
@@ -474,13 +479,16 @@
       up () { this.move(0, -1) },
       down () { this.move(0, 1) },
       left () { this.move(-1, 0) },
-      right () { this.move(1, 0) },
-      init () {}
+      right () { this.move(1, 0) }
     },
     mounted () {
-      this.init()
+      this.width = this.$refs.treetable.clientWidth
       this.isMounted = true
-      this.datasChanged()
+      let _this = this
+      window.addEventListener('resize', function () {
+        _this.width = _this.$refs.treetable.clientWidth
+        _this.formatColumns()
+      })
     }
   }
 </script>

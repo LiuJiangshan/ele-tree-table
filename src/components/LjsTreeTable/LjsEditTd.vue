@@ -3,7 +3,7 @@
     <td :class="tdClass" :width="column.width"
         @keyup.enter="onEnter"
         @click.stop="onClick" @dblclick.stop="onDbClick">
-        <div class="td_warp" tabindex="0" @focus="onTdFocus" ref="tdWarp">
+        <div class="td_warp" tabindex="0" @focus="onTdFocus" ref="tdWarp" @blut="onBlur">
             <div v-if="debug" v-html="getState()"
                  style="position: absolute;color: red;font-size: xx-small;right: 0;"></div>
             <div v-if="false" v-html="'h_w:'+headWidth+',b_w:'+bodyWidth"
