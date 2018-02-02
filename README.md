@@ -1,38 +1,63 @@
-[查看Demo演示](https://liujiangshan.github.io/Vue-LjsTreeTable-Doc)
+[查看Demo演示](https://liujiangshan.github.io/Vue-LjsTreeTable/docs)
 
-####运行此项目:
-#####1.安装yarn
-#####2.git clone https://github.com/LiuJiangshan/Vue-LjsTreeTable.git
-#####3.cd Vue-LjsTreeTable
-#####4.yarn install
-#####5.yarn run dev
-#####6.打开浏览器进入:http://localhost:8080
+## 运行此项目:
+##### 1.安装yarn
+##### 2.克隆项目
+```bash
+git clone https://github.com/LiuJiangshan/Vue-LjsTreeTable.git
+```
+##### 3.进入项目目录
+```bash
+cd Vue-LjsTreeTable
+```
+##### 4.安装依赖库
+```bash
+yarn install
+```
+在安装sass时可能报错，重新安装node-sass、sass-loader好像能解决
+```bash
+yarn remove node-sass sass-loader
+yarn add --save-dev node-sass sass-loader
+```
 
-####使用组件:
-#####1.赋值该项目dist文件夹至你的项目node_modules文件夹
-#####2.将dist命名为treetable
-#####3.在main.js中:
+##### 5.运行项目
+```bash
+yarn run dev
+```
+##### 6.打开浏览器访问:[http://localhost:8080](http://localhost:8080)
+
+## 使用组件:
+##### 1.复制该项目dist文件夹至你的项目node_modules文件夹
+##### 2.将dist命名为LjsTreeTable
+##### 3.在main.js中引入该组件:
 ```javascript
-import treetable from 'treetable'
+import LjsTreeTable from 'LjsTreeTable'
 ...
-Vue.use(TreeTable)
+Vue.use(LjsTreeTable)
 ...
 ```
-#####4.vue文件:
+##### 4.vue文件:
 ```javascript
 <template>
-<div>
-  <treetable :datas="datas" :columns="columns"/>
-  ...
-</div>
+  <div>
+    <treetable :datas="datas" :columns="columns"/>
+    ...
+  </div>
 </template>
-
 <script>
 ...
 </script>
-
 <style>
 ...
 </style>
+```
 
+## 编译自己的LjsTreeTable组件
+```bash
+yarn run build
+```
+
+## 编译该项目示例
+```bash
+yarn run doc
 ```

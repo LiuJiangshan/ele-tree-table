@@ -6,8 +6,8 @@
 </template>
 
 <script>
-  import closeIcon from './image/expand_close.gif'
-  import openIcon from './image/expand_open.gif'
+  import closeIcon from './image/expand_close.png'
+  import openIcon from './image/expand_open.png'
 
   export default {
     name: 'LjsExpand',

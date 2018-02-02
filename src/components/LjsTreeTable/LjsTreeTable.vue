@@ -44,24 +44,22 @@
         <!--固定右列-->
 
         <!--debug视图-->
-        <div v-if="debug" style="width: 100%;border: 1px red solid;">
-            <div>
-                <input type="button" value="原始数据" @click="printDatas"/>
-                <input type="button" value="列定义" @click="printColumns"/>
-                <input type="button" value="转换后的数据" @click="printFormated"/>
-                <input type="button" value="重新格式化数据" @click="formatNode(datas)"/>
-                <input type="button" value="刷新" @click="refresh"/>
-                <input type="button" value="当前焦点行" @click="nowFocus"/>
-                <input type="button" value="全选" @click="selectAll"/>
-                <input type="button" value="查看右键菜单定义" @click="showRightMenu"/>
-                <input type="button" value="查看列定义" @click="showColunm"/>
-                <input type="button" value="查看左边固定列定义" @click="showLeftFixColumn"/>
-                <input type="button" value="查看中间列定义" @click="showBodyColumn"/>
-                <input type="button" value="查看右边列定义" @click="showRightColumn"/>
-                <input type="button" :value="(fixLeftShow?'隐藏':'显示')+'左边固定列'" @click="fixLeftShow=!fixLeftShow"/>
-                <input type="button" :value="(fixRightShow?'隐藏':'显示')+'右边边固定列'" @click="fixRightShow=!fixRightShow"/>
-                <input type="button" value="show $Refs" @click="showRefs"/>
-            </div>
+        <div v-if="debug" style="position: absolute;bottom: 0;left: 0;border: 1px red solid;">
+            <input type="button" value="原始数据" @click="printDatas"/>
+            <input type="button" value="列定义" @click="printColumns"/>
+            <input type="button" value="转换后的数据" @click="printFormated"/>
+            <input type="button" value="重新格式化数据" @click="formatNode(datas)"/>
+            <input type="button" value="刷新" @click="refresh"/>
+            <input type="button" value="当前焦点行" @click="nowFocus"/>
+            <input type="button" value="全选" @click="selectAll"/>
+            <input type="button" value="查看右键菜单定义" @click="showRightMenu"/>
+            <input type="button" value="查看列定义" @click="showColunm"/>
+            <input type="button" value="查看左边固定列定义" @click="showLeftFixColumn"/>
+            <input type="button" value="查看中间列定义" @click="showBodyColumn"/>
+            <input type="button" value="查看右边列定义" @click="showRightColumn"/>
+            <input type="button" :value="(fixLeftShow?'隐藏':'显示')+'左边固定列'" @click="fixLeftShow=!fixLeftShow"/>
+            <input type="button" :value="(fixRightShow?'隐藏':'显示')+'右边边固定列'" @click="fixRightShow=!fixRightShow"/>
+            <input type="button" value="show $Refs" @click="showRefs"/>
         </div>
     </div>
 </template>
