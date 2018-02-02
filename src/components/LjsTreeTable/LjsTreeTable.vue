@@ -353,7 +353,7 @@
           })
         } else if (node instanceof Object) {
           if (node.check === undefined) this.$set(node, 'check', false)
-          if (node.kids === undefined) this.$set(node, 'kids', false)
+          if (node.kids === undefined) this.$set(node, 'kids', node.nodes instanceof Array ? node.nodes.length : false)
           // 格式化root节点
           if (this.isRoot(node)) {
             this.$set(node, 'father', false)

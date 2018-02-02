@@ -1,4 +1,5 @@
-[查看Demo演示](https://liujiangshan.github.io/Vue-LjsTreeTable/docs)
+[查看Demo演示](https://liujiangshan.github.io/Vue-LjsTreeTable/docs)：由于没有服务端，异步加载无效
+
 
 ## 运行此项目:
 ##### 1.安装yarn
