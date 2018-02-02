@@ -48,8 +48,8 @@
     }
 
     .image {
-        width: 15px;
-        height: 15px;
+        width: 11px;
+        height: 11px;
         cursor: pointer;
     }
 </style>
