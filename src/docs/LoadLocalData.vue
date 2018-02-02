@@ -1,8 +1,11 @@
 <template>
     <div>
-        <LjsTreeTable :border="true" :datas="datas" :columns="columns" :debug="debug"
+        <LjsTreeTable :border="border" :datas="datas" :columns="columns" :debug="debug"
                       style="width: 100%;height: 500px;"/>
-        <div><input type="button" :value="debug?'关闭调试':'打开调试'" @click="debug=!debug"/></div>
+        <div>
+            <input type="button" :value="debug?'关闭调试':'打开调试'" @click="debug=!debug"/>
+            <input type="button" :value="border?'隐藏边框':'显示边框'" @click="border=!border"/>
+        </div>
     </div>
 </template>
 
@@ -14,6 +17,7 @@
     components: {LjsTreeTable},
     data () {
       return {
+        border: true,
         debug: false,
         columns: [
           {
@@ -57,7 +61,7 @@
     },
     mounted () {
       let datas = []
-      for (let i = 0; i < 100; i++) {
+      for (let i = 0; i < 30; i++) {
         let data = {
           id: i,
           name: this.getRandName(),
@@ -66,14 +70,25 @@
           sex: this.getRandSex(),
           nodes: []
         }
-        for (let j = 0; j < 50; j++) {
-          data.nodes.push({
+        for (let j = 0; j < 2; j++) {
+          let data1 = {
             id: i + '-' + j,
             name: this.getRandName(),
             gard: this.getRandGard(),
             age: this.getRandAge(),
-            sex: this.getRandSex()
-          })
+            sex: this.getRandSex(),
+            nodes: []
+          }
+          for (let k = 0; k < 2; k++) {
+            data1.nodes.push({
+              id: i + '-' + j,
+              name: this.getRandName(),
+              gard: this.getRandGard(),
+              age: this.getRandAge(),
+              sex: this.getRandSex()
+            })
+          }
+          data.nodes.push(data1)
         }
         datas.push(data)
       }

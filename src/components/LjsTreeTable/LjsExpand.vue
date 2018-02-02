@@ -12,38 +12,22 @@
   export default {
     name: 'LjsExpand',
     props: {
-      data: {
-        type: Object
-      },
-      table: {
-        type: Object
-      }
+      data: {type: Object},
+      table: {type: Object}
     },
     computed: {
       expand: {
-        get () {
-          return this.data.expand === true
-        }
+        get () { return this.data.expand === true }
       },
       imageStyle: {
-        set () {
-        },
-        get () {
-          return {visibility: (this.show ? 'visible' : 'hidden')}
-        }
+        get () { return {visibility: (this.show ? 'visible' : 'hidden')} }
       },
       show: {
-        set () {
-        },
-        get () {
-          return (typeof this.data.kids) === 'number' && this.data.kids > 0
-        }
+        get () { return (typeof this.data.kids) === 'number' && this.data.kids > 0 }
       }
     },
     data () {
-      return {
-        openIcon, closeIcon
-      }
+      return {openIcon, closeIcon}
     }
   }
 </script>

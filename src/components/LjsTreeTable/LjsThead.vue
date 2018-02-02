@@ -17,8 +17,9 @@
                         <div v-if="table.debug"
                              style="position: absolute;color: red;font-size: xx-small;right: 0;bottom: 0;"
                              v-html="'w:'+column.width"></div>
-                        <input v-if="column.check" type="checkbox" style="margin-left: 31px;" @change="onChange"
-                               v-model="check"/>
+                        <div style="width: 32px;height: 32px;display: inline-block;"></div>
+                        <LjsCheckBox v-if="column.check" :check="check" @change="onCheckChange"
+                                     :table="table"/>
                         <span v-html="column.label" style="-webkit-user-select:none;user-select:none;"></span>
                     </div>
                 </th>
@@ -29,8 +30,11 @@
 </template>
 
 <script>
+  import LjsCheckBox from './LjsCheckBox.vue'
+
   export default {
     name: 'LjsThead',
+    components: {LjsCheckBox},
     props: {
       table: {
         type: Object
@@ -54,6 +58,10 @@
       }
     },
     methods: {
+      onCheckChange () {
+        this.check = !this.check
+        this.table.selectAll(this.check)
+      },
       mouseDown (event, column) {
         if (column.resize === true) {
           this.resizeColumn = column
@@ -72,9 +80,6 @@
           if (newSize < 20) newSize = 20
           this.resizeColumn.width = newSize
         }
-      },
-      onChange () {
-        this.table.selectAll(this.check)
       }
     }
   }
