@@ -56,8 +56,7 @@
       }
     },
     watch: {
-      state (newV, oldV) {
-        console.log('state change', newV, oldV)
+      state () {
         switch (this.state) {
           case States.normal:
             break
@@ -144,10 +143,7 @@
           }
           return value
         },
-        set (value) {
-          if (this.column.edit !== false && this.match) this.data[this.column.key] = value
-          else console.log('不能编辑')
-        }
+        set (value) { if (this.column.edit !== false && this.match) this.data[this.column.key] = value }
       }
     },
     methods: {
@@ -200,12 +196,17 @@
       },
       onBlur () {
         this.table.onTdBlur(this, States)
-        if (!this.input) console.log('未输入,不需要更新')
-        else if (this.column.render) console.log('自定义组件,更新操作需自定义')
-        else if (this.column.edit === false) console.log(this.column.label + '不允许编辑,未更新')
-        else if (!this.match) console.log(this.data.pojo + '没有' + this.column.key + '(' + this.column.label + ')字段,未更新')
-        else if (!this.driver || !this.driver.updater || !this.driver.updater.hasOwnProperty(this.data.pojo)) console.log('未提供更新方法')
-        else {
+        if (!this.input) {
+          if (this.debug) console.log('未输入,不需要更新')
+        } else if (this.column.render) {
+          if (this.debug) console.log('自定义组件,更新操作需自定义')
+        } else if (this.column.edit === false) {
+          if (this.debug) console.log(this.column.label + '不允许编辑,未更新')
+        } else if (!this.match) {
+          if (this.debug) console.log(this.data.pojo + '没有' + this.column.key + '(' + this.column.label + ')字段,未更新')
+        } else if (!this.driver || !this.driver.updater || !this.driver.updater.hasOwnProperty(this.data.pojo)) {
+          if (this.debug) console.log('未提供更新方法')
+        } else {
           let update = this.driver.updater[this.data.pojo]
           update(this.data, this.column)
         }

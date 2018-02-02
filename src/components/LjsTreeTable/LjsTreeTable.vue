@@ -159,9 +159,7 @@
       columns () { this.init() }
     },
     computed: {
-      thisTable: {
-        get () { return this }
-      },
+      thisTable: {get () { return this }},
       // 获取非固定列定义
       bodyColumns: {
         get () {
@@ -246,9 +244,7 @@
         this.formatNode(this.datas)
         this.refresh()
       },
-      refresh () {
-        this.expandDatas = this.getAllData(this.datas)
-      },
+      refresh () { this.expandDatas = this.getAllData(this.datas) },
       // 同步表头、固定列滚动
       handleBodyScroll ($event, header, body) {
         header.$el.scrollLeft = body.$el.scrollLeft
@@ -302,7 +298,7 @@
       isExpand (data) {
         let re = false
         if (this.isRoot(data)) re = true
-        else re = data.father.expand === true
+        else if (data.father && data.father.expand === true) re = true
         return re
       },
       // 将嵌套型数据转换为简单列表型数据
