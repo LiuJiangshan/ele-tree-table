@@ -241,7 +241,6 @@
     methods: {
       formatColumns () {
         if (this.fullWidth < this.width) {
-          console.log('未充满')
           let fullWidth = this.fullWidth
           for (let i = 0; i < this.columns.length; i++) {
             let column = this.columns[i]
