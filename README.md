@@ -1,6 +1,4 @@
 [查看Demo演示](https://liujiangshan.github.io/LjsTreeTable/docs)：由于没有服务端，异步加载无效
-
-
 ## 运行此项目:
 ##### 1.安装yarn
 ##### 2.克隆项目
@@ -15,12 +13,6 @@ cd Vue-LjsTreeTable
 ```bash
 yarn install
 ```
-在安装sass时可能报错，重新安装node-sass、sass-loader好像能解决
-```bash
-yarn remove node-sass sass-loader
-yarn add --save-dev node-sass sass-loader
-```
-
 ##### 5.运行项目
 ```bash
 yarn run dev
@@ -52,12 +44,10 @@ Vue.use(LjsTreeTable)
 ...
 </style>
 ```
-
 ## 编译自己的LjsTreeTable组件
 ```bash
 yarn run build
 ```
-
 ## 编译该项目示例
 ```bash
 yarn run doc
