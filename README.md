@@ -1,6 +1,6 @@
 [查看Demo演示](https://liujiangshan.github.io/LjsTreeTable/docs/)：由于没有服务端，异步加载无效
 ## 运行此项目:
-##### 1.安装yarn
+##### 1.[安装yarn](https://yarnpkg.com/zh-Hans/docs/install)
 ##### 2.克隆项目
 ```bash
 git clone https://github.com/LiuJiangshan/LjsTreeTable.git
