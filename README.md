@@ -3,11 +3,11 @@
 ##### 1.安装yarn
 ##### 2.克隆项目
 ```bash
-git clone https://github.com/LiuJiangshan/Vue-LjsTreeTable.git
+git clone https://github.com/LiuJiangshan/LjsTreeTable.git
 ```
 ##### 3.进入项目目录
 ```bash
-cd Vue-LjsTreeTable
+cd LjsTreeTable
 ```
 ##### 4.安装依赖库
 ```bash
