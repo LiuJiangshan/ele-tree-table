@@ -1,5 +1,8 @@
 <template>
-    <div class="body" @keyup.up="up" @keyup.down="down" :style="{width:width+'px'}"
+    <div name="LjsTreeTable" link="https://github.com/LiuJiangshan/LjsTreeTable"
+         class="ljs_treetable_body"
+         @keyup.up="up"
+         @keyup.down="down" :style="{width:width===0?600:width+'px'}"
          @keyup.left="left" @keyup.right="right" ref="treetable">
         <div v-if="debug"
              style="position: absolute;border:1px red solid;font-size: xx-small;color: red;right: 0;bottom: 50px;">
@@ -227,6 +230,7 @@
     components: {LjsThead, LjsTbody, LjsTr, LjsTableFix, LjsEditTd, LjsContextMenu},
     data () {
       return {
+        treeTableWidth: 600,
         width: 0,
         // 格式化数据
         expandDatas: [],
@@ -494,7 +498,7 @@
   }
 </script>
 <style lang="scss" scoped>
-    .body {
+    .ljs_treetable_body {
         position: relative;
     }
 </style>

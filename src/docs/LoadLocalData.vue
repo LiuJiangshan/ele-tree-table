@@ -1,7 +1,6 @@
 <template>
     <div>
-        <LjsTreeTable :border="border" :datas="datas" :columns="columns" :debug="debug"
-                      style="width: 100%;height: 500px;"/>
+        <LjsTreeTable :border="border" :datas="datas" :columns="columns" :debug="debug"/>
         <div>
             <input type="button" :value="debug?'关闭调试':'打开调试'" @click="debug=!debug"/>
             <input type="button" :value="border?'隐藏边框':'显示边框'" @click="border=!border"/>
