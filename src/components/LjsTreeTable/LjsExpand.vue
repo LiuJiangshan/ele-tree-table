@@ -34,7 +34,7 @@
 
 <style scoped>
     .expand_warp {
-        width: 23px;
+        width: 11px;
         height: 23px;
         display: flex;
         flex-direction: row;
