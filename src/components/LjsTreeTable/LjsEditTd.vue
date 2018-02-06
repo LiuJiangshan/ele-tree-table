@@ -3,7 +3,7 @@
     <td :class="tdClass" :width="column.width"
         @keyup.enter="onEnter"
         @click.stop="onClick" @dblclick.stop="onDbClick">
-        <div class="td_warp" tabindex="0" @focus="onTdFocus" ref="tdWarp" @blut="onBlur">
+        <div class="td_warp" tabindex="0" @focus="onTdFocus" ref="tdWarp" @blur="onBlur">
             <div v-if="debug" v-html="getState()"
                  style="position: absolute;color: red;font-size: xx-small;right: 0;"></div>
             <div v-if="false" v-html="'h_w:'+headWidth+',b_w:'+bodyWidth"
@@ -14,9 +14,10 @@
                     :draw="column.render" :data="data"
                     :column="column">
             </Render>
-            <input v-else type="text" :style="{width:bodyWidth+'px'}" ref="input" @blur="onBlur"
+            <input :disabled="this.column.edit===false" v-else type="text" :style="{width:bodyWidth+'px'}" ref="input"
+                   @blur="onBlur"
                    @focus="onFocus" v-model="value"
-                   @input="input=true"
+                   @input="onInput"
                    class="ljs_edit_td_input"/>
         </div>
     </td>
@@ -147,6 +148,7 @@
       }
     },
     methods: {
+      onInput () { if (!this.column.render) this.input = true },
       getState () {
         switch (this.state) {
           case States.normal:
