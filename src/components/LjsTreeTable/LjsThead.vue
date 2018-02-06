@@ -13,7 +13,8 @@
             <tr>
                 <th v-for="(column,columnIndex) in columns"
                     :key="columnIndex" class="th" :width="column.width" :height="table.headHeight">
-                    <div :class="column.resize?'th_warp_resizeable':'th_warp'" @mousedown="mouseDown($event,column)">
+                    <div :class="column.resize!==false?'th_warp_resizeable':'th_warp'"
+                         @mousedown="mouseDown($event,column)">
                         <div v-if="table.debug"
                              style="position: absolute;color: red;font-size: xx-small;right: 0;bottom: 0;"
                              v-html="'w:'+column.width"></div>
