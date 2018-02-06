@@ -253,7 +253,6 @@
     .td_warp {
         outline: none;
         border: none;
-        position: relative;
         display: flex;
         flex-direction: row;
         align-items: left;

@@ -1,5 +1,5 @@
 <template>
-    <div name="LjsTreeTable" link="https://github.com/LiuJiangshan/LjsTreeTable"
+    <div ljstreetable="LjsTreeTable" link="https://github.com/LiuJiangshan/LjsTreeTable"
          class="ljs_treetable_body"
          @keyup.up="up"
          @keyup.down="down" :style="{width:width===0?600:width+'px'}"
@@ -154,7 +154,7 @@
       // 层级区分宽度
       deepWidth: {
         type: Number,
-        default: 30
+        default: 20
       }
     },
     watch: {
