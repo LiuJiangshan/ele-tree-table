@@ -10,7 +10,6 @@ import VueBindTest from '../docs/VueBindTest.vue'
 import VueRefTest from '../docs/VueRefTest.vue'
 import IviewInputTest from '../docs/IviewInputTest.vue'
 import LoadLocalData from '../docs/LoadLocalData.vue'
-import SelectTest from '../docs/SelectTest.vue'
 
 Vue.use(Router)
 export default new Router({
@@ -64,11 +63,6 @@ export default new Router({
       path: '/IviewInputTest',
       name: 'IviewInputTest',
       component: IviewInputTest
-    },
-    {
-      path: '/SelectTest',
-      name: 'SelectTest',
-      component: SelectTest
     }
   ]
 })

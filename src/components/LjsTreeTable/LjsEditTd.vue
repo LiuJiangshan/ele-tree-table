@@ -198,7 +198,7 @@
       },
       focus () {
         this.state = States.select
-        if (this.column.render) this.$refs.tdWarp.focus()
+        if (this.column.render || this.column.edit === false) this.$refs.tdWarp.focus()
         else this.$refs.input.focus()
       },
       onBlur () {

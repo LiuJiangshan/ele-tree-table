@@ -4,8 +4,6 @@
         <br/>
         <router-link to="/LoadLocalData">简单列表示例</router-link>
         <br/>
-        <router-link to="/SelectTest">自定义下拉选择测试</router-link>
-        <br/>
     </div>
 </template>
 

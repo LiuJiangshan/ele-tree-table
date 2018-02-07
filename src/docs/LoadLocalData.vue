@@ -22,7 +22,6 @@
           {
             key: 'id',
             label: '编号',
-            width: 200,
             resize: true,
             expand: true,
             check: true,
@@ -30,23 +29,41 @@
           },
           {
             key: 'name',
-            label: '名称',
-            resize: true
+            label: '名称'
           },
           {
             key: 'sex',
             label: '性别',
-            resize: true
+            render (h, ctx) {
+              let re = h('Select', {
+                on: {
+                  blur () { console.log('loss focus') }
+                },
+                props: {
+                  transfer: true,
+                  value: ctx.data[ctx.column.key]
+                }
+              }, [h('Option', {props: {value: '男'}}, '男'), h('Option', {props: {value: '女'}}, '女')])
+              return re
+            }
           },
           {
             key: 'age',
-            label: '年龄',
-            resize: true
+            label:
+              '年龄'
+          },
+          {
+            key: 'birthday',
+            label: '生日',
+            width: 50,
+            render (h, ctx) {
+              return h('DatePicker', {props: {value: ctx.data.birthday}})
+            }
           },
           {
             key: 'gard',
-            label: '年级',
-            resize: true
+            label:
+              '年级'
           }
         ],
         datas: []
@@ -56,7 +73,15 @@
       getRandName () { return Math.random().toString(36).substr(2) },
       getRandGard () { return parseInt((Math.random() * 8 + 1) + '') + '年级' },
       getRandAge () { return parseInt((Math.random() * 50 + 20) + '') + '岁' },
-      getRandSex () { return Math.random() > 0.5 ? '男' : '女' }
+      getRandSex () { return Math.random() > 0.5 ? '男' : '女' },
+      getRandBirthday () {
+        let rand = Math.random() * new Date().getTime() / 2000
+        let date = Math.random() > 0.5 ? new Date(new Date().getTime() + rand) : new Date(new Date().getTime() - rand)
+        return date
+      },
+      getRandEnable () {
+        return Math.random() > 0.5
+      }
     },
     mounted () {
       let datas = []
@@ -67,6 +92,8 @@
           gard: this.getRandGard(),
           age: this.getRandAge(),
           sex: this.getRandSex(),
+          enable: this.getRandEnable(),
+          birthday: this.getRandBirthday(),
           nodes: []
         }
         for (let j = 0; j < 2; j++) {
@@ -75,7 +102,9 @@
             name: this.getRandName(),
             gard: this.getRandGard(),
             age: this.getRandAge(),
+            enable: this.getRandEnable(),
             sex: this.getRandSex(),
+            birthday: this.getRandBirthday(),
             nodes: []
           }
           for (let k = 0; k < 2; k++) {
@@ -83,8 +112,10 @@
               id: i + '-' + j,
               name: this.getRandName(),
               gard: this.getRandGard(),
+              enable: this.getRandEnable(),
               age: this.getRandAge(),
-              sex: this.getRandSex()
+              sex: this.getRandSex(),
+              birthday: this.getRandBirthday()
             })
           }
           data.nodes.push(data1)
@@ -96,6 +127,15 @@
   }
 </script>
 
-<style scoped>
+<style>
+    .ivu-input {
+        border: none;
+        outline: none;
+        border-radius: 0;
+    }
 
+    .ivu-select-selection {
+        border: none;
+        border-radius: 0;
+    }
 </style>

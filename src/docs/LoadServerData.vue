@@ -15,7 +15,7 @@
     components: {LjsTreeTable},
     data () {
       return {
-        debug: true,
+        debug: false,
         border: true,
         fixLeft: false,
         fixRight: false,
@@ -281,7 +281,6 @@
             // 可展开列
             expand: true,
             // 允许调整宽度
-            resize: true,
             // 可选择
             check: true,
             label: '名称',
@@ -293,14 +292,12 @@
             }
           },
           {
-            resize: true,
             edit: false,
             label: '经理',
             key: 'managerName',
             width: 100
           },
           {
-            resize: true,
             edit: false,
             type: 'Product',
             label: '产品ID',
@@ -308,7 +305,6 @@
             width: 100
           },
           {
-            resize: true,
             label: '详情',
             key: 'info',
             width: 100,
@@ -316,37 +312,19 @@
             maxLine: 10
           },
           {
-            resize: true,
+            label: '计划发布日期',
+            key: 'planPublish',
+            type: 'Product',
+            width: 100,
+            render (h, ctx) {
+              return h('DatePicker', {props: {value: ctx.data[ctx.column.key]}})
+            }
+          },
+          {
             label: '生产厂家',
             key: 'factory',
             type: 'Product',
             width: 100
-          },
-          {
-            resize: true,
-            label: '自定义可焦点',
-            key: 'planPublish',
-            width: 100,
-            render (h, ctx) {
-              let date = ctx.data[ctx.column.key]
-              if (date === undefined) date = new Date()
-              return h('LjsInput', {
-                props: {
-                  value: new Date(date).toLocaleString()
-                }
-              })
-            }
-          },
-          {
-            resize: true,
-            label: '自定义不可焦点',
-            key: 'publish',
-            width: 100,
-            render (h, ctx) {
-              let date = ctx.data[ctx.column.key]
-              if (date === undefined) date = new Date()
-              return h('LjsDiv', {props: {body: new Date(date).toLocaleString()}})
-            }
           }
         ],
         // 数据
@@ -382,3 +360,10 @@
     }
   }
 </script>
+<style>
+    .ivu-input {
+        border: none;
+        outline: none;
+        border-radius: 0;
+    }
+</style>

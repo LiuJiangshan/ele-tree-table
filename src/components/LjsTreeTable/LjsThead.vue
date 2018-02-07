@@ -66,7 +66,7 @@
         this.table.selectAll(this.check)
       },
       mouseDown (event, column) {
-        if (column.resize === true) {
+        if (column.resize !== false) {
           this.resizeColumn = column
           this.x = event.x
         }

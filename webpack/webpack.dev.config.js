@@ -36,7 +36,7 @@ module.exports = merge(basicConfig, {
     port: 1215,
     proxy: {
       '/api/**': {
-        target: 'http://192.168.1.88:8080',
+        target: 'http://192.168.1.91:8080',
         changeOrigin: true,
         pathRewrite: {
           '^/api': '/api'
