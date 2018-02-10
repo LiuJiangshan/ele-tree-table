@@ -29,7 +29,9 @@
           },
           {
             key: 'name',
-            label: '名称'
+            label: '名称',
+            width: 50,
+            autoLine: true
           },
           {
             key: 'sex',
@@ -70,7 +72,7 @@
       }
     },
     methods: {
-      getRandName () { return Math.random().toString(36).substr(2) },
+      getRandName () { return Math.random().toString(36).substr(2) + Math.random().toString(36).substr(2) + Math.random().toString(36).substr(2) },
       getRandGard () { return parseInt((Math.random() * 8 + 1) + '') + '年级' },
       getRandAge () { return parseInt((Math.random() * 50 + 20) + '') + '岁' },
       getRandSex () { return Math.random() > 0.5 ? '男' : '女' },
@@ -85,7 +87,7 @@
     },
     mounted () {
       let datas = []
-      for (let i = 0; i < 30; i++) {
+      for (let i = 0; i < 1; i++) {
         let data = {
           id: i,
           name: this.getRandName(),
@@ -96,7 +98,7 @@
           birthday: this.getRandBirthday(),
           nodes: []
         }
-        for (let j = 0; j < 2; j++) {
+        for (let j = 0; j < 0; j++) {
           let data1 = {
             id: i + '-' + j,
             name: this.getRandName(),
@@ -107,7 +109,7 @@
             birthday: this.getRandBirthday(),
             nodes: []
           }
-          for (let k = 0; k < 2; k++) {
+          for (let k = 0; k < 0; k++) {
             data1.nodes.push({
               id: i + '-' + j,
               name: this.getRandName(),

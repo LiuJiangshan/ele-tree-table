@@ -1,8 +1,8 @@
 <template>
     <tr v-if="expand" class="tr" tabindex="0"
-        @contextmenu.prevent.stop="table.$refs.menu.open($event.x - table.$el.offsetLeft,$event.y - table.$el.offsetTop,table.getContextItems(data),table.getMenuContext(data))">
+        @contextmenu.prevent="table.$refs.menu.open($event.x - table.$el.offsetLeft,$event.y - table.$el.offsetTop,table.getContextItems(data),table.getMenuContext(data))">
         <LjsEditTd v-for="(column,columnIndex) in table.columns" :key="columnIndex" :index="columnIndex" :data="data"
-                   :column="column"
+                   :column="column" :trHeight="height"
                    :ref="'td'+columnIndex" :tr="getThis()"/>
     </tr>
 </template>
@@ -30,8 +30,19 @@
       }
     },
     computed: {
-      expand: {
-        get () { return this.table.isExpand(this.data) }
+      expand () { return this.table.isExpand(this.data) },
+      height () {
+        let maxHeight = 0
+        for (let height in this.heights) {
+          if (height > maxHeight) maxHeight = height
+        }
+        return maxHeight
+      }
+    },
+    data () {
+      return {
+        lineHeight: this.table.lineHeight,
+        heights: {}
       }
     },
     mounted () {
@@ -45,6 +56,7 @@
 
 <style lang="scss" scoped>
     .tr {
+        overflow: hidden;
         outline: 0;
         background-color: white;
         &:hover {

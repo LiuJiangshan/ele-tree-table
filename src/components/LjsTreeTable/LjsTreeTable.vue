@@ -154,7 +154,11 @@
       // 层级区分宽度
       deepWidth: {
         type: Number,
-        default: 20
+        default: 15
+      },
+      lineHeight: {
+        type: Number,
+        default: 28
       }
     },
     watch: {
@@ -445,16 +449,6 @@
         let tds = td.tr.tds
         tds[td.index] = td
       },
-      // td获取到焦点事件
-      onTdFocus (td, States) {
-        if (this.focusTd !== undefined) this.focusTd.state = States.normal
-        this.focusTd = td
-        this.focusTd.state = States.select
-      },
-      // td失去焦点
-      onTdBlur (td, States) {
-        td.state = States.normal
-      },
       // 移动
       move (x, y) {
         if (!this.canMove) {
@@ -469,8 +463,12 @@
           // 判断是否超出边界
           if (nextY >= 0 && nextY < this.expandDatas.length && nextX >= 0 && nextX < this.columns.length) {
             let focusTd = this.expandDatas[nextY].tr.tds[nextX]
-            if (this.focusTd) this.focusTd.blur()
-            if (focusTd) focusTd.focus()
+            if (this.focusTd) {
+              // this.focusTd.blur()
+            }
+            if (focusTd) {
+              focusTd.focus()
+            }
           } else {
             console.log('超出边界', nextX, nextY)
             return false

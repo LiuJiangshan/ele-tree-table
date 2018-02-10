@@ -1,47 +1,57 @@
 <!--可编辑组件-->
 <template>
     <td :class="tdClass" :width="column.width"
-        @keyup.enter="onEnter"
-        @click.stop="onClick" @dblclick.stop="onDbClick">
-        <div class="td_warp" tabindex="0" @focus="onTdFocus" ref="tdWarp" @blur="onBlur">
-            <div v-if="debug" v-html="getState()"
-                 style="position: absolute;color: red;font-size: xx-small;right: 0;"></div>
-            <div v-if="false" v-html="'h_w:'+headWidth+',b_w:'+bodyWidth"
-                 style="position: absolute;color: red;font-size: xx-small;right: 0;"></div>
-            <LjsTdHead ref="tdHead" :td="getThis()"></LjsTdHead>
-            <!--自定义组件渲染-->
-            <Render :style="{width:bodyWidth+'px'}" v-if="this.column.render&&match" ref="input" :driver="driver"
-                    :draw="column.render" :data="data"
-                    :column="column">
-            </Render>
-            <input :disabled="this.column.edit===false" v-else type="text" :style="{width:bodyWidth+'px'}" ref="input"
-                   @blur="onBlur"
-                   @focus="onFocus" v-model="value"
-                   @input="onInput"
-                   class="ljs_edit_td_input"/>
+        @keyup.enter="handleEnter"
+        @click="handleClick" @dblclick="handleDbClick">
+        <div class="td_warp" tabindex="0" :style="tdWarpStyle"
+             @focus="handleFocus"
+             ref="tdWarp" @blur="handleBlur">
+            <template v-if="match">
+                <div v-if="debug" v-html="getState()+value"
+                     style="color: red;font-size: xx-small;"></div>
+                <div v-if="false" v-html="'h_w:'+headWidth+',b_w:'+bodyWidth"
+                     style="color: red;font-size: xx-small;"></div>
+                <LjsTdHead ref="tdHead" :td="getThis()"></LjsTdHead>
+                <!--自定义组件渲染-->
+                <Render :style="inputStyle" v-if="this.column.render" ref="input" :driver="driver"
+                        :draw="column.render" :data="data"
+                        :column="column">
+                </Render>
+                <template v-else>
+                    <LjsTextArea :only-one="!this.column.autoLine"
+                                 :auto-select="true"
+                                 :disabled="this.column.edit===false"
+                                 :style="textareaStyle"
+                                 ref="input"
+                                 @blur="handleBlur"
+                                 @focus="handleFocus"
+                                 v-model="value"
+                                 @input="handleInput"/>
+                </template>
+            </template>
         </div>
     </td>
 </template>
 <script>
   import Render from './Render.js'
   import LjsTdHead from './LjsTdHead.vue'
+  import LjsInput from './LjsInput.vue'
+  import LjsTextArea from './LjsTextArea.vue'
 
   // 单元格状态
   var States = {normal: 0, select: 1, lock: 2}
   export default {
     name: 'LjsEditTd',
-    components: {
-      Render, LjsTdHead
-    },
+    components: {Render, LjsTdHead, LjsInput, LjsTextArea},
     props: {
+      trHeight: {
+        type: Number
+      },
       index: {
         type: Number
       },
       tr: {
         type: Object
-      },
-      height: {
-        type: Number
       },
       data: {
         type: Object,
@@ -62,7 +72,6 @@
           case States.normal:
             break
           case States.select:
-            this.tr.table.onTdFocus(this, States)
             break
           case States.lock:
             this.tr.table.canMove = false
@@ -71,6 +80,19 @@
       }
     },
     computed: {
+      textareaStyle () {
+        let textareaStyle = {width: this.bodyWidth + 'px'}
+        return textareaStyle
+      },
+      tdWarpStyle () {
+        let tdWarpStyle = {}
+        return tdWarpStyle
+      },
+      inputStyle () {
+        let re = {}
+        re.width = this.bodyWidth + 'px'
+        return re
+      },
       debug: {get () { return this.table.debug }},
       driver: {get () { return this.table.driver }},
       table: {get () { return this.tr.table }},
@@ -148,7 +170,9 @@
       }
     },
     methods: {
-      onInput () { if (!this.column.render) this.input = true },
+      handleInput () {
+        if (!this.column.render) this.input = true
+      },
       getState () {
         switch (this.state) {
           case States.normal:
@@ -159,50 +183,16 @@
             return 'select'
         }
       },
-      selectAll () {
-        if (!this.column.render) {
-          this.$refs.input.select()
-          console.log('select all')
-        }
-      },
       getThis () { return this },
-      onCheck () {
-        this.data.check = true
-        this.table.onCheck()
-      },
-      onTdFocus () {
-        this.table.onTdFocus(this, States)
-        this.state = States.select
-      },
-      onFocus () {
-        this.table.onTdFocus(this, States)
+      handleFocus () {
+        console.log(this.value, '获取到了焦点')
+        if (this.focusTd) this.focusTd.state = States.normal
+        this.table.focusTd = this
         this.input = false
         this.state = States.select
-        if (this.column.edit !== false && !this.column.render) setTimeout(this.selectAll)
       },
-      onEnter () {
-        this.table.canMove = true
-        this.table.down()
-      },
-      onDbClick () { this.state = States.lock },
-      onClick () {
-        this.state = States.select
-        // 手动触发事件回调
-        if (this.column.render) this.onFocus()
-      },
-      blur () {
+      handleBlur () {
         this.state = States.normal
-        if (!this.column.render) this.$refs.input.blur()
-        // 手动触发事件回调
-        else this.onBlur()
-      },
-      focus () {
-        this.state = States.select
-        if (this.column.render || this.column.edit === false) this.$refs.tdWarp.focus()
-        else this.$refs.input.focus()
-      },
-      onBlur () {
-        this.table.onTdBlur(this, States)
         if (!this.input) {
           if (this.debug) console.log('未输入,不需要更新')
         } else if (this.column.render) {
@@ -217,7 +207,30 @@
           let update = this.driver.updater[this.data.pojo]
           update(this.data, this.column)
         }
-        this.inputChange = false
+        this.input = false
+      },
+      handleEnter () {
+        this.table.canMove = true
+        this.table.down()
+      },
+      handleDbClick () { this.state = States.lock },
+      handleClick () {
+        this.state = States.select
+      },
+      blur () {
+        this.state = States.normal
+        if (!this.column.render) {
+          // let input = this.$refs.input
+          // console.log(input)
+        } else this.handleBlur()// 手动触发事件回调
+      },
+      focus () {
+        if (this.column.render || this.column.edit === false) {
+          console.log(this.column.render ? '自定义组件' : '单元格禁止编辑' + '', '包裹层获取焦点')
+          this.$refs.tdWarp.focus()
+        } else {
+          this.$refs.input.$el.focus()
+        }
       }
     },
     data () {
@@ -255,26 +268,10 @@
     .td_warp {
         outline: none;
         border: none;
+        overflow: hidden;
         display: flex;
         flex-direction: row;
         align-items: left;
         align-content: left;
-        overflow: hidden;
-        width: 100%;
-        height: 28px;
-        line-height: 28px;
-    }
-
-    .ljs_edit_td_input {
-        font-family: Arial, 微软雅黑, serif;
-        font-size: 11px;
-        line-height: 28px;
-        height: 28px;
-        vertical-align: middle;
-        display: inline-block;
-        border: none;
-        background: none;
-        color: #333333;
-        outline: none;
     }
 </style>

@@ -1,10 +1,12 @@
 <template>
     <div>
-        <LjsTreeTable :border="border" :datas="datas" :columns="columns" :driver="driver" :rightMenu="rightMenu"
+        <LjsTreeTable :border="border" :datas="datas" :columns="columns" :driver="driver"
+                      :rightMenu="rightMenu"
                       :onExpand="onExpand" style="width:100%;height: 500px;" :onClose="onClose" :debug="debug"
                       :fixLeft="fixLeft" :fixRight="fixRight"
                       @on-check="onCheck"/>
         <input type="button" @click="debug=!debug" :value="debug?'关闭调试':'打开调试'"/>
+        <input type="button" :value="border?'隐藏边框':'显示边框'" @click="border=!border"/>
     </div>
 </template>
 <script>
@@ -308,6 +310,7 @@
             label: '详情',
             key: 'info',
             width: 100,
+            autoLine: true,
             // 最大显示行数
             maxLine: 10
           },
