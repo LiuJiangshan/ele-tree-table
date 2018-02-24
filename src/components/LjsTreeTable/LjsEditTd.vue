@@ -1,6 +1,6 @@
 <!--可编辑组件-->
 <template>
-    <td :class="tdClass" :width="column.width" v-click-outside="handleBlur"
+    <td :class="tdClass" :width="column.width"
         @keyup.enter="handleEnter"
         @click="handleClick" @dblclick="handleDbClick">
         <div class="td_warp" tabindex="0" :style="tdWarpStyle"
@@ -37,14 +37,12 @@
   import LjsTdHead from './LjsTdHead.vue'
   import LjsInput from './LjsInput.vue'
   import LjsTextArea from './LjsTextArea.vue'
-  import ClickOutside from './ClickOutSide.js'
 
   // 单元格状态
   var States = {normal: 0, select: 1, lock: 2}
   export default {
     name: 'LjsEditTd',
     components: {Render, LjsTdHead, LjsInput, LjsTextArea},
-    directives: {ClickOutside},
     props: {
       trHeight: {
         type: Number,
@@ -216,31 +214,23 @@
         if ($event.ctrlKey) {
           this.table.canMove = true
           this.table.down()
-          console.log($event)
         }
       },
       handleDbClick () { this.state = States.lock },
       handleClick () {
-        console.log(this.value, '被点击')
         if (this.focusTd) this.focusTd.state = States.normal
         this.table.focusTd = this
         this.input = false
         this.state = States.select
+        if (this.match && this.column.edit !== false) this.$refs.input.$el.focus()
       },
       blur () {
         this.state = States.normal
-        if (!this.column.render) {
-          // let input = this.$refs.input
-          // console.log(input)
-        } else this.handleBlur()// 手动触发事件回调
+        if (this.column.render) this.state = States.normal
       },
       focus () {
-        if (this.column.render || this.column.edit === false) {
-          console.log(this.column.render ? '自定义组件' : '单元格禁止编辑' + '', '包裹层获取焦点')
-          this.$refs.tdWarp.focus()
-        } else {
-          this.$refs.input.$el.focus()
-        }
+        if (this.match && this.column.edit !== false && !this.column.render) this.$refs.input.$el.focus()
+        else this.$refs.tdWarp.focus()
       }
     },
     data () {
