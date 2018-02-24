@@ -92,19 +92,21 @@
         this.$emit('blur')
       },
       autoLine () {
-        let textarea = this.$el
-        textarea.style.height = 'auto'
-        let scrollHeight = textarea.scrollHeight
-        let height
-        if (this.trHeight > scrollHeight) {
-          height = this.trHeight + 'px'
-          console.log('填满父容器完成:', height)
-        } else {
-          this.$parent.tr.heights[this.column.index] = scrollHeight
-          height = scrollHeight + 'px'
-          console.log('撑大父容器完成:', height)
+        if (!this.onlyOne) {
+          let textarea = this.$el
+          textarea.style.height = 'auto'
+          let scrollHeight = textarea.scrollHeight
+          let height
+          if (this.trHeight > scrollHeight) {
+            height = this.trHeight + 'px'
+            console.log('填满父容器完成:', height)
+          } else {
+            this.$parent.tr.heights[this.column.index] = scrollHeight
+            height = scrollHeight + 'px'
+            console.log('撑大父容器完成:', height)
+          }
+          textarea.style.height = height
         }
-        textarea.style.height = height
       }
     },
     data () {
@@ -133,6 +135,8 @@
         font-family: Arial, 微软雅黑, serif;
         font-size: 11px;
         color: #333333;
+        padding: 0;
+        margin: 0;
     }
 
     .ljs_input {

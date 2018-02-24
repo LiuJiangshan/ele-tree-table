@@ -92,6 +92,10 @@
       inputStyle () {
         let re = {}
         re.width = this.bodyWidth + 'px'
+        if (!this.column.autoLine) {
+          re.height = this.table.lineHeight + 'px'
+          re.overflow = 'hidden'
+        }
         return re
       },
       debug: {get () { return this.table.debug }},
