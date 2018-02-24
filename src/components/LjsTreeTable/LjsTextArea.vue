@@ -9,7 +9,6 @@
            :value="currentValue"/>
     <textarea v-else class="ljs_text_area"
               rows="1"
-              @keydown.enter.prevent="handleEnter"
               @input="handleInput"
               @focus="handleFocus"
               :style="inputStyle"
@@ -74,9 +73,6 @@
         this.$el.select()
       },
       handleClick () {
-      },
-      handleEnter (event) {
-        event.returnValue = false
       },
       handleInput (event) {
         this.autoLine()
