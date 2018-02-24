@@ -1,6 +1,6 @@
 <!--可编辑组件-->
 <template>
-    <td :class="tdClass" :width="column.width"
+    <td :class="tdClass" :width="column.width" v-click-outside="handleBlur"
         @keyup.enter="handleEnter"
         @click="handleClick" @dblclick="handleDbClick">
         <div class="td_warp" tabindex="0" :style="tdWarpStyle"
@@ -14,12 +14,12 @@
                 <LjsTdHead ref="tdHead" :td="getThis()"></LjsTdHead>
                 <!--自定义组件渲染-->
                 <Render :style="inputStyle" v-if="this.column.render" ref="input" :driver="driver"
-                        :draw="column.render" :data="data"
-                        :column="column">
+                        :draw="column.render" :data="data" :column="column">
                 </Render>
                 <template v-else>
                     <LjsTextArea :only-one="!this.column.autoLine"
                                  :auto-select="true"
+                                 :line-height="this.tr.table.lineHeight"
                                  :disabled="this.column.edit===false"
                                  :style="textareaStyle"
                                  ref="input"
@@ -37,15 +37,18 @@
   import LjsTdHead from './LjsTdHead.vue'
   import LjsInput from './LjsInput.vue'
   import LjsTextArea from './LjsTextArea.vue'
+  import ClickOutside from './ClickOutSide.js'
 
   // 单元格状态
   var States = {normal: 0, select: 1, lock: 2}
   export default {
     name: 'LjsEditTd',
     components: {Render, LjsTdHead, LjsInput, LjsTextArea},
+    directives: {ClickOutside},
     props: {
       trHeight: {
-        type: Number
+        type: Number,
+        default: undefined
       },
       index: {
         type: Number
@@ -119,16 +122,16 @@
       // 单元格边框样式
       tdClass: {
         get () {
-          let tdClass = {}
+          let tdClass = ''
           switch (this.state) {
             case States.normal:
-              tdClass.td_mormal = true
+              tdClass = 'td_mormal'
               break
             case States.select:
-              tdClass.td_select = true
+              tdClass = 'td_select'
               break
             case States.lock:
-              tdClass.td_lock = true
+              tdClass = 'td_lock'
               break
           }
           return tdClass
@@ -209,12 +212,19 @@
         }
         this.input = false
       },
-      handleEnter () {
-        this.table.canMove = true
-        this.table.down()
+      handleEnter ($event) {
+        if ($event.ctrlKey) {
+          this.table.canMove = true
+          this.table.down()
+          console.log($event)
+        }
       },
       handleDbClick () { this.state = States.lock },
       handleClick () {
+        console.log(this.value, '被点击')
+        if (this.focusTd) this.focusTd.state = States.normal
+        this.table.focusTd = this
+        this.input = false
         this.state = States.select
       },
       blur () {

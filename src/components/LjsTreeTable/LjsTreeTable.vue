@@ -1,5 +1,5 @@
 <template>
-    <div ljstreetable="LjsTreeTable" link="https://github.com/LiuJiangshan/LjsTreeTable"
+    <div component="LjsTreeTable" author="LiuJiangshan" github="https://github.com/LiuJiangshan/LjsTreeTable"
          class="ljs_treetable_body"
          @keyup.up="up"
          @keyup.down="down" :style="{width:width===0?600:width+'px'}"
@@ -127,8 +127,13 @@
         type: Boolean,
         default: false
       },
-      // 是否显示边框
+      // 是否显示表格边框
       border: {
+        type: Boolean,
+        default: true
+      },
+      // 是否显示行边框
+      trBorder: {
         type: Boolean,
         default: false
       },
@@ -250,10 +255,21 @@
       formatColumns () {
         if (this.fullWidth < this.width) {
           console.log('未充满')
-          let fullWidth = this.fullWidth
+          let heapWidth = 0
           for (let i = 0; i < this.columns.length; i++) {
+            let r
             let column = this.columns[i]
-            column.width = column.width / fullWidth * this.width
+            let oldWidth = column.width
+            if (i === this.columns.length - 1) {
+              r = undefined
+              column.width = this.width - heapWidth
+            } else {
+              r = column.width / this.fullWidth
+              column.width = r * this.width
+              column.width = Math.trunc(column.width)
+            }
+            heapWidth += column.width
+            console.log('fullWidth:', this.width, 'heapWidth:', heapWidth, 'columnWidth:', column.width, 'oldWidth:', oldWidth, 'r:', r)
           }
         }
       },

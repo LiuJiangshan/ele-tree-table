@@ -4,6 +4,9 @@
         <br/>
         <router-link to="/LoadLocalData">简单列表示例</router-link>
         <br/>
+        <router-link to="/autoLine">自动换行示例</router-link>
+        <br/>
+        <router-link to="/border">边框示例</router-link>
     </div>
 </template>
 
@@ -12,7 +15,5 @@
     name: 'index'
   }
 </script>
-
-<style scoped>
-
+<style lang="scss" scoped>
 </style>

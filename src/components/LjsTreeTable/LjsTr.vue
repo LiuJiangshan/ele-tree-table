@@ -1,5 +1,5 @@
 <template>
-    <tr v-if="expand" class="tr" tabindex="0"
+    <tr v-if="expand" :class="this.table.trBorder?'tr_border':'tr'" tabindex="0"
         @contextmenu.prevent="table.$refs.menu.open($event.x - table.$el.offsetLeft,$event.y - table.$el.offsetTop,table.getContextItems(data),table.getMenuContext(data))">
         <LjsEditTd v-for="(column,columnIndex) in table.columns" :key="columnIndex" :index="columnIndex" :data="data"
                    :column="column" :trHeight="height"
@@ -36,6 +36,7 @@
         for (let height in this.heights) {
           if (height > maxHeight) maxHeight = height
         }
+        if (maxHeight === 0) maxHeight = this.lineHeight
         return maxHeight
       }
     },
@@ -65,5 +66,10 @@
         &:focus {
             background-color: #f5f5f5;
         }
+    }
+
+    .tr_border {
+        @extend .tr;
+        border-bottom: 1px #E4E4E4 solid;
     }
 </style>

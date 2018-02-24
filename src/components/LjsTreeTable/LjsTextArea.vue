@@ -1,7 +1,6 @@
 <!--自动换行的textarea-->
 <template>
     <input v-if="onlyOne" :a="onlyOne" class="ljs_input"
-           rows="1"
            @input="handleInput"
            @focus="handleFocus"
            :style="inputStyle"
@@ -10,7 +9,7 @@
            :value="currentValue"/>
     <textarea v-else class="ljs_text_area"
               rows="1"
-              @@keydown.enter.prevent="handleEnter"
+              @keydown.enter.prevent="handleEnter"
               @input="handleInput"
               @focus="handleFocus"
               :style="inputStyle"
@@ -22,6 +21,10 @@
   export default {
     name: 'LjsTextArea',
     props: {
+      lineHeight: {
+        type: Number,
+        default: 28
+      },
       // 单行模式
       onlyOne: {
         type: Boolean,
@@ -41,7 +44,7 @@
       column () { return this.$parent.column },
       inputStyle: {
         get () {
-          let inputStyle = {}
+          let inputStyle = {lineHeight: this.lineHeight + 'px'}
           if (this.onlyOne) {
             inputStyle.height = this.parentHeight + 'px'
           } else {
@@ -67,6 +70,9 @@
       }
     },
     methods: {
+      select () {
+        this.$el.select()
+      },
       handleClick () {
       },
       handleEnter (event) {
@@ -78,7 +84,7 @@
       },
       handleFocus () {
         this.focus = true
-        if (this.autoSelect) this.$el.select()
+        if (this.autoSelect) setTimeout(this.select, 1)
         this.$emit('focus')
       },
       handleBlur () {
@@ -109,6 +115,9 @@
     },
     mounted () {
       this.autoLine()
+    },
+    updated () {
+      this.autoLine()
     }
   }
 </script>
@@ -131,6 +140,7 @@
     }
 
     .ljs_text_area {
+        line-height: 1;
         @extend .ljs_text;
         resize: none;
     }

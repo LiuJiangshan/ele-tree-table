@@ -78,6 +78,7 @@
         if (this.resizeColumn) {
           let x = event.x
           let length = x - this.x
+          length = Math.trunc(length)
           this.x = x
           let newSize = this.resizeColumn.width + length
           if (newSize < 20) newSize = 20

@@ -1,17 +1,19 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import index from '../docs/index.vue'
-import LoadServerData from '../docs/LoadServerData.vue'
-import LjsContextMenuTest from '../docs/LjsContextMenuTest.vue'
-import LjsExpandTest from '../docs/LjsExpandTest.vue'
-import RateTest from '../docs/RateTest.vue'
-import ResizeTest from '../docs/ResizeTest.vue'
-import VueBindTest from '../docs/VueBindTest.vue'
-import VueRefTest from '../docs/VueRefTest.vue'
-import IviewInputTest from '../docs/IviewInputTest.vue'
-import LoadLocalData from '../docs/LoadLocalData.vue'
-import LjsInputTest from '../docs/LjsInputTest.vue'
-import LjsTextAreaTest from '../docs/LjsTextAreaTest.vue'
+import LoadServerData from '../docs/example/LoadServerData.vue'
+import LoadLocalData from '../docs/example/LoadLocalData.vue'
+import border from '../docs/example/border.vue'
+import autoLine from '../docs/example/autoLine.vue'
+import LjsContextMenuTest from '../docs/test/LjsContextMenuTest.vue'
+import LjsExpandTest from '../docs/test/LjsExpandTest.vue'
+import RateTest from '../docs/test/RateTest.vue'
+import ResizeTest from '../docs/test/ResizeTest.vue'
+import VueBindTest from '../docs/test/VueBindTest.vue'
+import VueRefTest from '../docs/test/VueRefTest.vue'
+import IviewInputTest from '../docs/test/IviewInputTest.vue'
+import LjsInputTest from '../docs/test/LjsInputTest.vue'
+import LjsTextAreaTest from '../docs/test/LjsTextAreaTest.vue'
 
 Vue.use(Router)
 export default new Router({
@@ -25,6 +27,21 @@ export default new Router({
       path: '/LoadServerData',
       name: 'LoadServerData',
       component: LoadServerData
+    },
+    {
+      path: '/LoadLocalData',
+      name: 'LoadLocalData',
+      component: LoadLocalData
+    },
+    {
+      path: '/autoLine',
+      name: 'autoLine',
+      component: autoLine
+    },
+    {
+      path: '/border',
+      name: 'border',
+      component: border
     },
     {
       path: '/LjsContextMenuTest',
@@ -55,11 +72,6 @@ export default new Router({
       path: '/VueRefTest',
       name: 'VueRefTest',
       component: VueRefTest
-    },
-    {
-      path: '/LoadLocalData',
-      name: 'LoadLocalData',
-      component: LoadLocalData
     },
     {
       path: '/IviewInputTest',
