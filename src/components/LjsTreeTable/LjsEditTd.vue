@@ -1,6 +1,6 @@
 <!--可编辑组件-->
 <template>
-    <td :class="tdClass" :width="column.width"
+    <td :class="tdClass" :width="column.width" :style="tdStyle"
         @keyup.enter="handleEnter"
         @click="handleClick" @dblclick="handleDbClick">
         <div class="td_warp" tabindex="0" :style="tdWarpStyle"
@@ -81,6 +81,11 @@
       }
     },
     computed: {
+      tdStyle () {
+        let tdStyle = {}
+        if (this.state === States.normal) tdStyle.borderColor = this.table.borderColor
+        return tdStyle
+      },
       textareaStyle () {
         let textareaStyle = {width: this.bodyWidth + 'px'}
         return textareaStyle
@@ -190,7 +195,7 @@
       },
       getThis () { return this },
       handleFocus () {
-        console.log(this.value, '获取到了焦点')
+        // console.log(this.value, '获取到了焦点')
         if (this.focusTd) this.focusTd.state = States.normal
         this.table.focusTd = this
         this.input = false
@@ -199,15 +204,15 @@
       handleBlur () {
         this.state = States.normal
         if (!this.input) {
-          if (this.debug) console.log('未输入,不需要更新')
+          // console.log('未输入,不需要更新')
         } else if (this.column.render) {
-          if (this.debug) console.log('自定义组件,更新操作需自定义')
+          // console.log('自定义组件,更新操作需自定义')
         } else if (this.column.edit === false) {
-          if (this.debug) console.log(this.column.label + '不允许编辑,未更新')
+          // console.log(this.column.label + '不允许编辑,未更新')
         } else if (!this.match) {
-          if (this.debug) console.log(this.data.pojo + '没有' + this.column.key + '(' + this.column.label + ')字段,未更新')
+          // console.log(this.data.pojo + '没有' + this.column.key + '(' + this.column.label + ')字段,未更新')
         } else if (!this.driver || !this.driver.updater || !this.driver.updater.hasOwnProperty(this.data.pojo)) {
-          if (this.debug) console.log('未提供更新方法')
+          // console.log('未提供更新方法')
         } else {
           let update = this.driver.updater[this.data.pojo]
           update(this.data, this.column)
@@ -256,22 +261,22 @@
         let tdWarp = this.$refs.tdWarp
         if (!this.match) {
           tdWarp.focus()
-          console.log('空白获取到焦点:', this.column.label)
+          // console.log('空白获取到焦点:', this.column.label)
         } else if (this.column.edit === false) {
           tdWarp.focus()
-          console.log('不能编辑获取到焦点:', this.column.label)
+          // console.log('不能编辑获取到焦点:', this.column.label)
         } else if (this.column.render) {
           let focusAbleNode = this.getFocusNode(tdWarp)
           tdWarp.click()
           if (focusAbleNode) {
             focusAbleNode.focus()
             this.state = States.select
-            console.log('可焦点元素:', focusAbleNode)
+            // console.log('可焦点元素:', focusAbleNode)
           }
-          console.log('自定义组件获取到焦点:', this.column.label)
+          // console.log('自定义组件获取到焦点:', this.column.label)
         } else {
           this.$refs.input.$el.focus()
-          console.log('文本框获取到焦点:', this.column.label)
+          // console.log('文本框获取到焦点:', this.column.label)
         }
       }
     },

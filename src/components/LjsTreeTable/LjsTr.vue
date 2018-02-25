@@ -1,5 +1,5 @@
 <template>
-    <tr v-if="expand" :class="this.table.trBorder?'tr_border':'tr'" tabindex="0"
+    <tr v-if="expand" :class="this.table.trBorder?'tr_border':'tr'" :style="trStyle" tabindex="0"
         @contextmenu.prevent="table.$refs.menu.open($event.x - table.$el.offsetLeft,$event.y - table.$el.offsetTop,table.getContextItems(data),table.getMenuContext(data))">
         <LjsEditTd v-for="(column,columnIndex) in table.columns" :key="columnIndex" :index="columnIndex" :data="data"
                    :column="column" :trHeight="height"
@@ -30,6 +30,11 @@
       }
     },
     computed: {
+      trStyle () {
+        let trStyle = {}
+        trStyle.borderColor = this.table.trBorderColor
+        return trStyle
+      },
       expand () { return this.table.isExpand(this.data) },
       height () {
         let maxHeight = 0
@@ -70,6 +75,6 @@
 
     .tr_border {
         @extend .tr;
-        border-bottom: 1px #E4E4E4 solid;
+        border-bottom: 1px solid;
     }
 </style>

@@ -39,10 +39,10 @@
         display: flex;
         flex-direction: row;
         align-items: center;
+        margin: 4px;
         justify-content: center;
         justify-items: center;
         align-content: center;
-        margin: 4px;
     }
 
     .image {

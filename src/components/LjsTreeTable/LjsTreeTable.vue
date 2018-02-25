@@ -159,7 +159,7 @@
       // 层级区分宽度
       deepWidth: {
         type: Number,
-        default: 15
+        default: 19
       },
       lineHeight: {
         type: Number,
@@ -177,14 +177,16 @@
       }
     },
     computed: {
+      trBorderColor () { return '#E4E4E4' },
+      borderColor () {
+        return this.border ? '#E4E4E4' : 'transparent'
+      },
       thisTable: {get () { return this }},
       // 获取非固定列定义
-      bodyColumns: {
-        get () {
-          let start = this.fixLeft ? 1 : 0
-          let end = this.fixRight ? (this.columns.length - 2) : (this.columns.length - 1)
-          return this.columns.slice(start, end)
-        }
+      bodyColumns () {
+        let start = this.fixLeft ? 1 : 0
+        let end = this.fixRight ? (this.columns.length - 2) : (this.columns.length - 1)
+        return this.columns.slice(start, end)
       },
       // 获取第一列定义
       leftColumns: {
@@ -254,12 +256,10 @@
     methods: {
       formatColumns () {
         if (this.fullWidth < this.width) {
-          console.log('未充满')
           let heapWidth = 0
           for (let i = 0; i < this.columns.length; i++) {
             let r
             let column = this.columns[i]
-            let oldWidth = column.width
             if (i === this.columns.length - 1) {
               r = undefined
               // 最后一个单元格占满剩余宽度(减去边框宽度)
@@ -270,7 +270,6 @@
               column.width = Math.trunc(column.width)
             }
             heapWidth += column.width
-            console.log('fullWidth:', this.width, 'heapWidth:', heapWidth, 'columnWidth:', column.width, 'oldWidth:', oldWidth, 'r:', r)
           }
         }
       },

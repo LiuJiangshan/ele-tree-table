@@ -1,7 +1,7 @@
 <!--单元格表头内容-->
 <template>
     <div class="td_head_warp" ref="head_warp">
-        <div class="td_head">
+        <div class="td_head" :style="tdHeadStyle">
             <!--深度-->
             <template v-if="column.expand">
                 <LjsDeep :data="data" :column="column" :table="td.tr.table"/>
@@ -31,6 +31,11 @@
       }
     },
     computed: {
+      tdHeadStyle () {
+        let tdHeadStyle = {}
+        tdHeadStyle.height = this.td.tr.height + 'px'
+        return tdHeadStyle
+      },
       table: {get () { return this.td.tr.table }},
       data: {
         get () {
@@ -67,7 +72,6 @@
 
 <style lang="scss" scoped>
     .td_head_warp {
-        height: 100%;
         display: inline-block;
     }
 
@@ -76,13 +80,5 @@
         flex-direction: row;
         align-items: center;
         align-content: left;
-    }
-
-    .check_warp {
-        height: 100%;
-        display: flex;
-        flex-direction: row;
-        align-content: center;
-        align-items: center;
     }
 </style>

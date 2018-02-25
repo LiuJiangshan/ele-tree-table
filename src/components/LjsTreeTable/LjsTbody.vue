@@ -52,7 +52,7 @@
       tableStyle: {
         get () {
           return {
-            'border-color': this.table.border ? '#E4E4E4' : 'transparent',
+            borderColor: this.table.borderColor,
             width: this.fix ? 'auto' : this.fullWidth + 'px'
           }
         }

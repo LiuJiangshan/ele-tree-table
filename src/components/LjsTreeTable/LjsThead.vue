@@ -3,15 +3,14 @@
     <div class="table_head_warp"
          :style="{width:width+'px',height:table.headHeight+'px'}" ref="header">
         <table @mouseup="mouseUp" @mouseleave="mouseUp" @mousemove="mouseMove($event)" class="head_table"
-               :width="fullWidth?fullWidth:'100%'" :border="0"
-               cellspacing="0" cellpadding="0">
+               :width="fullWidth?fullWidth:'100%'" border="1">
             <colgroup>
                 <col v-for="(column,columnIndex) in columns" :key="columnIndex" :width="column.width"
                      :index="columnIndex">
             </colgroup>
             <thead>
             <tr>
-                <th v-for="(column,columnIndex) in columns"
+                <th v-for="(column,columnIndex) in columns" :style="thStyle"
                     :key="columnIndex" class="th" :width="column.width" :height="table.headHeight">
                     <div :class="column.resize!==false?'th_warp_resizeable':'th_warp'"
                          @mousedown="mouseDown($event,column)">
@@ -60,6 +59,12 @@
         resizeColumn: undefined
       }
     },
+    computed: {
+      thStyle () {
+        let thStyle = {borderColor: this.table.borderColor}
+        return thStyle
+      }
+    },
     methods: {
       onCheckChange () {
         this.check = !this.check
@@ -92,11 +97,11 @@
 
 <style lang="scss" scoped>
     .table_head_warp {
-        overflow-x: hidden;
-        overflow-y: scroll;
+        overflow: hidden;
     }
 
     .head_table {
+        box-sizing: border-box;
         border-collapse: collapse;
         border: none transparent;
         table-layout: fixed;
@@ -105,6 +110,8 @@
 
     .th {
         text-align: left;
+        box-sizing: border-box;
+        border: 1px solid;
         background-color: #F2F2F2;
         font-size: 11px;
     }

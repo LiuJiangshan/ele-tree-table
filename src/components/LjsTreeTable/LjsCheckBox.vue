@@ -1,5 +1,5 @@
 <template>
-    <div class="expand_warp">
+    <div class="check_warp">
         <img class="image" @click.stop="handClick" :style="imageStyle"
              :src="check?checkedIcon:noCheckedIcon"/>
     </div>
@@ -35,16 +35,16 @@
 </script>
 
 <style lang="scss" scoped>
-    .expand_warp {
+    .check_warp {
         width: 11px;
         height: 23px;
         display: flex;
         flex-direction: row;
         align-items: center;
+        margin: 4px;
         justify-content: center;
         justify-items: center;
         align-content: center;
-        margin: 4px;
     }
 
     .image {
