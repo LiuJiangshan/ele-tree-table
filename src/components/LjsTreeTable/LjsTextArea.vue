@@ -1,31 +1,36 @@
 <!--自动换行的textarea-->
 <template>
-    <input v-if="onlyOne" :a="onlyOne" class="ljs_input"
-           @input="handleInput"
-           @focus="handleFocus"
-           :style="inputStyle"
-           @blur="handleBlur"
-           @click="handleClick"
-           :value="currentValue"/>
-    <textarea v-else class="ljs_text_area"
-              rows="1"
+    <textarea v-if="autoSize" class="ljs_text_area" rows="1"
               @input="handleInput"
               @focus="handleFocus"
               :style="inputStyle"
               @click="handleClick"
               @blur="handleBlur"
               :value="currentValue"></textarea>
+    <input v-else class="ljs_input"
+           @input="handleInput"
+           @focus="handleFocus"
+           :style="inputStyle"
+           @blur="handleBlur"
+           @click="handleClick"
+           :value="currentValue"/>
 </template>
 <script>
   export default {
     name: 'LjsTextArea',
     props: {
-      lineHeight: {
+      // 单行模式行高
+      oneLineHeight: {
         type: Number,
         default: 28
       },
-      // 单行模式
-      onlyOne: {
+      // 多行模式行高
+      manyLineHeight: {
+        typr: Number,
+        default: 15
+      },
+      // 是否根据内容自适应宽高
+      autoSize: {
         type: Boolean,
         default: false
       },
@@ -43,12 +48,8 @@
       column () { return this.$parent.column },
       inputStyle: {
         get () {
-          let inputStyle = {lineHeight: this.lineHeight + 'px'}
-          if (this.onlyOne) {
-            inputStyle.height = this.parentHeight + 'px'
-          } else {
-            inputStyle.height = this.parentHeight + 'px'
-          }
+          let inputStyle = {}
+          if (this.lineHeight) inputStyle.lineHeight = this.lineHeight + 'px'
           return inputStyle
         }
       },
@@ -60,9 +61,9 @@
       }
     },
     watch: {
-      trHeights () {
+      trHeights (oldVal, newVal) {
         console.log('检查到tr变化')
-        this.autoLine()
+        this.resize()
       },
       value (newValue, oldValue) {
         if (!this.focused) this.currentValue = newValue
@@ -75,7 +76,7 @@
       handleClick () {
       },
       handleInput (event) {
-        this.autoLine()
+        this.resize()
         this.$emit('input', event.target.value)
       },
       handleFocus () {
@@ -87,35 +88,42 @@
         this.focus = false
         this.$emit('blur')
       },
-      autoLine () {
-        if (!this.onlyOne) {
+      resize () {
+        if (this.autoSize) {
           let textarea = this.$el
           textarea.style.height = 'auto'
           let scrollHeight = textarea.scrollHeight
           let height
           if (this.trHeight > scrollHeight) {
-            height = this.trHeight + 'px'
-            console.log('填满父容器完成:', height)
+            height = this.trHeight
+            this.lineHeight = this.oneLineHeight
+            console.log('填满父容器完成:', height, ',lineHeight:', this.lineHeight)
           } else {
             this.$parent.tr.heights[this.column.index] = scrollHeight
-            height = scrollHeight + 'px'
-            console.log('撑大父容器完成:', height)
+            height = scrollHeight
+            // 防止布局抖动
+            if (scrollHeight * 2 / 3 > this.trHeight) {
+              this.lineHeight = this.manyLineHeight
+              console.log('scrollHeight:', scrollHeight, ',trHeight:', this.trHeight)
+            }
+            console.log('撑大父容器完成:', height, ',lineHeight:', this.lineHeight)
           }
-          textarea.style.height = height
-        }
+          textarea.style.height = height + 'px'
+        } else this.lineHeight = this.oneLineHeight
       }
     },
     data () {
       return {
         focused: false,
-        currentValue: this.value
+        currentValue: this.value,
+        lineHeight: this.manyLineHeight
       }
     },
     mounted () {
-      this.autoLine()
+      this.resize()
     },
     updated () {
-      this.autoLine()
+      this.resize()
     }
   }
 </script>
@@ -126,10 +134,14 @@
         border: none;
         outline: none;
         background: none;
-        vertical-align: middle;
         overflow: hidden;
         font-family: Arial, 微软雅黑, serif;
         font-size: 11px;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
         color: #333333;
         padding: 0;
         margin: 0;

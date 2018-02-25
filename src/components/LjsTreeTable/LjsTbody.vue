@@ -3,7 +3,7 @@
     <div v-if="table.datas&&table.datas.length>0" :class="{fix_table_body_warp:fix,table_body_warp:!fix}"
          :style="bodyStyle" @contextmenu.prevent.stop="1+1"
          @scroll="onScroll">
-        <table class="body_table" :style="tableStyle" :width="fix?'auto':fullWidth" border="1" cellspacing="0"
+        <table class="body_table" :style="tableStyle" border="1" cellspacing="0"
                cellpadding="0">
             <colgroup>
                 <col v-for="(column,columnIndex) in columns" :key="columnIndex" :width="column.width">
@@ -49,7 +49,14 @@
     computed: {
       // 表体高度
       height: {get () { return this.table.height - this.table.headHeight }},
-      tableStyle: {get () { return {'border-color': this.table.border ? '#E4E4E4' : 'transparent'} }},
+      tableStyle: {
+        get () {
+          return {
+            'border-color': this.table.border ? '#E4E4E4' : 'transparent',
+            width: this.fix ? 'auto' : this.fullWidth + 'px'
+          }
+        }
+      },
       bodyStyle: {
         get () {
           let bodyStyle = {width: this.width + 'px'}

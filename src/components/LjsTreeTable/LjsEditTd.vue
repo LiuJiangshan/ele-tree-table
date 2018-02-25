@@ -17,9 +17,9 @@
                         :draw="column.render" :data="data" :column="column">
                 </Render>
                 <template v-else>
-                    <LjsTextArea :only-one="!this.column.autoLine"
+                    <LjsTextArea :auto-size="this.column.autoLine"
                                  :auto-select="true"
-                                 :line-height="this.tr.table.lineHeight"
+                                 :one-line-height="this.tr.table.lineHeight"
                                  :disabled="this.column.edit===false"
                                  :style="textareaStyle"
                                  ref="input"

@@ -20,22 +20,38 @@
             border: 1px red solid;
         }
 
+        .center_text {
+            width: 100px;
+            height: 500px;
+            background-color: #a1e4b6;
+        }
+
         div {
             border: 1px red solid;
         }
     </style>
     <script type="application/javascript">
-        function autoWrap() {
-            return
-            let textarea = document.getElementById("textarea")
-            textarea.style.height = textarea.scrollHeight + "px";
-        }
+      function autoWrap () {
+        return
+        let textarea = document.getElementById('textarea')
+        textarea.style.height = textarea.scrollHeight + 'px'
+      }
+
+      function getLine () {
+        let tmp = document.getElementById('textarea1').value
+        let ipstr = tmp.replace(/\n/g, ',')
+        if (ipstr.substring(-1) == ',') ipstr = ipstr.substring(0, ipstr.length - 1)
+        return ipstr
+      }
+
+      window.getLine = getLine
     </script>
 </head>
 <body>
 <input type="button" value="自动高度" onclick="autoWrap()"/>
 <div>
     <textarea class="textarea" id="textarea"></textarea>
+    <textarea class="center_text" id="textarea1"><center>sss</center></textarea>
 </div>
 </body>
 </html>
