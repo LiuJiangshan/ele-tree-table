@@ -18,7 +18,7 @@
                              style="position: absolute;color: red;font-size: xx-small;right: 0;bottom: 0;"
                              v-html="'w:'+column.width"></div>
                         <template v-if="column.check">
-                            <div style="width: 32px;height: 32px;display: inline-block;"></div>
+                            <div style="width: 19px;height: 1px;display: inline-block;"></div>
                             <LjsCheckBox :check="check" @change="onCheckChange"
                                          :table="table"/>
                         </template>
