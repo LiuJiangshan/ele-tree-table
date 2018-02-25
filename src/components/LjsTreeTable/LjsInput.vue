@@ -80,7 +80,7 @@
   }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
     .auto_line_edit {
         width: auto;
         text-align: start;

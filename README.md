@@ -1,4 +1,4 @@
-[查看Demo演示](https://liujiangshan.github.io/LjsTreeTable/docs/)：由于没有服务端，异步加载无效
+[查看Demo演示](https://liujiangshan.github.io/LjsTreeTable/docs/)：由于GitHubPage无法部署服务端，异步加载无效
 ## 运行此项目:
 ##### 1.[安装yarn](https://yarnpkg.com/zh-Hans/docs/install)
 ##### 2.克隆项目

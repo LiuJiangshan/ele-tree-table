@@ -32,7 +32,7 @@
   }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
     .expand_warp {
         width: 11px;
         height: 23px;

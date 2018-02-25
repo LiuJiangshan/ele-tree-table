@@ -36,7 +36,7 @@
     }
   }
 </script>
-<style scoped>
+<style lang="scss" scoped>
     .menu {
         outline: 0;
         font-size: 12px;

@@ -82,7 +82,8 @@
           this.x = x
           let newSize = this.resizeColumn.width + length
           if (newSize < 20) newSize = 20
-          this.resizeColumn.width = newSize
+          if (length < 0 && this.fullWidth - this.width + 1 < Math.abs(length)) console.log('不能缩小')
+          else this.resizeColumn.width = newSize
         }
       }
     }

@@ -65,7 +65,7 @@
   }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
     .td_head_warp {
         height: 100%;
         display: inline-block;

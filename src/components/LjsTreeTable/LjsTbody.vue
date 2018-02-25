@@ -73,15 +73,15 @@
   }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
     .fix_table_body_warp {
-        overflow-x: scroll;
+        overflow-x: auto;
         overflow-y: hidden;
         background-color: white;
     }
 
     .table_body_warp {
-        overflow: scroll;
+        overflow: auto;
         background-color: white;
     }
 

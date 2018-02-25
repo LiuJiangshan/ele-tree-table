@@ -262,7 +262,8 @@
             let oldWidth = column.width
             if (i === this.columns.length - 1) {
               r = undefined
-              column.width = this.width - heapWidth
+              // 最后一个单元格占满剩余宽度(减去边框宽度)
+              column.width = this.width - heapWidth - 1
             } else {
               r = column.width / this.fullWidth
               column.width = r * this.width

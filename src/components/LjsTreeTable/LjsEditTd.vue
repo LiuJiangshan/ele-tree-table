@@ -232,9 +232,47 @@
         this.state = States.normal
         if (this.column.render) this.state = States.normal
       },
+      isFocusNode (node) {
+        let re = false
+        if (node) {
+          let nodeName = node.nodeName
+          re = nodeName === 'A' || nodeName === 'INPUT'
+        }
+        return re
+      },
+      getFocusNode (node) {
+        if (node && node.childElementCount > 0) {
+          let childs = node.childNodes
+          for (let child of childs) {
+            if (this.isFocusNode(child)) return child
+            else {
+              let childFocus = this.getFocusNode(child)
+              if (childFocus) return childFocus
+            }
+          }
+        }
+      },
       focus () {
-        if (this.match && this.column.edit !== false && !this.column.render) this.$refs.input.$el.focus()
-        else this.$refs.tdWarp.focus()
+        let tdWarp = this.$refs.tdWarp
+        if (!this.match) {
+          tdWarp.focus()
+          console.log('空白获取到焦点:', this.column.label)
+        } else if (this.column.edit === false) {
+          tdWarp.focus()
+          console.log('不能编辑获取到焦点:', this.column.label)
+        } else if (this.column.render) {
+          let focusAbleNode = this.getFocusNode(tdWarp)
+          tdWarp.click()
+          if (focusAbleNode) {
+            focusAbleNode.focus()
+            this.state = States.select
+            console.log('可焦点元素:', focusAbleNode)
+          }
+          console.log('自定义组件获取到焦点:', this.column.label)
+        } else {
+          this.$refs.input.$el.focus()
+          console.log('文本框获取到焦点:', this.column.label)
+        }
       }
     },
     data () {
