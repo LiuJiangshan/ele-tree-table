@@ -38,7 +38,7 @@
   import LjsInput from './LjsInput.vue'
   import LjsTextArea from './LjsTextArea.vue'
   // 单元格状态
-  var States = {normal: 0, select: 1, lock: 2}
+  let States = {normal: 0, select: 1, lock: 2}
   export default {
     name: 'LjsEditTd',
     components: {Render, LjsTdHead, LjsInput, LjsTextArea},
@@ -202,6 +202,7 @@
       },
       handleBlur () {
         this.state = States.normal
+        if (this.data.submitType !== this.table.submitTypes.add) this.data.submitType = this.table.submitTypes.update
         if (!this.input) {
           // console.log('未输入,不需要更新')
         } else if (this.column.render) {

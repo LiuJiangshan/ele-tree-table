@@ -1,5 +1,6 @@
 <template>
-    <div component="LjsTreeTable" author="LiuJiangshan" github="https://github.com/LiuJiangshan/LjsTreeTable"
+    <div component="LjsTreeTable" author="LiuJiangshan"
+         github="https://github.com/LiuJiangshan/LjsTreeTable"
          class="ljs_treetable_body"
          @keyup.up="up"
          @keyup.down="down" :style="{width:width===0?600:width+'px'}"
@@ -63,6 +64,7 @@
             <input type="button" :value="(fixLeftShow?'隐藏':'显示')+'左边固定列'" @click="fixLeftShow=!fixLeftShow"/>
             <input type="button" :value="(fixRightShow?'隐藏':'显示')+'右边边固定列'" @click="fixRightShow=!fixRightShow"/>
             <input type="button" value="show $Refs" @click="showRefs"/>
+            <input type="button" value="getSubmitData" @click="showSubmitData"/>
         </div>
     </div>
 </template>
@@ -250,10 +252,15 @@
         fixLeftShow: true,
         fixRightShow: true,
         canMove: true,
-        isMounted: false
+        isMounted: false,
+        submitTypes: {add: 'add', remove: 'remove', update: 'update'}
       }
     },
     methods: {
+      // 获取提交数据
+      getSubmitData () {
+        return this.getAllData(this.datas, true)
+      },
       formatColumns () {
         if (this.fullWidth < this.width) {
           let heapWidth = 0
@@ -331,14 +338,14 @@
         return re
       },
       // 将嵌套型数据转换为简单列表型数据
-      getAllData (datas) {
+      getAllData (datas, noCheckExpand = false) {
         let array = []
         if (datas instanceof Array) {
           for (let v = 0; v < datas.length; v++) {
             let data = datas[v]
-            if (this.isExpand(data)) array.push(data)
+            if (noCheckExpand || this.isExpand(data)) array.push(data)
             // 递归子节点
-            if (data.expand && data.nodes) array = [...array, ...this.getAllData(data.nodes)]
+            if (noCheckExpand || (data.expand && data.nodes)) array = [...array, ...this.getAllData(data.nodes)]
           }
         }
         return array
@@ -405,6 +412,7 @@
       showBodyColumn () { console.log(this.bodyColumns) },
       showRightColumn () { console.log(this.rightColumns) },
       showRefs () { console.log(this.$refs, this.$refs.treetable.clientWidth, this.width) },
+      showSubmitData () { console.log(this.getSubmitData()) },
       nowFocus () { console.log(this.focusTd.data, this.focusTd.column) },
       printDatas () { console.log(this.datas) },
       printColumns () { console.log(this.columns) },
@@ -412,10 +420,12 @@
       // 添加根节点
       root (data) {
         this.formatNode(data, undefined)
+        data.submitType = this.submitTypes.add
         this.datas.push(data)
       },
       // 添加兄弟节点
       brother (data, brother) {
+        brother.submitType = this.submitTypes.add
         this.formatNode(brother, data.father)
         if (this.isRoot(data)) this.datas.push(brother)
         else data.father.nodes.push(brother)
@@ -423,6 +433,10 @@
       },
       // 添加子节点
       son (data, son) {
+        if (this.submitTypes.add === data.submitType) {
+          let error = '未提交,不能添加子节点'
+          throw error
+        } else son.submitType = this.submitTypes.add
         this.formatNode(son, data)
         data.kids++
         // 节点已经展开
@@ -433,23 +447,46 @@
       },
       // 删除节点
       remove (data) {
-        let nodes
-        let father
-        if (this.isRoot(data)) nodes = this.datas
-        else if (data.father) {
-          father = data.father
-          nodes = data.father.nodes
-        }
-        if (nodes instanceof Array) {
-          for (let v = 0; v < nodes.length; v++) {
-            if (nodes[v] === data) {
-              nodes.splice(v, 1)
-              if (father) father.kids--
-              this.refresh()
-              break
+        if (data.submitType) {
+          let nodes
+          let father
+          if (this.isRoot(data)) nodes = this.datas
+          else if (data.father) {
+            father = data.father
+            nodes = data.father.nodes
+          }
+          if (nodes instanceof Array) {
+            for (let v = 0; v < nodes.length; v++) {
+              if (nodes[v] === data) {
+                nodes.splice(v, 1)
+                if (father) father.kids--
+                this.refresh()
+                break
+              }
             }
           }
+        } else {
+          this.$set(data, 'remove', true)
+          data.submitType = this.submitTypes.remove
         }
+        this.refresh()
+        // let nodes
+        // let father
+        // if (this.isRoot(data)) nodes = this.datas
+        // else if (data.father) {
+        //   father = data.father
+        //   nodes = data.father.nodes
+        // }
+        // if (nodes instanceof Array) {
+        //   for (let v = 0; v < nodes.length; v++) {
+        //     if (nodes[v] === data) {
+        //       nodes.splice(v, 1)
+        //       if (father) father.kids--
+        //       this.refresh()
+        //       break
+        //     }
+        //   }
+        // }
       },
       formatRoot () {
         for (let v; v < this.datas.length; v++) {
@@ -499,9 +536,14 @@
       left () { this.move(-1, 0) },
       right () { this.move(1, 0) }
     },
+    created () {
+      this.formatRoot()
+      this.formatNode(this.datas)
+      this.refresh()
+    },
     mounted () {
-      this.width = this.$refs.treetable.clientWidth
       this.isMounted = true
+      this.width = this.$refs.treetable.clientWidth
       this.formatColumns()
       let _this = this
       window.addEventListener('resize', function () {

@@ -5,6 +5,7 @@ import LoadServerData from '../docs/example/LoadServerData.vue'
 import LoadLocalData from '../docs/example/LoadLocalData.vue'
 import border from '../docs/example/border.vue'
 import autoLine from '../docs/example/autoLine.vue'
+import SubmitAllChange from '../docs/example/SubmitAllChange.vue'
 import LjsContextMenuTest from '../docs/test/LjsContextMenuTest.vue'
 import LjsExpandTest from '../docs/test/LjsExpandTest.vue'
 import RateTest from '../docs/test/RateTest.vue'
@@ -42,6 +43,11 @@ export default new Router({
       path: '/border',
       name: 'border',
       component: border
+    },
+    {
+      path: '/SubmitAllChange',
+      name: 'SubmitAllChange',
+      component: SubmitAllChange
     },
     {
       path: '/LjsContextMenuTest',

@@ -22,7 +22,6 @@
           {
             key: 'id',
             label: '编号',
-            resize: true,
             expand: true,
             check: true,
             edit: false

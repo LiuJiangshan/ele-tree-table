@@ -7,6 +7,8 @@
         <router-link to="/autoLine">自动换行示例</router-link>
         <br/>
         <router-link to="/border">边框示例</router-link>
+        <br/>
+        <router-link to="/SubmitAllChange">批量提交示例</router-link>
     </div>
 </template>
 
