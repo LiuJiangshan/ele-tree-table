@@ -37,7 +37,6 @@
   import LjsTdHead from './LjsTdHead.vue'
   import LjsInput from './LjsInput.vue'
   import LjsTextArea from './LjsTextArea.vue'
-
   // 单元格状态
   var States = {normal: 0, select: 1, lock: 2}
   export default {
@@ -241,7 +240,7 @@
         let re = false
         if (node) {
           let nodeName = node.nodeName
-          re = nodeName === 'A' || nodeName === 'INPUT'
+          re = nodeName === 'A' || (nodeName === 'INPUT' && node.attributes.getNamedItem('type') !== 'hidden')
         }
         return re
       },
@@ -266,13 +265,19 @@
           tdWarp.focus()
           // console.log('不能编辑获取到焦点:', this.column.label)
         } else if (this.column.render) {
-          let focusAbleNode = this.getFocusNode(tdWarp)
-          tdWarp.click()
-          if (focusAbleNode) {
-            focusAbleNode.focus()
-            this.state = States.select
-            // console.log('可焦点元素:', focusAbleNode)
+          let focusable = $(tdWarp).find(':focusable')
+          if (focusable) {
+            tdWarp.focus()
+            focusable.focus()
+            console.log(focusable)
           }
+          // let focusAbleNode = this.getFocusNode(tdWarp)
+          // tdWarp.click()
+          // if (focusAbleNode) {
+          //   focusAbleNode.focus()
+          //   this.state = States.select
+          //   // console.log('可焦点元素:', focusAbleNode)
+          // }
           // console.log('自定义组件获取到焦点:', this.column.label)
         } else {
           this.$refs.input.$el.focus()

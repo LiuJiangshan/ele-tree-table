@@ -5,12 +5,17 @@
   },
   "extends": "standard",
   "env": {
-    "browser": true
+    "browser": true,
+    "jquery": true
   },
   "plugins": [
     "vue"
   ],
   "settings": {
-    "import/extensions": [".js", ".vue", ".less"]
+    "import/extensions": [
+      ".js",
+      ".vue",
+      ".less"
+    ]
   }
 }
