@@ -259,7 +259,7 @@
     methods: {
       // 获取提交数据
       getSubmitData () {
-        return this.getAllData(this.datas, true)
+        return this.getAllData(this.datas, false, true)
       },
       formatColumns () {
         if (this.fullWidth < this.width) {
@@ -338,14 +338,16 @@
         return re
       },
       // 将嵌套型数据转换为简单列表型数据
-      getAllData (datas, noCheckExpand = false) {
+      getAllData (datas, checkExpand = true, checkSubmit = false) {
         let array = []
         if (datas instanceof Array) {
           for (let v = 0; v < datas.length; v++) {
             let data = datas[v]
-            if (noCheckExpand || this.isExpand(data)) array.push(data)
+            if (this.isExpand(data) || checkExpand) {
+              if (!checkSubmit || data.submitType) array.push(data)
+            }
             // 递归子节点
-            if (noCheckExpand || (data.expand && data.nodes)) array = [...array, ...this.getAllData(data.nodes)]
+            if (!checkExpand || (data.expand && data.nodes)) array = [...array, ...this.getAllData(data.nodes, checkExpand, checkSubmit)]
           }
         }
         return array
@@ -364,7 +366,8 @@
         if (expand) {
           // 加载子节点
           if (node.nodes === true) {
-            let loadFunction = loader[node.pojo]
+            let loadFunction
+            loadFunction = loader[node.pojo]
             if (loadFunction instanceof Function) {
               let okDo = function () {
                 formatNode(node.nodes, node)
@@ -433,14 +436,12 @@
       },
       // 添加子节点
       son (data, son) {
-        if (this.submitTypes.add === data.submitType) {
-          let error = '未提交,不能添加子节点'
-          throw error
-        } else son.submitType = this.submitTypes.add
+        if (this.submitTypes.add !== data.submitType) son.submitType = this.submitTypes.add
         this.formatNode(son, data)
         data.kids++
         // 节点已经展开
-        if (data.expand) {
+        if (data.expand || !this.driver || !this.driver.adder) {
+          if (!(data.nodes instanceof Array)) data.nodes = []
           data.nodes.push(son)
           this.refresh()
         } else data.nodes = true

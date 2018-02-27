@@ -24,7 +24,8 @@
         columns: [
           {
             label: '编号',
-            key: 'id'
+            key: 'id',
+            expand: true
           },
           {
             label: '名称',
