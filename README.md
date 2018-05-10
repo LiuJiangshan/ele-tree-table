@@ -27,7 +27,7 @@ yarn run dev
 ```
 #### 2.main.js中
 ```
-Vue.component("LjsTreeTable",LjsTreeTable);
+Vue.component("LjsTreeTable",LjsTreeTable.default)
 ```
 #### 3.Vue文件中(同方法二中第4步)
 ###方法2(node_modules引用,太懒没有上传npm)
@@ -37,7 +37,7 @@ Vue.component("LjsTreeTable",LjsTreeTable);
 ```javascript
 import LjsTreeTable from 'LjsTreeTable'
 ...
-Vue.component("LjsTreeTable",LjsTreeTable);
+Vue.component("LjsTreeTable",LjsTreeTable)
 ...
 ```
 ##### 4.vue文件:
