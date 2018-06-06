@@ -35,13 +35,10 @@ module.exports = merge(basicConfig, {
     host: 'localhost',
     port: 1215,
     proxy: {
-      '/api/**': {
-        target: 'http://192.168.1.91:8080',
-        changeOrigin: true,
-        pathRewrite: {
-          '^/api': '/api'
-        }
-      }
+      // '/plm': {
+      //   target: 'http://192.168.1.113:8081',
+      //   changeOrigin: true
+      // }
     },
     contentBase: resolve('/'),
     compress: true,
@@ -54,8 +51,8 @@ module.exports = merge(basicConfig, {
     // copy custom static assets
     new CopyWebpackPlugin([
       {
-        from: join(__dirname, '../static'),
-        to: 'static',
+        from: join(__dirname, '../plm'),
+        to: 'plm',
         ignore: ['.*']
       }
     ]),

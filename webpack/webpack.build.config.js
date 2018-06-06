@@ -5,6 +5,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin')
 const CompressionWebpackPlugin = require('compression-webpack-plugin')
 const resolve = dir => join(__dirname, '..', dir)
 
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 module.exports = merge(basicConfig, {
     entry: {
         app: './src/components/index.js'
@@ -36,6 +37,7 @@ module.exports = merge(basicConfig, {
         ]
     },
     plugins: [
+        new BundleAnalyzerPlugin(),
         new CleanWebpackPlugin(['dist'], {
             root: resolve('./')
         }),

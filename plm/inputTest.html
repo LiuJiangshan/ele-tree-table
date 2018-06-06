@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style type="text/css">
+        .input {
+            width: 100%;
+            height: 100%;
+            outline: none;
+            border: none;
+        }
+
+        .input:focus {
+            border: 1px green solid;
+        }
+
+        .input:disabled {
+            border: none;
+        }
+
+        .panel {
+            background-color: darkgray;
+            width: 200px;
+            height: 50px;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="panel">
+    <input type="text" value="启动" class="input"/>
+</div>
+<div class="panel">
+    <input type="text" value="禁用" class="input" disabled/>
+</div>
+</body>
+</html>

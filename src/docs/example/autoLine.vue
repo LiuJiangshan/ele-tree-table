@@ -25,12 +25,12 @@
               node['nodes'] = []
               // 加载子产品组
               axios({
-                method: 'put',
-                url: '/api/productline/search.do',
-                data: {superId: node.id, onePageShow: 10000}
+                method: 'GET',
+                url: window.apiUrl + '/productline',
+                params: {superId: node.id, onePageShow: 10000}
               })
                 .then(function (response) {
-                  let datas = response.data.page.data
+                  let datas = response.data.data
                   if (datas instanceof Array) datas.map(function (val) { node.nodes.push(val) })
                   refresh()
                 })
@@ -39,11 +39,11 @@
                 })
               // 加载子产品
               axios({
-                method: 'put',
-                url: '/api/product/search.do',
-                data: {productLineId: node.id, onePageShow: 10000}
+                method: 'GET',
+                url: window.apiUrl + '/product',
+                params: {productLineId: node.id, onePageShow: 10000}
               }).then(function (response) {
-                let datas = response.data.page.data
+                let datas = response.data.data
                 if (datas instanceof Array) datas.map(function (val) { node.nodes.push(val) })
                 refresh()
               }).catch(function (error) {
@@ -53,12 +53,12 @@
             Product (node, refresh) {
               node['nodes'] = []
               axios({
-                method: 'put',
-                url: '/api/product/search.do',
-                data: {superId: node.id, onePageShow: 10000}
+                method: 'GET',
+                url: window.apiUrl + '/product',
+                params: {superId: node.id, onePageShow: 10000}
               })
                 .then(function (response) {
-                  let datas = response.data.page.data
+                  let datas = response.data.data
                   if (datas instanceof Array) datas.map(function (val) { node.nodes.push(val) })
                   refresh()
                 })
@@ -74,7 +74,7 @@
               params[column.key] = data[column.key]
               axios({
                 method: 'put',
-                url: '/api/productline/update.do',
+                url: window.apiUrl + '/productline',
                 data: params
               })
                 .then(function (response) {
@@ -90,7 +90,7 @@
               params[column.key] = data[column.key]
               axios({
                 method: 'put',
-                url: '/api/product/update.do',
+                url: window.apiUrl + '/product',
                 data: params
               })
                 .then(function (response) {
@@ -106,8 +106,8 @@
           adder: {
             Product (data, cb) {
               axios({
-                method: 'put',
-                url: '/api/product/add.do',
+                method: 'POST',
+                url: window.apiUrl + '/product',
                 data: data
               })
                 .then(cb)
@@ -117,8 +117,8 @@
             },
             ProductLine (data, cb) {
               axios({
-                method: 'put',
-                url: '/api/productline/add.do',
+                method: 'POST',
+                url: window.apiUrl + '/productline',
                 data: data
               })
                 .then(cb)
@@ -132,7 +132,7 @@
             Product (data, cb) {
               axios({
                 method: 'delete',
-                url: '/api/product/delete.do',
+                url: window.apiUrl + '/product',
                 data: [data.id]
               })
                 .then(cb)
@@ -143,7 +143,7 @@
             ProductLine (data, cb) {
               axios({
                 method: 'delete',
-                url: '/api/productline/delete.do',
+                url: window.apiUrl + '/productline',
                 data: [data.id]
               })
                 .then(cb)
@@ -334,13 +334,15 @@
       },
       loadRootCB (response) {
         if (response.data.ok) {
-          this.datas = response.data.page.data
+          this.datas = response.data.data
         }
       },
       loadRoot (cb) {
-        axios.put('/api/productline/search.do',
-          {superId: -1, onePageShow: 10000})
-          .then(cb)
+        axios({
+          method: 'GET',
+          url: window.apiUrl + '/productline',
+          params: {superId: -1, onePageShow: 10000}
+        }).then(cb)
           .catch(function (error) {
             console.log(error)
           })
