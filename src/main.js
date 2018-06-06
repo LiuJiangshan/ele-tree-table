@@ -10,7 +10,7 @@ Vue.use(iview)
 
 window.axios = axios
 axios.defaults.headers['Client-Type'] = 'web'
-window.contentPath = '/plm'
+window.contentPath = './plm'
 window.apiUrl = window.contentPath + '/api'
 window.axios.interceptors.response.use(response => {
   if (response.data.ok) window.app.$Message.success(response.data.msg)
