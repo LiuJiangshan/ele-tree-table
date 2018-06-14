@@ -13,7 +13,7 @@
       "component",
       {
         "libraryName": "element-ui",
-        "style": true
+        "style": false
       }
     ]
   ]

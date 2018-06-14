@@ -10,7 +10,6 @@
 </template>
 <script>
   import LjsTreeTable from '../../components/LjsTreeTable/LjsTreeTable.vue'
-  import axios from 'axios'
 
   export default {
     components: {LjsTreeTable},
@@ -24,7 +23,7 @@
             ProductLine (node, refresh) {
               node['nodes'] = []
               // 加载子产品组
-              axios({
+              app.axios({
                 method: 'GET',
                 url: window.apiUrl + '/productline',
                 params: {superId: node.id, onePageShow: 10000}
@@ -38,7 +37,7 @@
                   console.log(error)
                 })
               // 加载子产品
-              axios({
+              app.axios({
                 method: 'GET',
                 url: window.apiUrl + '/product',
                 params: {productLineId: node.id, onePageShow: 10000}
@@ -52,7 +51,7 @@
             },
             Product (node, refresh) {
               node['nodes'] = []
-              axios({
+              this.axios({
                 method: 'GET',
                 url: window.apiUrl + '/product',
                 params: {superId: node.id, onePageShow: 10000}
@@ -72,7 +71,7 @@
             ProductLine (data, column) {
               let params = {id: data.id}
               params[column.key] = data[column.key]
-              axios({
+              this.axios({
                 method: 'put',
                 url: window.apiUrl + '/productline',
                 data: params
@@ -88,7 +87,7 @@
             Product (data, column) {
               let params = {id: data.id}
               params[column.key] = data[column.key]
-              axios({
+              this.axios({
                 method: 'put',
                 url: window.apiUrl + '/product',
                 data: params
@@ -104,8 +103,8 @@
           },
           // 添加器
           adder: {
-            Product (data, cb) {
-              axios({
+            Product: (data, cb) => {
+              this.axios({
                 method: 'POST',
                 url: window.apiUrl + '/product',
                 data: data
@@ -115,8 +114,8 @@
                   console.log(error)
                 })
             },
-            ProductLine (data, cb) {
-              axios({
+            ProductLine: (data, cb) => {
+              this.axios({
                 method: 'POST',
                 url: window.apiUrl + '/productline',
                 data: data
@@ -130,7 +129,7 @@
           // 删除器
           deleter: {
             Product (data, cb) {
-              axios({
+              this.axios({
                 method: 'delete',
                 url: window.apiUrl + '/product',
                 data: [data.id]
@@ -141,7 +140,7 @@
                 })
             },
             ProductLine (data, cb) {
-              axios({
+              this.axios({
                 method: 'delete',
                 url: window.apiUrl + '/productline',
                 data: [data.id]
@@ -338,7 +337,7 @@
         }
       },
       loadRoot (cb) {
-        axios({
+        this.axios({
           method: 'GET',
           url: window.apiUrl + '/productline',
           params: {superId: -1, onePageShow: 10000}

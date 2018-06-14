@@ -8,11 +8,9 @@
 </template>
 
 <script>
-  import LjsContextMenu from '../../components/LjsTreeTable/LjsContextMenu.vue'
 
   export default {
     name: 'LjsContextMenuTest',
-    components: {LjsContextMenu},
     data () {
       return {
         items: [

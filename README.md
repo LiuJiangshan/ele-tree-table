@@ -65,3 +65,5 @@ yarn run build
 ```bash
 yarn run doc
 ```
+## 其他
+依赖jquery、jquery-ui(仅在焦点控制时用到)

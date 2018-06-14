@@ -11,11 +11,8 @@
 </template>
 
 <script>
-  import LjsExpand from '../../components/LjsTreeTable/LjsExpand.vue'
-
   export default {
     name: 'LjsExpandTest',
-    components: {LjsExpand},
     methods: {
       onChange () {
         this.expand = !this.expand

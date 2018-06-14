@@ -1,9 +1,10 @@
 const {join} = require('path')
 const resolve = dir => join(__dirname, '..', dir)
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 module.exports = {
   output: {
-    filename: 'bundle.js',
+    filename: '[name].bundle.js',
     path: resolve('dist'),
     publicPath: '/'
   },
@@ -20,21 +21,32 @@ module.exports = {
         test: /\.js$/,
         exclude: /node_modules/,
         use: [
-          'babel-loader',
-          'eslint-loader'
+          'babel-loader'
+          // 'eslint-loader'
         ]
       },
       {
-        enforce: 'pre',
         test: /\.vue$/,
-        loader: 'eslint-loader',
-        exclude: /node_modules/
+        loader: 'vue-loader'
       },
+      {
+        test: /\.css/,
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: 'css-loader'
+        })
+      },
+      // {
+      //   enforce: 'pre',
+      //   test: /\.vue$/,
+      //   loader: 'eslint-loader',
+      //   exclude: /node_modules/
+      // },
       {
         test: /\.(eot|svg|ttf|woff|woff2)$/,
         loader: 'file-loader',
         query: {
-          name: 'font/[hash:8].[ext]'
+          name: 'font/ljs_[name][contenthash:8].[ext]'
         }
       },
       {
@@ -42,17 +54,22 @@ module.exports = {
         loader: 'url-loader',
         query: {
           limit: 10000,
-          name: 'img/[hash:8].[ext]'
+          name: 'img/ljs_[name][contenthash:8].[ext]'
         }
       },
       {
         test: /\.scss$/,
-        loaders: ['style', 'css', 'sass']
+        loaders: ['style-loader', 'css-loader', 'sass-loader']
       }
     ]
   },
+  plugins: [
+    new ExtractTextPlugin({
+      filename: 'css/ljs_[name].[contenthash:8].css',
+      allChunks: true
+    })],
   resolve: {
-    extensions: ['.js', '.vue', '.json', '.css', '.less'],
+    extensions: ['.js', '.vue', '.json', '.css', '.less', '.scss'],
     modules: [resolve('src'), 'node_modules'],
     alias: {
       'vue$': 'vue/dist/vue.esm.js',

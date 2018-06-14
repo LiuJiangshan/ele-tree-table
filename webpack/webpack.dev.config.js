@@ -4,41 +4,20 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const merge = require('webpack-merge')
 const basicConfig = require('./webpack.base.config')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-
 const resolve = dir => join(__dirname, '..', dir)
 
 module.exports = merge(basicConfig, {
   entry: {
     app: './src/main.js'
   },
-  module: {
-    rules: [
-      {
-        test: /\.vue$/,
-        loader: 'vue-loader'
-      },
-      {
-        test: /\.css$/,
-        use: [
-          {loader: 'style-loader'},
-          {loader: 'css-loader'}
-        ]
-      },
-      {
-        test: /\.scss$/,
-        loaders: ['style', 'css', 'sass']
-      }
-    ]
-  },
   devtool: 'eval-source-map',
   devServer: {
     host: 'localhost',
     port: 1215,
     proxy: {
-      // '/plm': {
-      //   target: 'http://192.168.1.113:8081',
-      //   changeOrigin: true
-      // }
+      '/plm': {
+        target: 'http://192.168.1.91:8080',
+      }
     },
     contentBase: resolve('/'),
     compress: true,

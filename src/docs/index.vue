@@ -1,21 +1,56 @@
 <template>
-    <div>
-        <router-link to="/LoadServerData">异步加载示例</router-link>
-        <br/>
-        <router-link to="/LoadLocalData">简单列表示例</router-link>
-        <br/>
-        <router-link to="/autoLine">自动换行示例</router-link>
-        <br/>
-        <router-link to="/border">边框示例</router-link>
-        <br/>
-        <router-link to="/SubmitAllChange">批量提交示例</router-link>
+    <div class="body">
+        <Menu :router="true" class="ElMenu-demo" mode="horizontal">
+            <MenuItem index="LoadServerData">异步加载示例</MenuItem>
+            <MenuItem index="LoadLocalData">简单列表示例</MenuItem>
+            <MenuItem index="autoLine">自动换行示例</MenuItem>
+            <MenuItem index="border">边框示例</MenuItem>
+            <MenuItem index="SubmitAllChange">批量提交示例</MenuItem>
+            <MenuItem index="LjsLayoutTest">LjsLayoutTest</MenuItem>
+            <Submenu index="2">
+                <template slot="title">我的工作台</template>
+                <MenuItem index="2-1">选项1</MenuItem>
+                <MenuItem index="2-2">选项2</MenuItem>
+                <Submenu index="2-4">
+                    <template slot="title">选项4</template>
+                    <MenuItem index="2-4-1">选项1</MenuItem>
+                    <MenuItem index="2-4-2">选项2</MenuItem>
+                    <MenuItem index="2-4-3">选项3</MenuItem>
+                </Submenu>
+            </Submenu>
+        </Menu>
+        <div class="content">
+            <router-view/>
+        </div>
     </div>
 </template>
 
 <script>
+  import Vue from 'vue'
+  import { Menu, MenuItem, Submenu } from 'element-ui'
+
+  Vue.use(Menu)
+  Vue.use(MenuItem)
+  Vue.use(Submenu)
+
   export default {
-    name: 'index'
+    name: 'index',
+    components: {Menu, MenuItem, Submenu},
+    mounted () { }
   }
 </script>
 <style lang="scss" scoped>
+    .body {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    .content {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
 </style>

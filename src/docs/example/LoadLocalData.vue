@@ -9,11 +9,10 @@
 </template>
 
 <script>
-  import LjsTreeTable from '../../components/LjsTreeTable/LjsTreeTable.vue'
+  import dateformat from 'dateformat'
 
   export default {
     name: 'LoadLocalData',
-    components: {LjsTreeTable},
     data () {
       return {
         border: true,
@@ -35,12 +34,12 @@
             key: 'sex',
             label: '性别',
             render (h, ctx) {
-              let re = h('Select', {
+              let re = h('select', {
                 props: {
                   transfer: true,
                   value: ctx.data[ctx.column.key]
                 }
-              }, [h('Option', {props: {value: '男'}}, '男'), h('Option', {props: {value: '女'}}, '女')])
+              }, [h('option', {props: {value: '男'}}, '男'), h('Option', {props: {value: '女'}}, '女')])
               return re
             }
           },
@@ -51,9 +50,8 @@
           {
             key: 'birthday',
             label: '生日',
-            width: 50,
             render (h, ctx) {
-              return h('DatePicker', {props: {value: ctx.data.birthday}})
+              return h('input', {attrs: {type: 'date', value: ctx.data.birthday}})
             }
           },
           {
@@ -61,7 +59,8 @@
             label: '年级'
           }
         ],
-        datas: []
+        datas: [],
+        dateformat: undefined
       }
     },
     methods: {
@@ -72,52 +71,56 @@
       getRandBirthday () {
         let rand = Math.random() * new Date().getTime() / 2000
         let date = Math.random() > 0.5 ? new Date(new Date().getTime() + rand) : new Date(new Date().getTime() - rand)
-        return date
+        let da = dateformat(date, 'yyyy-mm-dd')
+        return da
       },
       getRandEnable () {
         return Math.random() > 0.5
-      }
-    },
-    mounted () {
-      let datas = []
-      for (let i = 0; i < 1; i++) {
-        let data = {
-          id: i,
-          name: this.getRandName(),
-          gard: this.getRandGard(),
-          age: this.getRandAge(),
-          sex: this.getRandSex(),
-          enable: this.getRandEnable(),
-          birthday: this.getRandBirthday(),
-          nodes: []
-        }
-        for (let j = 0; j < 1; j++) {
-          let data1 = {
-            id: i + '-' + j,
+      },
+      initData () {
+        let datas = []
+        for (let i = 0; i < 1; i++) {
+          let data = {
+            id: i,
             name: this.getRandName(),
             gard: this.getRandGard(),
             age: this.getRandAge(),
-            enable: this.getRandEnable(),
             sex: this.getRandSex(),
+            enable: this.getRandEnable(),
             birthday: this.getRandBirthday(),
             nodes: []
           }
-          for (let k = 0; k < 1; k++) {
-            data1.nodes.push({
+          for (let j = 0; j < 1; j++) {
+            let data1 = {
               id: i + '-' + j,
               name: this.getRandName(),
               gard: this.getRandGard(),
-              enable: this.getRandEnable(),
               age: this.getRandAge(),
+              enable: this.getRandEnable(),
               sex: this.getRandSex(),
-              birthday: this.getRandBirthday()
-            })
+              birthday: this.getRandBirthday(),
+              nodes: []
+            }
+            for (let k = 0; k < 1; k++) {
+              data1.nodes.push({
+                id: i + '-' + j,
+                name: this.getRandName(),
+                gard: this.getRandGard(),
+                enable: this.getRandEnable(),
+                age: this.getRandAge(),
+                sex: this.getRandSex(),
+                birthday: this.getRandBirthday()
+              })
+            }
+            data.nodes.push(data1)
           }
-          data.nodes.push(data1)
+          datas.push(data)
         }
-        datas.push(data)
+        this.datas = datas
       }
-      this.datas = datas
+    },
+    mounted () {
+      this.initData()
     }
   }
 </script>

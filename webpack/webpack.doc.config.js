@@ -3,62 +3,35 @@ const webpack = require('webpack')
 const merge = require('webpack-merge')
 const basicConfig = require('./webpack.base.config')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
-
 const resolve = dir => join(__dirname, '..', dir)
-
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+const HTMLWebpackPlugin = require('html-webpack-plugin')
 module.exports = merge(basicConfig, {
   entry: {
-    'js/app': './src/main.js',
-    'js/vendor': [
-      'vue',
-      'vue-router'
-    ]
+    'js/app': './src/main.js'
+    // 'js/vendor': ['vue', 'vue-router'],
+    // 'js/vue': 'vue',
+    // 'js/vue-router': 'vue-router',
+    // 'js/dateformat': 'dateformat',
+    // '/js/jquery': 'jquery',
+    // '/js/jquery-ui': 'jquery-ui',
+    // '/js/LjsTreeTable': './src/components/index.js'
   },
-  devtool: 'source-map',
+  devtool: false,
   output: {
     path: resolve('docs'),
     filename: '[name].[chunkhash:8].js',
-    chunkFilename: 'js/[name].[chunkhash:8].js',
+    chunkFilename: 'js/ljs_[name].[chunkhash:8].js',
     publicPath: './'
   },
-  module: {
-    rules: [
-      {
-        test: /\.vue$/,
-        loader: 'vue-loader',
-        options: {
-          loaders: {
-            css: ExtractTextPlugin.extract({
-              use: ['css-loader']
-            }),
-            less: ExtractTextPlugin.extract({
-              use: ['css-loader', 'less-loader']
-            })
-          }
-        }
-      },
-      {
-        test: /\.css$/,
-        use: [
-          {loader: 'style-loader'},
-          {loader: 'css-loader'}
-        ]
-      },
-      {
-        test: /\.scss$/,
-        loaders: ['style', 'css', 'sass']
-      }
-    ]
-  },
   plugins: [
-    new ExtractTextPlugin({
-      filename: 'css/[name].[contenthash:8].css',
-      allChunks: true
-    }),
-    new webpack.optimize.CommonsChunkPlugin({
-      names: ['js/vendor', 'js/manifest']
+    new BundleAnalyzerPlugin(),
+    // new webpack.optimize.CommonsChunkPlugin({
+    //   name: '/js/common' // 指定公共 bundle 的名称。
+    // }),
+    new HTMLWebpackPlugin({
+      title: 'Code Splitting'
     }),
     new HtmlWebpackPlugin({
       filename: 'index.html',

@@ -266,12 +266,14 @@
           tdWarp.focus()
           // console.log('不能编辑获取到焦点:', this.column.label)
         } else if (this.column.render) {
-          let focusable = $(tdWarp).find(':focusable')
-          if (focusable) {
-            tdWarp.focus()
-            focusable.focus()
-            console.log(focusable)
-          }
+          if (!$) {
+            let focusable = $(tdWarp).find(':focusable')
+            if (focusable) {
+              tdWarp.focus()
+              focusable.focus()
+              console.log(focusable)
+            }
+          } else console.error('请添加jQuery、jQuery-Ui,否则不能对自定义组件设置焦点')
           // let focusAbleNode = this.getFocusNode(tdWarp)
           // tdWarp.click()
           // if (focusAbleNode) {
