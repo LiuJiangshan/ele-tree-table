@@ -6,5 +6,15 @@
         "modules": false
       }
     ]
+  ],
+  "plugins": [
+    "syntax-dynamic-import",
+    [
+      "component",
+      {
+        "libraryName": "element-ui",
+        "style": true
+      }
+    ]
   ]
 }
