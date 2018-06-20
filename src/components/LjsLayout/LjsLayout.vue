@@ -1,12 +1,12 @@
 <template>
-    <div class="ljs_layout_body">
+    <div class="ljs_layout_body" ref="ljs_layout_body">
         <transition>
-            <div v-if="topShow" class="ljs_layout_top" :style="{flexGrow:topWeight}">
+            <div v-show="topShow" class="top_warp" :style="topStyle">
                 <slot name="top"/>
             </div>
         </transition>
         <transition>
-            <div v-if="bottomShow" class="ljs_layout_bottom" :style="{flexGrow:bottomWeight}">
+            <div v-show="bottomShow" class="bottom_warp" :style="bottomStyle">
                 <slot name="bottom"/>
             </div>
         </transition>
@@ -34,60 +34,42 @@
         default: true
       }
     },
+    data () {
+      return {
+        height: 0
+      }
+    },
+    computed: {
+      topStyle () {
+        let style = {}
+        if (this.bottomShow)
+          style.height = this.height * this.topWeight / (this.topWeight + this.bottomWeight) + 'px'
+        return style
+      },
+      bottomStyle () {
+        let style = {}
+        if (this.topShow)
+          style.height = this.height * this.bottomWeight / (this.topWeight + this.bottomWeight) + 'px'
+        return style
+      }
+    },
+    mounted () {
+      this.height = this.$refs.ljs_layout_body.clientHeight
+    }
   }
 </script>
-<style>
-    .v-leave {
-        /* 定义 出场动画的 起始状态 */
-        /* 只停留一帧 */
-        transform: translateY(500px);
-    }
-
-    .v-leave-active {
-        /* 定义 出场动画 过程 */
-        transition: all 0.1s ease;
-    }
-
-    .v-leave-to {
-        /* 定义 出场动画 结束状态（即：该动画要达到的目标状态） */
-        transform: translateY(500px);
-        opacity: 0;
-    }
-
-    /* 定义  入场动画 */
-
-    .v-enter {
-        /* 定义 入场动画 的起始状态 */
-        transform: translateY(500px);
-        opacity: 0;
-    }
-
-    .v-enter-active {
-        /* 定义 入场动画 过程 */
-        transition: all 0.1s ease;
-    }
-
-    .v-enter-to {
-        /* 定义 入场动画 过程 */
-        /* 只停留一帧 */
-        transform: translateY(0px);
-    }
-</style>
 <style lang="scss" scoped>
     .ljs_layout_body {
-        display: flex;
-        flex-direction: column;
         width: 100%;
         height: 100%;
-    }
-
-    .ljs_layout_top {
-        overflow: hidden;
-        height: 0;
-    }
-
-    .ljs_layout_bottom {
-        overflow: hidden;
-        height: 0;
+        > * {
+            overflow: auto;
+        }
+        > .top_warp {
+            height: 100%;
+        }
+        > .bottom_warp {
+            height: 100%;
+        }
     }
 </style>

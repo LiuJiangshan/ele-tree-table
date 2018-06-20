@@ -8,7 +8,7 @@ import LjsDeep from './LjsTreeTable/LjsDeep'
 import LjsTdHead from './LjsTreeTable/LjsTdHead'
 import LjsTextArea from './LjsTreeTable/LjsTextArea'
 import LjsContextMenu from './LjsTreeTable/LjsContextMenu'
-// import LjsLayout from './LjsLayout/LjsLayout'
+import LjsLayout from './LjsLayout/LjsLayout'
 
 function install (Vue) {
   Vue.component(LjsTreeTable.name, LjsTreeTable)
@@ -21,7 +21,7 @@ function install (Vue) {
   Vue.component(LjsTdHead.name, LjsTdHead)
   Vue.component(LjsTextArea.name, LjsTextArea)
   Vue.component(LjsContextMenu.name, LjsContextMenu)
-  // Vue.component(LjsLayout.name, LjsLayout)
+  Vue.component(LjsLayout.name, LjsLayout)
 }
 
 const out = {install, 'version': '1.0'}

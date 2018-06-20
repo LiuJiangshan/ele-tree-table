@@ -2,7 +2,7 @@
     <div style="width: 100%;height: 100%">
         <el-button v-if="!bottomShow" @click="bottomShow=true">打开</el-button>
         <div class="container">
-            <LjsLayout :top-weight="1" :bottom-weight="2" :bottom-show="bottomShow">
+            <LjsLayout class="layout" :top-weight="1" :bottom-weight="2" :bottom-show="bottomShow">
                 <div slot="top" class="top">
                     <el-table size="s" :data="tableData"
                               style="width: 100%">
@@ -67,16 +67,20 @@
         height: 100%;
     }
 
-    .top {
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background: #3a8ee6;
+    .layout {
+        > * {
+            > * {
+                float: left
+            }
+            > .top {
+                overflow: auto;
+                background: #3a8ee6;
+            }
+
+            > .bottom {
+                background: #d1dbe5;
+            }
+        }
     }
 
-    .bottom {
-        width: 100%;
-        height: 100%;
-        background: #d1dbe5;
-    }
 </style>
