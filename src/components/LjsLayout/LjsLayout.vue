@@ -51,14 +51,16 @@
         if (this.topShow)
           style.height = this.height * this.bottomWeight / (this.topWeight + this.bottomWeight) + 'px'
         return style
-      },
+      }
+    },
+    methods: {
       refreshHeight () {
         this.height = this.$refs.ljs_layout_body.clientHeight
       }
     },
     mounted () {
       this.refreshHeight()
-      window.onresize = () => this.refreshHeight()
+      window.onresize = this.refreshHeight
     }
   }
 </script>
