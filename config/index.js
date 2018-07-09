@@ -23,8 +23,8 @@ module.exports = {
   },
   lib: {
     env: require('./prod.env'),
-    assetsRoot: path.resolve(__dirname, '../dist'),
-    assetsSubDirectory: 'lib',
+    assetsRoot: path.resolve(__dirname, '../dist/lib'),
+    assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     productionSourceMap: false,
     productionGzip: false,
