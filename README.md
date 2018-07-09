@@ -1,11 +1,11 @@
 ### 预览
 ![avatar](pre.png)
-[查看Demo演示](https://liujiangshan.github.io/LjsTreeTable/index.html)：(api使用静态数据模拟)
+[查看Demo演示](https://liujiangshan.github.io/ljs-tree-table/index.html)：(api使用静态数据模拟)
 ## 运行此项目:
 ##### 1.[安装yarn](https://yarnpkg.com/zh-Hans/docs/install)
 ##### 2.克隆项目
 ```bash
-git clone https://github.com/LiuJiangshan/LjsTreeTable.git
+git clone https://github.com/LiuJiangshan/ljs-tree-table.git
 ```
 ##### 3.进入项目目录
 ```bash

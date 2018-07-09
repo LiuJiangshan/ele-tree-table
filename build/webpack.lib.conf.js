@@ -23,7 +23,7 @@ var webpackConfig = merge(baseWebpackConfig, {
   devtool: config.lib.productionSourceMap ? '#source-map' : false,
   output: {
     path: config.lib.assetsRoot,
-    filename: utils.assetsLibPath('[name].min.js'),
+    filename: 'index.js',
     library: '[name]',
     libraryTarget: 'umd'
   },

@@ -26,7 +26,7 @@ module.exports = {
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'lib',
     assetsPublicPath: '/',
-    productionSourceMap: true,
+    productionSourceMap: false,
     productionGzip: false,
     productionGzipExtensions: ['js', 'css'],
     bundleAnalyzerReport: process.env.npm_config_report
@@ -36,7 +36,7 @@ module.exports = {
     port: 8080,
     autoOpenBrowser: true,
     assetsSubDirectory: 'docs',
-    assetsPublicPath: '/',
+    assetsPublicPath: './',
     proxyTable: {
       '/plm': {
         target: 'http://192.168.1.91:8080',
