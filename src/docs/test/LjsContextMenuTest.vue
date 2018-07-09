@@ -9,32 +9,32 @@
 
 <script>
 
-  export default {
-    name: 'LjsContextMenuTest',
-    data () {
-      return {
-        items: [
-          {
-            label: 'test1',
-            click () {
-              console.log('test1')
-            }
-          },
-          {
-            label: 'test2',
-            click () {
-              console.log('test2')
-            }
+export default {
+  name: 'LjsContextMenuTest',
+  data () {
+    return {
+      items: [
+        {
+          label: 'test1',
+          click () {
+            console.log('test1')
           }
-        ]
-      }
-    },
-    methods: {
-      getThis () {
-        return this
-      }
+        },
+        {
+          label: 'test2',
+          click () {
+            console.log('test2')
+          }
+        }
+      ]
+    }
+  },
+  methods: {
+    getThis () {
+      return this
     }
   }
+}
 </script>
 
 <style scoped>

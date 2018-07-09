@@ -1,6 +1,6 @@
 ### 预览
 ![avatar](pre.png)
-[查看Demo演示](https://liujiangshan.github.io/LjsTreeTable/docs/)：(api使用静态数据模拟)
+[查看Demo演示](https://liujiangshan.github.io/LjsTreeTable/index.html)：(api使用静态数据模拟)
 ## 运行此项目:
 ##### 1.[安装yarn](https://yarnpkg.com/zh-Hans/docs/install)
 ##### 2.克隆项目
@@ -32,7 +32,7 @@ yarn run dev
 Vue.component("LjsTreeTable",LjsTreeTable.default)
 ```
 #### 3.Vue文件中(同方法二中第4步)
-###方法2(node_modules引用,太懒没有上传npm)
+### 方法2(node_modules引用,太懒没有上传npm)
 ##### 1.复制该项目dist文件夹至你的项目node_modules文件夹
 ##### 2.将dist命名为LjsTreeTable
 ##### 3.在main.js中引入该组件:

@@ -1,20 +1,18 @@
 {
   "presets": [
-    [
-      "env",
-      {
-        "modules": false
+    ["env", {
+      "modules": false,
+      "targets": {
+        "browsers": ["> 1%", "last 2 versions", "not ie <= 8"]
       }
-    ]
+    }],
+    "stage-2"
   ],
-  "plugins": [
-    "syntax-dynamic-import",
-    [
-      "component",
-      {
-        "libraryName": "element-ui",
-        "style": false
-      }
-    ]
-  ]
+  "plugins": ["transform-runtime"],
+  "env": {
+    "test": {
+      "presets": ["env", "stage-2"],
+      "plugins": ["istanbul"]
+    }
+  }
 }

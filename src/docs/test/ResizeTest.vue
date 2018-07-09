@@ -4,17 +4,17 @@
     </div>
 </template>
 <script>
-  export default {
-    name: 'ResizeTest',
-    methods: {
-      down () {
-        console.log('down')
-      },
-      up () {
-        console.log('up')
-      }
+export default {
+  name: 'ResizeTest',
+  methods: {
+    down () {
+      console.log('down')
+    },
+    up () {
+      console.log('up')
     }
   }
+}
 </script>
 
 <style scoped>

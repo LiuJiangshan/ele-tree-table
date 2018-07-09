@@ -5,13 +5,13 @@
 </template>
 
 <script>
-  import LjsTextArea from '../../components/LjsTreeTable/LjsTextArea.vue'
+import LjsTextArea from '../../lib/LjsTreeTable/LjsTextArea.vue'
 
-  export default {
-    name: 'LjsTextAreaTest',
-    components: {LjsTextArea},
-    data () { return {} }
-  }
+export default {
+  name: 'LjsTextAreaTest',
+  components: {LjsTextArea},
+  data () { return {} }
+}
 </script>
 
 <style scoped>

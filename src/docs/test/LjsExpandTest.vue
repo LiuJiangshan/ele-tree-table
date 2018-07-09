@@ -11,17 +11,17 @@
 </template>
 
 <script>
-  export default {
-    name: 'LjsExpandTest',
-    methods: {
-      onChange () {
-        this.expand = !this.expand
-      }
-    },
-    data () {
-      return {expand: true, show: true}
+export default {
+  name: 'LjsExpandTest',
+  methods: {
+    onChange () {
+      this.expand = !this.expand
     }
+  },
+  data () {
+    return {expand: true, show: true}
   }
+}
 </script>
 
 <style scoped>

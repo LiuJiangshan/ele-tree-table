@@ -6,17 +6,17 @@
 </template>
 
 <script>
-  export default {
-    name: 'IviewInputTest',
-    methods: {
-      showValue () {
-        console.log(this.value)
-      }
-    },
-    data () {
-      return {value: ''}
+export default {
+  name: 'IviewInputTest',
+  methods: {
+    showValue () {
+      console.log(this.value)
     }
+  },
+  data () {
+    return {value: ''}
   }
+}
 </script>
 
 <style scoped>

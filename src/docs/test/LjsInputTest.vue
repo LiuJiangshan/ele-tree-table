@@ -16,15 +16,15 @@
     </div>
 </template>
 <script>
-  import LjsInput from '../../components/LjsTreeTable/LjsInput.vue'
+import LjsInput from '../../lib/LjsTreeTable/LjsInput.vue'
 
-  export default {
-    name: 'LjsInputTest',
-    components: {LjsInput},
-    data () {
-      return {value: '123'}
-    }
+export default {
+  name: 'LjsInputTest',
+  components: {LjsInput},
+  data () {
+    return {value: '123'}
   }
+}
 </script>
 <style scoped>
 </style>

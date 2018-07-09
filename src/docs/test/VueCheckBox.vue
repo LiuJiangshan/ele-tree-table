@@ -6,17 +6,17 @@
 </template>
 
 <script>
-  export default {
-    name: 'VueCheckBox',
-    props: {
-      data: {
-        type: Object
-      },
-      column: {
-        type: Object
-      }
+export default {
+  name: 'VueCheckBox',
+  props: {
+    data: {
+      type: Object
+    },
+    column: {
+      type: Object
     }
   }
+}
 </script>
 
 <style scoped>

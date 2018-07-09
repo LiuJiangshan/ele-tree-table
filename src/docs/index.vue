@@ -1,21 +1,21 @@
 <template>
     <div class="body">
         <Menu :router="true" class="ElMenu-demo" mode="horizontal">
-            <MenuItem index="LoadServerData">异步加载示例</MenuItem>
-            <MenuItem index="LoadLocalData">简单列表示例</MenuItem>
-            <MenuItem index="autoLine">自动换行示例</MenuItem>
-            <MenuItem index="border">边框示例</MenuItem>
-            <MenuItem index="SubmitAllChange">批量提交示例</MenuItem>
-            <MenuItem index="LjsLayoutTest">LjsLayoutTest</MenuItem>
+            <ElMenuItem index="LoadServerData">异步加载示例</ElMenuItem>
+            <ElMenuItem index="LoadLocalData">简单列表示例</ElMenuItem>
+            <ElMenuItem index="autoLine">自动换行示例</ElMenuItem>
+            <ElMenuItem index="border">边框示例</ElMenuItem>
+            <ElMenuItem index="SubmitAllChange">批量提交示例</ElMenuItem>
+            <ElMenuItem index="LjsLayoutTest">LjsLayoutTest</ElMenuItem>
             <Submenu index="2">
                 <template slot="title">我的工作台</template>
-                <MenuItem index="2-1">选项1</MenuItem>
-                <MenuItem index="2-2">选项2</MenuItem>
+                <ElMenuItem index="2-1">选项1</ElMenuItem>
+                <ElMenuItem index="2-2">选项2</ElMenuItem>
                 <Submenu index="2-4">
                     <template slot="title">选项4</template>
-                    <MenuItem index="2-4-1">选项1</MenuItem>
-                    <MenuItem index="2-4-2">选项2</MenuItem>
-                    <MenuItem index="2-4-3">选项3</MenuItem>
+                    <ElMenuItem index="2-4-1">选项1</ElMenuItem>
+                    <ElMenuItem index="2-4-2">选项2</ElMenuItem>
+                    <ElMenuItem index="2-4-3">选项3</ElMenuItem>
                 </Submenu>
             </Submenu>
         </Menu>
@@ -26,18 +26,18 @@
 </template>
 
 <script>
-  import Vue from 'vue'
-  import { Menu, MenuItem, Submenu } from 'element-ui'
+import Vue from 'vue'
+import { Menu, MenuItem, Submenu } from 'element-ui'
 
-  Vue.use(Menu)
-  Vue.use(MenuItem)
-  Vue.use(Submenu)
+Vue.use(Menu)
+Vue.use(MenuItem)
+Vue.use(Submenu)
 
-  export default {
-    name: 'index',
-    components: {Menu, MenuItem, Submenu},
-    mounted () { }
-  }
+export default {
+  name: 'index',
+  components: {Menu, 'ElMenuItem': MenuItem, Submenu},
+  mounted () { }
+}
 </script>
 <style lang="scss" scoped>
     .body {

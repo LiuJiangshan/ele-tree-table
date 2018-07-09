@@ -1,5 +1,2 @@
-dist
-doc
-node_modules
-webpack
-tools
+build/*.js
+config/*.js
