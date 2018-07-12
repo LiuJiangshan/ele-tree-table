@@ -7,7 +7,7 @@
   </div>
 </template>
 <script>
-import LjsTreeTable from '../../lib/LjsTreeTable/LjsTreeTable.vue'
+import LjsTreeTable from '../../lib/ljs-tree-table/LjsTreeTable.vue'
 
 export default {
   name: 'submitAllChange',

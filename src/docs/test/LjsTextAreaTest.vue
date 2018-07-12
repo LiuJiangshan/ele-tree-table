@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import LjsTextArea from '../../lib/LjsTreeTable/LjsTextArea.vue'
+import LjsTextArea from '../../lib/ljs-tree-table/LjsTextArea.vue'
 
 export default {
   name: 'LjsTextAreaTest',

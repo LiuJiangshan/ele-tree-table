@@ -1,14 +1,14 @@
-import LjsTreeTable from './lib/LjsTreeTable/LjsTreeTable'
-import LjsTbody from './lib/LjsTreeTable/LjsTbody'
-import LjsTr from './lib/LjsTreeTable/LjsTr'
-import LjsInput from './lib/LjsTreeTable/LjsInput'
-import LjsExpand from './lib/LjsTreeTable/LjsExpand'
-import LjsCheckBox from './lib/LjsTreeTable/LjsCheckBox'
-import LjsDeep from './lib/LjsTreeTable/LjsDeep'
-import LjsTdHead from './lib/LjsTreeTable/LjsTdHead'
-import LjsTextArea from './lib/LjsTreeTable/LjsTextArea'
-import LjsContextMenu from './lib/LjsTreeTable/LjsContextMenu'
-import LjsLayout from './lib/LjsLayout/LjsLayout'
+import { installComponents } from './installUtils.js'
+import LjsTreeTable from './lib/ljs-tree-table/LjsTreeTable'
+import LjsTbody from './lib/ljs-tree-table/LjsTbody'
+import LjsTr from './lib/ljs-tree-table/LjsTr'
+import LjsInput from './lib/ljs-tree-table/LjsInput'
+import LjsExpand from './lib/ljs-tree-table/LjsExpand'
+import LjsCheckBox from './lib/ljs-tree-table/LjsCheckBox'
+import LjsDeep from './lib/ljs-tree-table/LjsDeep'
+import LjsTdHead from './lib/ljs-tree-table/LjsTdHead'
+import LjsTextArea from './lib/ljs-tree-table/LjsTextArea'
+import LjsContextMenu from './lib/ljs-tree-table/LjsContextMenu'
 
 const components = {
   LjsTreeTable,
@@ -20,20 +20,17 @@ const components = {
   LjsDeep,
   LjsTdHead,
   LjsTextArea,
-  LjsContextMenu,
-  LjsLayout
+  LjsContextMenu
 }
 
-function install (Vue, Opt = {debug: false}) {
-  if (install.installed) return
-  for (let key in components) {
-    if (Opt.debug) console.log('install:' + key)
-    let component = components[key]
-    if (Opt.debug) console.log('name:' + component.name)
-    Vue.component(component.name, component)
-    if (Opt.debug) console.log('end:' + component.name)
-  }
+let API
+
+function install (Vue, option) {
+  installComponents(API, Vue, option)
 }
 
-const API = {install, version: 0, components}
-export default API
+/** cdn引用方式安装 */
+if (typeof window !== 'undefined' && window.Vue) {
+  install(window.Vue)
+}
+export default API = {name: 'ljs-tree-table', install, version: 0, ...components, components}

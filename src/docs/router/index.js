@@ -79,11 +79,6 @@ export default new Router({
           path: 'LjsTextAreaTest',
           name: 'LjsTextAreaTest',
           component: () => Promise.resolve(require('../test/LjsTextAreaTest'))
-        },
-        {
-          path: 'LjsLayoutTest',
-          name: 'LjsLayoutTest',
-          component: () => Promise.resolve(require('../test/LjsLayoutTest'))
         }
       ]
     }

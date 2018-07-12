@@ -6,7 +6,7 @@ import Message from 'iview/src/components/message'
 import 'element-ui/lib/theme-chalk/index.css'
 import 'iview/dist/styles/iview.css'
 import './docs/style/common.scss'
-import LjsTreeTable from './lib'
+import LjsTreeTable from './lib.js'
 import 'jquery'
 import 'jquery-ui'
 
