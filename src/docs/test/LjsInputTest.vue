@@ -16,7 +16,7 @@
     </div>
 </template>
 <script>
-import LjsInput from '../../lib/ljs-tree-table/LjsInput.vue'
+import LjsInput from '../../lib/m-input/m-input.vue'
 
 export default {
   name: 'LjsInputTest',

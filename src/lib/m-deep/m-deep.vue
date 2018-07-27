@@ -1,11 +1,11 @@
 <template>
-    <div class="deep"
-         :style="deepStyle"></div>
+  <div class="deep"
+       :style="deepStyle"></div>
 </template>
 
 <script>
 export default {
-  name: 'ljs-deep',
+  name: 'm-deep',
   props: {
     data: {
       type: Object
@@ -36,8 +36,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    .deep {
-        height: 20px;
-        display: block;
-    }
+  .deep {
+    height: 20px;
+    display: block;
+  }
 </style>

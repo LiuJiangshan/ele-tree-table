@@ -1,17 +1,17 @@
 <template>
-    <tr v-if="expand&&data.remove!==true" :class="this.table.trBorder?'tr_border':'tr'" :style="trStyle" tabindex="0"
-        @contextmenu.prevent="table.$refs.menu.open($event.x - table.$el.offsetLeft,$event.y - table.$el.offsetTop,table.getContextItems(data),table.getMenuContext(data))">
-        <LjsEditTd v-for="(column,columnIndex) in table.columns" :key="columnIndex" :index="columnIndex" :data="data"
-                   :column="column" :trHeight="height"
-                   :ref="'td'+columnIndex" :tr="getThis()"/>
-    </tr>
+  <tr v-if="expand&&data.remove!==true" :class="this.table.trBorder?'tr_border':'tr'" :style="trStyle" tabindex="0"
+      @contextmenu.prevent="table.$refs.menu.open($event.x - table.$el.offsetLeft,$event.y - table.$el.offsetTop,table.getContextItems(data),table.getMenuContext(data))">
+    <LjsEditTd v-for="(column,columnIndex) in table.columns" :key="columnIndex" :index="columnIndex" :data="data"
+               :column="column" :trHeight="height"
+               :ref="'td'+columnIndex" :tr="getThis()"/>
+  </tr>
 </template>
 
 <script>
-import LjsEditTd from './LjsEditTd.vue'
+import LjsEditTd from '../m-edit-td/m-edit-td.vue'
 
 export default {
-  name: 'ljs-tr',
+  name: 'm-tr',
   components: {LjsEditTd},
   props: {
     index: {
@@ -61,20 +61,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    .tr {
-        overflow: hidden;
-        outline: 0;
-        background-color: white;
-        &:hover {
-            background-color: #fafafa;
-        }
-        &:focus {
-            background-color: #f5f5f5;
-        }
+  .tr {
+    overflow: hidden;
+    outline: 0;
+    background-color: white;
+    &:hover {
+      background-color: #fafafa;
     }
+    &:focus {
+      background-color: #f5f5f5;
+    }
+  }
 
-    .tr_border {
-        @extend .tr;
-        border-bottom: 1px solid;
-    }
+  .tr_border {
+    @extend .tr;
+    border-bottom: 1px solid;
+  }
 </style>

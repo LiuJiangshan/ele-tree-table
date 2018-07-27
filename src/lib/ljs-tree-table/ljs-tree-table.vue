@@ -1,83 +1,82 @@
 <template>
-    <div component="LjsTreeTable" author="LiuJiangshan"
-         github="https://github.com/LiuJiangshan/LjsTreeTable"
-         class="ljs_treetable_body"
-         @keyup.up="up"
-         @keyup.down="down" :style="{width:width===0?600:width+'px'}"
-         @keyup.left="left" @keyup.right="right" ref="treetable">
-        <div v-if="debug"
-             style="position: absolute;border:1px red solid;font-size: xx-small;color: red;right: 0;bottom: 50px;">
-            <div v-html="'width:'+width"></div>
-            <div v-html="'fullWidth:'+fullWidth"></div>
-            <div v-html="'canMove:'+canMove"></div>
-            <div v-html="focusTd?('x:'+this.focusTd.x+',y:'+this.focusTd.y):'no focus'"></div>
-        </div>
-        <LjsContextMenu ref="menu" :context="this"/>
-        <!--正常表格-->
-        <!--表头-->
-        <LjsThead @select-all="selectAll" :table="thisTable" :columns="columns" ref="header" :width="width"
-                  :fullWidth="fullWidth"/>
-        <!--表内容-->
-        <LjsTbody :table="thisTable" :header="$refs.header" :width="width" :fullWidth="fullWidth"
-                  :columns="columns">
-            <!--表内容-->
-            <LjsTr v-for="(data,dataIndex) in expandDatas" :key="dataIndex" :index="dataIndex" :data="data"
-                   :table="thisTable">
-            </LjsTr>
-        </LjsTbody>
-
-        <!--固定左列-->
-        <LjsTableFix v-if="fixLeft&&fixLeftShow" :fixType="'left'">
-            <LjsThead @select-all="selectAll" :table="thisTable" :columns="leftColumns" ref="leftHeader"
-                      :width="leftFixWidth" :fullWidth="fullWidth"/>
-            <!--表内容-->
-            <LjsTbody :fix="true" ref="fixLeft" :table="thisTable" :columns="leftColumns"
-                      :wrapWidth="leftFixWidth"
-                      :tableWidth="leftFixWidth"
-                      :height="height-headHeight">
-                <!--表内容-->
-                <LjsTr v-for="(data,dataIndex) in expandDatas" :key="dataIndex" :data="data" :table="thisTable">
-                    <LjsEditTd v-for="(column,columnIndex) in leftColumns" :key="columnIndex" :table="thisTable"
-                               :data="data"
-                               :column="column"
-                               :index="columnIndex" @on-check="onCheck"/>
-                </LjsTr>
-            </LjsTbody>
-        </LjsTableFix>
-
-        <!--固定右列-->
-
-        <!--debug视图-->
-        <div v-if="debug" style="position: absolute;bottom: 0;left: 0;border: 1px red solid;">
-            <input type="button" value="原始数据" @click="printDatas"/>
-            <input type="button" value="列定义" @click="printColumns"/>
-            <input type="button" value="转换后的数据" @click="printFormated"/>
-            <input type="button" value="重新格式化数据" @click="formatNode(datas)"/>
-            <input type="button" value="刷新" @click="refresh"/>
-            <input type="button" value="当前焦点行" @click="nowFocus"/>
-            <input type="button" value="全选" @click="selectAll"/>
-            <input type="button" value="查看右键菜单定义" @click="showRightMenu"/>
-            <input type="button" value="查看列定义" @click="showColunm"/>
-            <input type="button" value="查看左边固定列定义" @click="showLeftFixColumn"/>
-            <input type="button" value="查看中间列定义" @click="showBodyColumn"/>
-            <input type="button" value="查看右边列定义" @click="showRightColumn"/>
-            <input type="button" :value="(fixLeftShow?'隐藏':'显示')+'左边固定列'" @click="fixLeftShow=!fixLeftShow"/>
-            <input type="button" :value="(fixRightShow?'隐藏':'显示')+'右边边固定列'" @click="fixRightShow=!fixRightShow"/>
-            <input type="button" value="show $Refs" @click="showRefs"/>
-            <input type="button" value="getSubmitData" @click="showSubmitData"/>
-        </div>
+  <div component="LjsTreeTable" author="LiuJiangshan"
+       github="https://github.com/LiuJiangshan/LjsTreeTable"
+       class="ljs-treetable" @keyup.up="up"
+       @keyup.down="down" :style="{width:width===0?600:width+'px'}"
+       @keyup.left="left" @keyup.right="right" ref="treetable">
+    <div v-if="debug"
+         style="position: absolute;border:1px red solid;font-size: xx-small;color: red;right: 0;bottom: 50px;">
+      <div v-html="'width:'+width"></div>
+      <div v-html="'fullWidth:'+fullWidth"></div>
+      <div v-html="'canMove:'+canMove"></div>
+      <div v-html="focusTd?('x:'+this.focusTd.x+',y:'+this.focusTd.y):'no focus'"></div>
     </div>
+    <m-context-menu ref="menu" :context="this"/>
+    <!--正常表格-->
+    <!--表头-->
+    <m-thead @select-all="selectAll" :table="thisTable" :columns="columns" ref="header" :width="width"
+             :fullWidth="fullWidth"/>
+    <!--表内容-->
+    <m-tbody :table="thisTable" :header="$refs.header" :width="width" :fullWidth="fullWidth"
+             :columns="columns">
+      <!--表内容-->
+      <m-tr v-for="(data,dataIndex) in expandDatas" :key="dataIndex" :index="dataIndex" :data="data"
+            :table="thisTable">
+      </m-tr>
+    </m-tbody>
+
+    <!--固定左列-->
+    <m-table-fix v-if="fixLeft&&fixLeftShow" :fixType="'left'">
+      <m-thead @select-all="selectAll" :table="thisTable" :columns="leftColumns" ref="leftHeader"
+               :width="leftFixWidth" :fullWidth="fullWidth"/>
+      <!--表内容-->
+      <m-tbody :fix="true" ref="fixLeft" :table="thisTable" :columns="leftColumns"
+               :wrapWidth="leftFixWidth"
+               :tableWidth="leftFixWidth"
+               :height="height-headHeight">
+        <!--表内容-->
+        <m-tr v-for="(data,dataIndex) in expandDatas" :key="dataIndex" :data="data" :table="thisTable">
+          <m-edit-td v-for="(column,columnIndex) in leftColumns" :key="columnIndex" :table="thisTable"
+                     :data="data"
+                     :column="column"
+                     :index="columnIndex" @on-check="onCheck"/>
+        </m-tr>
+      </m-tbody>
+    </m-table-fix>
+    <!--固定右列-->
+
+    <!--debug视图-->
+    <div v-if="debug" style="position: absolute;bottom: 0;left: 0;border: 1px red solid;">
+      <input type="button" value="原始数据" @click="printDatas"/>
+      <input type="button" value="列定义" @click="printColumns"/>
+      <input type="button" value="转换后的数据" @click="printFormated"/>
+      <input type="button" value="重新格式化数据" @click="formatNode(datas)"/>
+      <input type="button" value="刷新" @click="refresh"/>
+      <input type="button" value="当前焦点行" @click="nowFocus"/>
+      <input type="button" value="全选" @click="selectAll"/>
+      <input type="button" value="查看右键菜单定义" @click="showRightMenu"/>
+      <input type="button" value="查看列定义" @click="showColunm"/>
+      <input type="button" value="查看左边固定列定义" @click="showLeftFixColumn"/>
+      <input type="button" value="查看中间列定义" @click="showBodyColumn"/>
+      <input type="button" value="查看右边列定义" @click="showRightColumn"/>
+      <input type="button" :value="(fixLeftShow?'隐藏':'显示')+'左边固定列'" @click="fixLeftShow=!fixLeftShow"/>
+      <input type="button" :value="(fixRightShow?'隐藏':'显示')+'右边边固定列'" @click="fixRightShow=!fixRightShow"/>
+      <input type="button" value="show $Refs" @click="showRefs"/>
+      <input type="button" value="getSubmitData" @click="showSubmitData"/>
+    </div>
+  </div>
 </template>
 <script>
-import LjsEditTd from './LjsEditTd.vue'
-import LjsThead from './LjsThead.vue'
-import LjsTbody from './LjsTbody.vue'
-import LjsTableFix from './LjsTableFix.vue'
-import LjsTr from './LjsTr.vue'
-import LjsContextMenu from './LjsContextMenu.vue'
+import MContextMenu from '../m-context-menu/m-context-menu'
+import MThead from '../m-thead/m-thead'
+import MTbody from '../m-tbody/m-tbody'
+import MTr from '../m-tr/m-tr'
+import MTableFix from '../m-table-fix/m-table-fix'
+import MEditTd from '../m-edit-td/m-edit-td'
 
 export default {
   name: 'ljs-tree-table',
+  components: {MEditTd, MTableFix, MTr, MTbody, MThead, MContextMenu},
   props: {
     // 子节点数据驱动
     driver: {
@@ -240,7 +239,6 @@ export default {
       set (val) { this.treeTableWidth = val }
     }
   },
-  components: {LjsThead, LjsTbody, LjsTr, LjsTableFix, LjsEditTd, LjsContextMenu},
   data () {
     return {
       treeTableWidth: 600,
@@ -295,15 +293,6 @@ export default {
     selectAll (check) {
       for (let v = 0; v < this.expandDatas.length; v++) this.expandDatas[v].check = check
       this.onCheck()
-    },
-    // 选择发生变化回调
-    onCheck () {
-      let checkDatas = []
-      for (let v = 0; v < this.expandDatas.length; v++) {
-        let data = this.expandDatas[v]
-        if (data.check === true) checkDatas.push(data)
-      }
-      this.$emit('on-check', checkDatas)
     },
     // 获取右键菜单上下文
     getMenuContext (data) {
@@ -555,7 +544,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-    .ljs_treetable_body {
-        position: relative;
-    }
+  .ljs-treetable {
+    position: relative;
+  }
 </style>

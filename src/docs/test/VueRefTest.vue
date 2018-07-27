@@ -5,7 +5,7 @@
   </div>
 </template>
 <script>
-import Render from '../../lib/ljs-tree-table/Render.js'
+import Render from '../../lib/m-render/m-render.js'
 
 export default {
   name: 'VueRefTest',

@@ -6,7 +6,7 @@ module.exports = {
     env: require('./prod.env'),
     index: path.resolve(__dirname, '../index.html'),
     assetsRoot: path.resolve(__dirname, '../dist'),
-    assetsSubDirectory: 'docs',
+    assetsSubDirectory: 'static',
     assetsPublicPath: './dist',
     productionSourceMap: true,
     // Gzip off by default as many popular static hosts such as
@@ -33,14 +33,14 @@ module.exports = {
   },
   dev: {
     env: require('./dev.env'),
-    port: 8080,
+    port: 1215,
     autoOpenBrowser: true,
-    assetsSubDirectory: 'docs',
+    assetsSubDirectory: 'plm',
     assetsPublicPath: '/',
     proxyTable: {
-      '/plm': {
-        target: 'http://192.168.1.91:8080',
-      }
+      // '/plm': {
+      //   target: 'http://192.168.1.91:8080',
+      // }
     },
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README

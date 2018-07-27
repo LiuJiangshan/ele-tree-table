@@ -1,16 +1,16 @@
 <!--自动换行文本框-->
 <template>
-    <div class="auto_line_edit"
-         contenteditable="true"
-         @focus="handleFocus"
-         @input="handleInput"
-         @blur="handleBlur"
-         v-html="currentValue">
-    </div>
+  <div class="auto_line_edit"
+       contenteditable="true"
+       @focus="handleFocus"
+       @input="handleInput"
+       @blur="handleBlur"
+       v-html="currentValue">
+  </div>
 </template>
 <script>
 export default {
-  name: 'ljs-input',
+  name: 'm-input',
   props: {value: {default: ''}},
   computed: {
     textareaStyle: {
@@ -81,15 +81,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    .auto_line_edit {
-        width: auto;
-        text-align: start;
-        line-height: 28px;
-        vertical-align: middle;
-        resize: none;
-        -webkit-user-modify: read-write-plaintext-only;
-        max-width: 100%;
-        border: none;
-        outline: none;
-    }
+  .auto_line_edit {
+    width: auto;
+    text-align: start;
+    line-height: 28px;
+    vertical-align: middle;
+    resize: none;
+    -webkit-user-modify: read-write-plaintext-only;
+    max-width: 100%;
+    border: none;
+    outline: none;
+  }
 </style>

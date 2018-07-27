@@ -1,0 +1,16 @@
+$theme-color: #18946c !default;
+$color-light: white !default;
+$theme-color-1: mix($color-light, $theme-color, 10%);
+$theme-color-2: mix($color-light, $theme-color, 20%);
+$theme-color-3: mix($color-light, $theme-color, 30%);
+$theme-color-4: mix($color-light, $theme-color, 40%);
+$theme-color-5: mix($color-light, $theme-color, 50%);
+$theme-color-6: mix($color-light, $theme-color, 60%);
+$theme-color-7: mix($color-light, $theme-color, 70%);
+$theme-color-8: mix($color-light, $theme-color, 80%);
+$theme-color-9: mix($color-light, $theme-color, 90%);
+$border-color: #e4e4e4 !default;
+$text-color: #606266 !default;
+$text-bg-color: white !default;
+$text-color-hover: $theme-color-1 !default;
+@import "../utils/mixin.scss";

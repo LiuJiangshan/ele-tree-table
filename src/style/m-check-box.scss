@@ -1,0 +1,12 @@
+@import "./vars.scss";
+
+.m-check-box {
+  width: 11px;
+  height: 11px;
+  @include flex_h;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin: 4px;
+  color: $theme-color;
+}

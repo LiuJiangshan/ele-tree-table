@@ -1,47 +1,46 @@
 <!--可编辑组件-->
 <template>
-    <td :class="tdClass" :width="column.width" :style="tdStyle"
-        @keyup.enter="handleEnter"
-        @click="handleClick" @dblclick="handleDbClick">
-        <div class="td_warp" tabindex="0" :style="tdWarpStyle"
-             @focus="handleFocus"
-             ref="tdWarp" @blur="handleBlur">
-            <template v-if="match">
-                <div v-if="debug" v-html="getState()+value"
-                     style="color: red;font-size: xx-small;"></div>
-                <div v-if="false" v-html="'h_w:'+headWidth+',b_w:'+bodyWidth"
-                     style="color: red;font-size: xx-small;"></div>
-                <LjsTdHead ref="tdHead" :td="getThis()"></LjsTdHead>
-                <!--自定义组件渲染-->
-                <Render :style="inputStyle" v-if="this.column.render" ref="input" :driver="driver"
-                        :draw="column.render" :data="data" :column="column">
-                </Render>
-                <template v-else>
-                    <LjsTextArea :auto-size="this.column.autoLine"
-                                 :auto-select="true"
-                                 :one-line-height="this.tr.table.lineHeight"
-                                 :disabled="this.column.edit===false"
-                                 :style="textareaStyle"
-                                 ref="input"
-                                 @blur="handleBlur"
-                                 @focus="handleFocus"
-                                 v-model="value"
-                                 @input="handleInput"/>
-                </template>
-            </template>
-        </div>
-    </td>
+  <td :class="tdClass" :width="column.width" :style="tdStyle"
+      @keyup.enter="handleEnter"
+      @click="handleClick" @dblclick="handleDbClick">
+    <div class="td_warp" tabindex="0" :style="tdWarpStyle"
+         @focus="handleFocus"
+         ref="tdWarp" @blur="handleBlur">
+      <template v-if="match">
+        <div v-if="debug" v-html="getState()+value"
+             style="color: red;font-size: xx-small;"></div>
+        <div v-if="false" v-html="'h_w:'+headWidth+',b_w:'+bodyWidth"
+             style="color: red;font-size: xx-small;"></div>
+        <m-td-head ref="tdHead" :td="getThis()"></m-td-head>
+        <!--自定义组件渲染-->
+        <m-render :style="inputStyle" v-if="this.column.render" ref="input" :driver="driver"
+                  :draw="column.render" :data="data" :column="column"/>
+        <template v-else>
+          <m-text-area :auto-size="this.column.autoLine"
+                       :auto-select="true"
+                       :one-line-height="this.tr.table.lineHeight"
+                       :disabled="this.column.edit===false"
+                       :style="textareaStyle"
+                       ref="input"
+                       @blur="handleBlur"
+                       @focus="handleFocus"
+                       v-model="value"
+                       @input="handleInput"/>
+        </template>
+      </template>
+    </div>
+  </td>
 </template>
 <script>
-import Render from './Render.js'
-import LjsTdHead from './LjsTdHead.vue'
-import LjsInput from './LjsInput.vue'
-import LjsTextArea from './LjsTextArea.vue'
 // 单元格状态
+import MTdHead from '../m-td-head/m-td-head'
+import MRender from '../m-render/m-render'
+import MTextArea from '../m-text-area/m-text-area'
+
 let States = {normal: 0, select: 1, lock: 2}
 export default {
-  name: 'ljs-edit-td',
-  components: {Render, LjsTdHead, LjsInput, LjsTextArea},
+  name: 'm-edit-td',
+  components: {MTextArea, MRender, MTdHead},
   props: {
     trHeight: {
       type: Number,
@@ -304,29 +303,29 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-    .td_normal {
-        box-sizing: border-box;
-        font-family: Arial, 微软雅黑, serif;
-        font-size: 11px;
-    }
+  .td_normal {
+    box-sizing: border-box;
+    font-family: Arial, 微软雅黑, serif;
+    font-size: 11px;
+  }
 
-    .td_select {
-        @extend .td_normal;
-        border: 1px #66CC66 solid;
-    }
+  .td_select {
+    @extend .td_normal;
+    border: 1px #66CC66 solid;
+  }
 
-    .td_lock {
-        @extend .td_normal;
-        border: 1px #3fcc2c solid;
-    }
+  .td_lock {
+    @extend .td_normal;
+    border: 1px #3fcc2c solid;
+  }
 
-    .td_warp {
-        outline: none;
-        border: none;
-        overflow: hidden;
-        display: flex;
-        flex-direction: row;
-        align-items: left;
-        align-content: left;
-    }
+  .td_warp {
+    outline: none;
+    border: none;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: left;
+    align-content: left;
+  }
 </style>

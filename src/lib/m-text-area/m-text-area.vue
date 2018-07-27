@@ -7,17 +7,17 @@
               @click="handleClick"
               @blur="handleBlur"
               :value="currentValue"></textarea>
-    <input v-else class="ljs_input"
-           @input="handleInput"
-           @focus="handleFocus"
-           :style="inputStyle"
-           @blur="handleBlur"
-           @click="handleClick"
-           :value="currentValue"/>
+  <input v-else class="ljs_input"
+         @input="handleInput"
+         @focus="handleFocus"
+         :style="inputStyle"
+         @blur="handleBlur"
+         @click="handleClick"
+         :value="currentValue"/>
 </template>
 <script>
 export default {
-  name: 'ljs-text-area',
+  name: 'm-text-area',
   props: {
     // 单行模式行高
     oneLineHeight: {
@@ -129,31 +129,31 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    .ljs_text {
-        width: 100%;
-        border: none;
-        outline: none;
-        background: none;
-        overflow: hidden;
-        font-family: Arial, 微软雅黑, serif;
-        font-size: 11px;
+  .ljs_text {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: none;
+    overflow: hidden;
+    font-family: Arial, 微软雅黑, serif;
+    font-size: 11px;
 
-        display: flex;
-        justify-content: center;
-        align-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-        color: #333333;
-        padding: 0;
-        margin: 0;
-    }
+    color: #333333;
+    padding: 0;
+    margin: 0;
+  }
 
-    .ljs_input {
-        @extend .ljs_text;
-    }
+  .ljs_input {
+    @extend .ljs_text;
+  }
 
-    .ljs_text_area {
-        line-height: 1;
-        @extend .ljs_text;
-        resize: none;
-    }
+  .ljs_text_area {
+    line-height: 1;
+    @extend .ljs_text;
+    resize: none;
+  }
 </style>

@@ -9,7 +9,17 @@ import './docs/style/common.scss'
 import LjsTreeTable from './lib.js'
 import 'jquery'
 import 'jquery-ui'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { fas } from '@fortawesome/free-solid-svg-icons'
+import { fab } from '@fortawesome/free-brands-svg-icons'
+import { far } from '@fortawesome/free-regular-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import './style/index.scss'
 
+library.add(fas)
+library.add(fab)
+library.add(far)
+Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.prototype.$Message = Message
 
 Message.config({top: 200})
@@ -18,7 +28,7 @@ Vue.use(LjsTreeTable)
 Vue.prototype.axios = axios
 axios.defaults.headers['Client-Type'] = 'web'
 // static api
-window.contentPath = '../plm'
+window.contentPath = './plm'
 // window.contentPath = '/plm'
 window.apiUrl = window.contentPath + '/api'
 axios.interceptors.response.use(response => {

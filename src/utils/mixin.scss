@@ -1,0 +1,27 @@
+@mixin w100 {
+  width: 100%;
+}
+
+@mixin h100 {
+  height: 100%;
+}
+
+@mixin wh100 {
+  @include w100;
+  @include h100;
+}
+
+@mixin flex_h {
+  display: flex;
+  flex-direction: row;
+}
+
+@mixin flex_v {
+  display: flex;
+  flex-direction: column;
+}
+
+@mixin debug {
+  box-sizing: border-box;
+  border: 2px red solid;
+}

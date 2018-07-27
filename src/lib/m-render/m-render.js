@@ -1,5 +1,5 @@
 export default {
-  name: 'Render',
+  name: 'm-render',
   props: {
     data: {
       type: Object,

@@ -10,7 +10,7 @@
     </div>
 </template>
 <script>
-import LjsTreeTable from '../../lib/ljs-tree-table/LjsTreeTable.vue'
+import LjsTreeTable from '../../lib/ljs-tree-table/ljs-tree-table.vue'
 import axios from 'axios'
 
 export default {

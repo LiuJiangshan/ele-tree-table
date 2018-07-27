@@ -10,7 +10,7 @@
 
 <script>
 import dateformat from 'dateformat'
-import LjsTreeTable from '../../lib/ljs-tree-table/LjsTreeTable.vue'
+import LjsTreeTable from '../../lib/ljs-tree-table/ljs-tree-table.vue'
 
 export default {
   name: 'LoadLocalData',

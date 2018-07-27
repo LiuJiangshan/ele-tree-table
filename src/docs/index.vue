@@ -6,7 +6,7 @@
             <ElMenuItem index="autoLine">自动换行示例</ElMenuItem>
             <ElMenuItem index="border">边框示例</ElMenuItem>
             <ElMenuItem index="SubmitAllChange">批量提交示例</ElMenuItem>
-            <ElMenuItem index="LjsLayoutTest">LjsLayoutTest</ElMenuItem>
+          <ElMenuItem index="test">test</ElMenuItem>
             <Submenu index="2">
                 <template slot="title">我的工作台</template>
                 <ElMenuItem index="2-1">选项1</ElMenuItem>
