@@ -520,6 +520,5 @@ export default {
 </script>
 <style lang="scss" scoped>
   .ljs-treetable {
-    position: relative;
   }
 </style>

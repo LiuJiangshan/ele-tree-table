@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="panel">
     <LjsTreeTable :border="border" :datas="datas" :columns="columns" :driver="driver"
                   :rightMenu="rightMenu"
                   :onExpand="onExpand" style="width:100%;height: 500px;" :onClose="onClose" :debug="debug"
@@ -365,6 +365,17 @@ export default {
 }
 </script>
 <style lang="scss">
+  @import "../../style/vars.scss";
+
+  .panel {
+    @include debug;
+    position: absolute;
+    top: 100px;
+    left: 100px;
+    width: 1000px;
+    height: 500px;
+  }
+
   .ivu-date-picker {
     .ivu-date-picker-focused input {
       border: none;
