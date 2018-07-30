@@ -81,9 +81,14 @@ export default new Router({
           component: () => Promise.resolve(require('../test/LjsTextAreaTest'))
         },
         {
-          path: 'test',
-          name: 'test',
-          component: () => Promise.resolve(require('../test/test.vue'))
+          path: 'mCheckBoxTest',
+          name: 'mCheckBoxTest',
+          component: () => Promise.resolve(require('../test/mCheckBoxTest.vue'))
+        },
+        {
+          path: 'mExpandTest',
+          name: 'mExpandTest',
+          component: () => Promise.resolve(require('../test/mExpandTest.vue'))
         }
       ]
     }

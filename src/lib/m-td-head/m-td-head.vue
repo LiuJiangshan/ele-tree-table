@@ -1,13 +1,14 @@
 <!--单元格表头内容-->
 <template>
-  <div class="td_head_warp" ref="head_warp">
-    <div class="td_head" :style="tdHeadStyle">
-      <template v-if="canExpand">
-        <m-deep :data="data" :column="column" :table="td.tr.table"/>
-        <m-expand :data="data" :table="table"/>
-      </template>
-      <m-check-box v-else-if="canSelection" v-model="data.checked" @check-changed="column.onCheck" :table="table"/>
-    </div>
+  <div class="m-td-head" ref="mTdHead">
+    <template v-if="canExpand">
+      <m-deep :data="data" :column="column" :table="td.tr.table"/>
+      <m-expand v-model="expand" :data="data" :table="table" @expand-changed="onExpandChange"/>
+    </template>
+    <m-check-box v-else-if="canSelection" v-model="data.selection" @check-changed="column.onCheck?column.onCheck:()=>{}"
+                 :table="table">{{data[column.key]}}
+    </m-check-box>
+    <slot/>
   </div>
 </template>
 
@@ -44,14 +45,18 @@ export default {
     width: {
       get () {
         let width = 0
-        if (this.isMounted) width = this.$refs.head_warp.clientWidth
+        if (this.isMounted) width = this.$refs.mTdHead.clientWidth
         return width
       }
     }
   },
-  methods: {},
+  methods: {
+    onExpandChange (value) {
+      this.table.setExpand(this.data, value)
+    }
+  },
   data () {
-    return {isMounted: false}
+    return {isMounted: false, expand: false}
   },
   mounted () {
     this.isMounted = true
@@ -60,8 +65,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .td_head_warp {
+  @import "../../utils/mixin.scss";
+
+  .m-td-head {
     display: inline-block;
+    @include flex_h;
+    align-items: center;
+    justify-content: flex-start;
   }
 
   .td_head {

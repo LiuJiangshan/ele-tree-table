@@ -9,7 +9,7 @@ export default {
       type: Object,
       default: undefined
     },
-    draw: {
+    render: {
       type: Function,
       default: undefined
     },
@@ -19,6 +19,6 @@ export default {
     }
   },
   render (h) {
-    return this.draw(h, this)
+    return this.render(h, this)
   }
 }

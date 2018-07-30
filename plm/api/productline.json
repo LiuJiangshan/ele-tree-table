@@ -1,0 +1,33 @@
+{
+  "pojo": "Response",
+  "msg": "查询完成",
+  "data": [
+    {
+      "pojo": "ProductLine",
+      "nodes": true,
+      "name": "产品线",
+      "id": 5,
+      "managerName": "test1",
+      "info": "info1",
+      "superId": -1,
+      "kids": 1
+    },
+    {
+      "pojo": "ProductLine",
+      "nodes": true,
+      "managerName": "test2",
+      "info": "info2",
+      "name": "产品线",
+      "id": 6,
+      "superId": -1,
+      "kids": 3
+    }
+  ],
+  "page": {
+    "offset": 0,
+    "page": 1,
+    "pageSize": 30,
+    "total": 6
+  },
+  "ok": true
+}

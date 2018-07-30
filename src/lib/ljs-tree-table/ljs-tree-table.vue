@@ -12,38 +12,14 @@
       <div v-html="focusTd?('x:'+this.focusTd.x+',y:'+this.focusTd.y):'no focus'"></div>
     </div>
     <m-context-menu ref="menu" :context="this"/>
-    <!--正常表格-->
-    <!--表头-->
     <m-thead @select-all="selectAll" :table="thisTable" :columns="columns" ref="header" :width="width"
              :fullWidth="fullWidth"/>
-    <!--表内容-->
     <m-tbody :table="thisTable" :header="$refs.header" :width="width" :fullWidth="fullWidth"
              :columns="columns">
-      <!--表内容-->
       <m-tr v-for="(data,dataIndex) in expandDatas" :key="dataIndex" :index="dataIndex" :data="data"
             :table="thisTable">
       </m-tr>
     </m-tbody>
-
-    <!--固定左列-->
-    <m-table-fix v-if="fixLeft&&fixLeftShow" :fixType="'left'">
-      <m-thead @select-all="selectAll" :table="thisTable" :columns="leftColumns" ref="leftHeader"
-               :width="leftFixWidth" :fullWidth="fullWidth"/>
-      <!--表内容-->
-      <m-tbody :fix="true" ref="fixLeft" :table="thisTable" :columns="leftColumns"
-               :wrapWidth="leftFixWidth"
-               :tableWidth="leftFixWidth"
-               :height="height-headHeight">
-        <!--表内容-->
-        <m-tr v-for="(data,dataIndex) in expandDatas" :key="dataIndex" :data="data" :table="thisTable">
-          <m-edit-td v-for="(column,columnIndex) in leftColumns" :key="columnIndex" :table="thisTable"
-                     :data="data"
-                     :column="column"
-                     :index="columnIndex" @on-check="onCheck"/>
-        </m-tr>
-      </m-tbody>
-    </m-table-fix>
-    <!--固定右列-->
 
     <!--debug视图-->
     <div v-if="debug" style="position: absolute;bottom: 0;left: 0;border: 1px red solid;">
@@ -287,12 +263,15 @@ export default {
     },
     // 判断该数据是否在此列有数据
     matchType (column, data) {
-      return !column.type || column.type === data.pojo
+      return !column.dataType ||
+        (column.dataType.search(`^${data.pojo}$`) >= 0 ||
+          column.dataType.search(`!^|${data.pojo}|!$`) >= 0 ||
+          column.dataType.search(`^${data.pojo}|!$`) >= 0 ||
+          column.dataType.search(`!^|${data.pojo}$`) >= 0)
     },
     // 全选
     selectAll (check) {
-      for (let v = 0; v < this.expandDatas.length; v++) this.expandDatas[v].check = check
-      this.onCheck()
+      this.expandDatas.forEach(item => { this.$set(item, 'selection', check) })
     },
     // 获取右键菜单上下文
     getMenuContext (data) {
@@ -506,12 +485,8 @@ export default {
         // 判断是否超出边界
         if (nextY >= 0 && nextY < this.expandDatas.length && nextX >= 0 && nextX < this.columns.length) {
           let focusTd = this.expandDatas[nextY].tr.tds[nextX]
-          if (this.focusTd) {
-            // this.focusTd.blur()
-          }
-          if (focusTd) {
-            focusTd.focus()
-          }
+          if (this.focusTd) this.focusTd.blur()
+          if (focusTd) focusTd.focus()
         } else {
           console.log('超出边界', nextX, nextY)
           return false

@@ -7,23 +7,21 @@ import 'element-ui/lib/theme-chalk/index.css'
 import 'iview/dist/styles/iview.css'
 import './docs/style/common.scss'
 import LjsTreeTable from './lib.js'
-import 'jquery'
-import 'jquery-ui'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import { fab } from '@fortawesome/free-brands-svg-icons'
 import { far } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import './style/index.scss'
+import iview from 'iview'
 
-library.add(fas)
-library.add(fab)
-library.add(far)
+library.add(fab, far, fas)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.prototype.$Message = Message
 
 Message.config({top: 200})
 Vue.use(LjsTreeTable)
+Vue.use(iview)
 
 Vue.prototype.axios = axios
 axios.defaults.headers['Client-Type'] = 'web'

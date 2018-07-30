@@ -1,13 +1,13 @@
 <template>
-    <div>
-        <LjsTreeTable :border="border" :datas="datas" :columns="columns" :driver="driver"
-                      :rightMenu="rightMenu"
-                      :onExpand="onExpand" style="width:100%;height: 500px;" :onClose="onClose" :debug="debug"
-                      :fixLeft="fixLeft" :fixRight="fixRight"
-                      @on-check="onCheck"/>
-        <input type="button" @click="debug=!debug" :value="debug?'关闭调试':'打开调试'"/>
-        <input type="button" :value="border?'隐藏边框':'显示边框'" @click="border=!border"/>
-    </div>
+  <div>
+    <LjsTreeTable :border="border" :datas="datas" :columns="columns" :driver="driver"
+                  :rightMenu="rightMenu"
+                  :onExpand="onExpand" style="width:100%;height: 500px;" :onClose="onClose" :debug="debug"
+                  :fixLeft="fixLeft" :fixRight="fixRight"
+                  @on-check="onCheck"/>
+    <input type="button" @click="debug=!debug" :value="debug?'关闭调试':'打开调试'"/>
+    <input type="button" :value="border?'隐藏边框':'显示边框'" @click="border=!border"/>
+  </div>
 </template>
 <script>
 import LjsTreeTable from '../../lib/ljs-tree-table/ljs-tree-table.vue'
@@ -30,7 +30,7 @@ export default {
             // 加载子产品组
             axios({
               method: 'GET',
-              url: window.apiUrl + '/productline',
+              url: window.apiUrl + '/productline.json',
               params: {superId: node.id, onePageShow: 10000}
             })
               .then(function (response) {
@@ -44,7 +44,7 @@ export default {
             // 加载子产品
             axios({
               method: 'GET',
-              url: window.apiUrl + '/product',
+              url: window.apiUrl + '/product.json',
               params: {productLineId: node.id, onePageShow: 10000}
             }).then(function (response) {
               let datas = response.data.data
@@ -58,7 +58,7 @@ export default {
             node['nodes'] = []
             axios({
               method: 'GET',
-              url: window.apiUrl + '/product',
+              url: window.apiUrl + '/product.json',
               params: {superId: node.id, onePageShow: 10000}
             })
               .then(function (response) {
@@ -78,7 +78,7 @@ export default {
             params[column.key] = data[column.key]
             axios({
               method: 'put',
-              url: window.apiUrl + '/productline',
+              url: window.apiUrl + '/productline.json',
               data: params
             })
               .then(function (response) {
@@ -94,7 +94,7 @@ export default {
             params[column.key] = data[column.key]
             axios({
               method: 'put',
-              url: window.apiUrl + '/product',
+              url: window.apiUrl + '/product.json',
               data: params
             })
               .then(function (response) {
@@ -111,7 +111,7 @@ export default {
           Product (data, cb) {
             axios({
               method: 'POST',
-              url: window.apiUrl + '/product',
+              url: window.apiUrl + '/product.json',
               data: data
             })
               .then(cb)
@@ -122,7 +122,7 @@ export default {
           ProductLine (data, cb) {
             axios({
               method: 'POST',
-              url: window.apiUrl + '/productline',
+              url: window.apiUrl + '/productline.json',
               data: data
             })
               .then(cb)
@@ -136,7 +136,7 @@ export default {
           Product (data, cb) {
             axios({
               method: 'delete',
-              url: window.apiUrl + '/product',
+              url: window.apiUrl + '/product.json',
               data: [data.id]
             })
               .then(cb)
@@ -147,7 +147,7 @@ export default {
           ProductLine (data, cb) {
             axios({
               method: 'delete',
-              url: window.apiUrl + '/productline',
+              url: window.apiUrl + '/productline.json',
               data: [data.id]
             })
               .then(cb)
@@ -280,18 +280,20 @@ export default {
       // 列定义
       columns: [
         {
-          // 可展开列
-          expand: true,
-          // 允许调整宽度
-          // 可选择
-          check: true,
+          type: 'selection',
+          key: 'id',
+          label: '编号',
+          width: 30
+        },
+        {
+          type: 'expand',
+          width: 100
+        },
+        {
           label: '名称',
           key: 'name',
-          width: 400,
-          // 自定义显示文字
-          text (data, column) {
-            return data.kids > 0 ? data[column.key] + '(' + data.kids + ')' : data[column.key]
-          }
+          dataType: 'Product|ProductLine',
+          width: 100
         },
         {
           edit: false,
@@ -301,7 +303,7 @@ export default {
         },
         {
           edit: false,
-          type: 'Product',
+          dataType: 'Product',
           label: '产品ID',
           key: 'id',
           width: 100
@@ -314,7 +316,7 @@ export default {
         {
           label: '计划发布日期',
           key: 'planPublish',
-          type: 'Product',
+          dataType: 'Product',
           width: 100,
           render (h, ctx) {
             return h('DatePicker', {props: {value: ctx.data[ctx.column.key]}})
@@ -323,7 +325,7 @@ export default {
         {
           label: '生产厂家',
           key: 'factory',
-          type: 'Product',
+          dataType: 'Product',
           width: 100
         }
       ],
@@ -349,7 +351,7 @@ export default {
     loadRoot (cb) {
       axios({
         method: 'GET',
-        url: window.apiUrl + '/productline',
+        url: window.apiUrl + '/productline.json',
         params: {superId: -1, onePageShow: 10000}
       }).then(cb)
         .catch(function (error) {
@@ -362,5 +364,15 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
+  .ivu-date-picker {
+    .ivu-date-picker-focused input {
+      border: none;
+    }
+
+    .ivu-input {
+      height: auto;
+      border: none;
+    }
+  }
 </style>

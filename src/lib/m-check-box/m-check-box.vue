@@ -1,36 +1,37 @@
 <template>
   <div class="m-check-box">
-    <font-awesome-icon :icon="value?['check-square']:['square']" size="lg" @click.stop="handClick"/>
+    <font-awesome-icon class="icon" :icon="icon" @click.stop="handClick"/>
+    <div class="label">
+      <slot/>
+    </div>
   </div>
 </template>
 
 <script>
-import checkedIcon from '../image/checked.png'
-import noCheckedIcon from '../image/no_checked.png'
 
 export default {
   name: 'm-check-box',
   props: {
     data: {type: Object},
     table: {type: Object},
-    value: {type: Boolean},
-    show: {
-      type: Boolean,
-      default: true
-    }
+    value: {type: Boolean}
+  },
+  data () {
+    return {check: this.value}
   },
   computed: {
+    icon () {
+      if (this.check) return ['fas', 'check-square']
+      else return ['far', 'square']
+    },
     imageStyle: {get () { return {visibility: (this.show ? 'visible' : 'hidden')} }}
   },
   methods: {
     handClick () {
-      this.value = !this.value
-      this.$emit('input', this.value)
-      this.$emit('check-changed', this.value)
+      this.check = !this.check
+      this.$emit('input', this.check)
+      this.$emit('check-changed', this.check)
     }
-  },
-  data () {
-    return {checkedIcon, noCheckedIcon}
   }
 }
 </script>

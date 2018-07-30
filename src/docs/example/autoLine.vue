@@ -1,12 +1,12 @@
 <!--自动换行测试-->
 <template>
-    <div>
-        <LjsTreeTable :datas="datas" :columns="columns" :driver="driver"
-                      :rightMenu="rightMenu"
-                      style="width:100%;height: 500px;" :debug="debug"
-                      @on-check="onCheck"/>
-        <input type="button" @click="debug=!debug" :value="debug?'关闭调试':'打开调试'"/>
-    </div>
+  <div>
+    <LjsTreeTable :datas="datas" :columns="columns" :driver="driver"
+                  :rightMenu="rightMenu"
+                  style="width:100%;height: 500px;" :debug="debug"
+                  @on-check="onCheck"/>
+    <input type="button" @click="debug=!debug" :value="debug?'关闭调试':'打开调试'"/>
+  </div>
 </template>
 <script>
 import LjsTreeTable from '../../lib/ljs-tree-table/ljs-tree-table.vue'
@@ -276,8 +276,20 @@ export default {
       // 列定义
       columns: [
         {
-          // 可展开列
-          expand: true,
+          type: 'expand',
+          // 允许调整宽度
+          // 可选择
+          check: true,
+          label: '名称',
+          key: 'name',
+          width: 400,
+          // 自定义显示文字
+          text (data, column) {
+            return data.kids > 0 ? data[column.key] + '(' + data.kids + ')' : data[column.key]
+          }
+        },
+        {
+          type: 'selection',
           // 允许调整宽度
           // 可选择
           check: true,

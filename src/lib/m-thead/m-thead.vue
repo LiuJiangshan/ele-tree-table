@@ -1,8 +1,7 @@
 <!--表头组件-->
 <template>
-  <div class="table_head_warp"
-       :style="{width:width+'px',height:table.headHeight+'px'}" ref="header">
-    <table @mouseup="mouseUp" @mouseleave="mouseUp" @mousemove="mouseMove($event)" class="head_table"
+  <div class="m-thead" :style="{width:width+'px',height:table.headHeight+'px'}" ref="header">
+    <table @mouseup="mouseUp" @mouseleave="mouseUp" @mousemove="mouseMove($event)" class="head-table"
            :width="fullWidth?fullWidth:'100%'" border="1">
       <colgroup>
         <col v-for="(column,columnIndex) in columns" :key="columnIndex" :width="column.width"
@@ -10,21 +9,9 @@
       </colgroup>
       <thead>
       <tr>
-        <th v-for="(column,columnIndex) in columns" :style="thStyle"
-            :key="columnIndex" class="th" :width="column.width" :height="table.headHeight">
-          <div :class="column.resize!==false?'th_warp_resizeable':'th_warp'"
-               @mousedown="mouseDown($event,column)">
-            <div v-if="table.debug"
-                 style="position: absolute;color: red;font-size: xx-small;right: 0;bottom: 0;"
-                 v-html="'w:'+column.width"></div>
-            <template v-if="column.check">
-              <div style="width: 19px;height: 1px;display: inline-block;"></div>
-              <LjsCheckBox :check="check" @change="onCheckChange"
-                           :table="table"/>
-            </template>
-            <span v-html="column.label" style="-webkit-user-select:none;user-select:none;"></span>
-          </div>
-        </th>
+        <m-th v-for="(column,index) in columns" @mousedown="mouseDown($event,column)"
+              :key="index" :width="column.width" :height="table.headHeight" :table="table"
+              :column="column"/>
       </tr>
       </thead>
     </table>
@@ -33,10 +20,11 @@
 
 <script>
 import LjsCheckBox from '../m-check-box/m-check-box.vue'
+import MTh from '../m-th/m-th'
 
 export default {
   name: 'm-thead',
-  components: {LjsCheckBox},
+  components: {MTh, LjsCheckBox},
   props: {
     table: {
       type: Object
@@ -57,12 +45,6 @@ export default {
       check: false,
       x: 0,
       resizeColumn: undefined
-    }
-  },
-  computed: {
-    thStyle () {
-      let thStyle = {borderColor: this.table.borderColor}
-      return thStyle
     }
   },
   methods: {
@@ -96,39 +78,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .table_head_warp {
+  @import "../../utils/mixin.scss";
+
+  .m-thead {
     overflow: hidden;
-  }
-
-  .head_table {
-    box-sizing: border-box;
-    border-collapse: collapse;
-    border: none transparent;
-    table-layout: fixed;
-    word-break: break-all;
-  }
-
-  .th {
-    text-align: left;
-    box-sizing: border-box;
-    border: 1px solid;
-    background-color: #F2F2F2;
-    font-size: 11px;
-  }
-
-  .th_warp {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    font-family: Arial, 微软雅黑, serif;
-    align-content: left;
-    overflow: hidden;
-    height: 30px;
-    position: relative;
-  }
-
-  .th_warp_resizeable {
-    @extend .th_warp;
-    cursor: col-resize;
+    .head-table {
+      box-sizing: border-box;
+      border-collapse: collapse;
+      border: none transparent;
+      table-layout: fixed;
+      word-break: break-all;
+    }
   }
 </style>

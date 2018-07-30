@@ -1,32 +1,27 @@
 <!--可编辑组件-->
 <template>
-  <td :class="tdClass" :width="column.width" :style="tdStyle"
+  <td :class="tdClass" :width="column.width" :height="trHeight"
       @keyup.enter="handleEnter"
       @click="handleClick" @dblclick="handleDbClick">
-    <div class="td_warp" tabindex="0" :style="tdWarpStyle"
+    <div class="td-warp" tabindex="0"
          @focus="handleFocus"
          ref="tdWarp" @blur="handleBlur">
-      <template v-if="match">
+      <m-td-head class="td-head-style" ref="tdHead" :td="getThis()"/>
+      <template v-if="match&&!canSelection">
         <div v-if="debug" v-html="getState()+value"
              style="color: red;font-size: xx-small;"></div>
-        <div v-if="false" v-html="'h_w:'+headWidth+',b_w:'+bodyWidth"
-             style="color: red;font-size: xx-small;"></div>
-        <m-td-head ref="tdHead" :td="getThis()"></m-td-head>
-        <!--自定义组件渲染-->
-        <m-render :style="inputStyle" v-if="this.column.render" ref="input" :driver="driver"
-                  :draw="column.render" :data="data" :column="column"/>
-        <template v-else>
-          <m-text-area :auto-size="this.column.autoLine"
-                       :auto-select="true"
-                       :one-line-height="this.tr.table.lineHeight"
-                       :disabled="this.column.edit===false"
-                       :style="textareaStyle"
-                       ref="input"
-                       @blur="handleBlur"
-                       @focus="handleFocus"
-                       v-model="value"
-                       @input="handleInput"/>
-        </template>
+        <m-render v-if="column.render" class="custom-render-style"
+                  ref="input" :driver="driver" :render="column.render" :data="data" :column="column"/>
+        <m-text-area v-else :auto-size="this.column.autoLine"
+                     :auto-select="true"
+                     :one-line-height="tr.table.lineHeight"
+                     :disabled="column.edit===false"
+                     class="text-area-style"
+                     ref="input"
+                     @blur="handleBlur"
+                     @focus="handleFocus"
+                     v-model="value"
+                     @input="handleInput"/>
       </template>
     </div>
   </td>
@@ -79,19 +74,7 @@ export default {
     }
   },
   computed: {
-    tdStyle () {
-      let tdStyle = {}
-      if (this.state === States.normal) tdStyle.borderColor = this.table.borderColor
-      return tdStyle
-    },
-    textareaStyle () {
-      let textareaStyle = {width: this.bodyWidth + 'px'}
-      return textareaStyle
-    },
-    tdWarpStyle () {
-      let tdWarpStyle = {}
-      return tdWarpStyle
-    },
+    canSelection () { return this.column.type && this.column.type.indexOf('selection') !== -1 },
     inputStyle () {
       let re = {}
       re.width = this.bodyWidth + 'px'
@@ -127,16 +110,15 @@ export default {
     // 单元格边框样式
     tdClass: {
       get () {
-        let tdClass = ''
+        let tdClass = {'td-select': false, 'td-lock': false, 'td-border': false}
         switch (this.state) {
           case States.normal:
-            tdClass = 'td_mormal'
             break
           case States.select:
-            tdClass = 'td_select'
+            tdClass['td-select'] = true
             break
           case States.lock:
-            tdClass = 'td_lock'
+            tdClass['td-lock'] = true
             break
         }
         return tdClass
@@ -145,7 +127,9 @@ export default {
     // 当前焦点单元格
     focusTd: {get () { return this.table.focusTd }},
     // 当前单元格所在列是否与该行数据类型匹配
-    match: {get () { return this.table.matchType(this.column, this.data) }},
+    match () {
+      return this.table.matchType(this.column, this.data)
+    },
     // 当前单元格显示内容
     value: {
       get () {
@@ -265,12 +249,11 @@ export default {
         tdWarp.focus()
         // console.log('不能编辑获取到焦点:', this.column.label)
       } else if (this.column.render) {
-        if (!window.$) {
+        if (window.$) {
           let focusable = window.$(tdWarp).find(':focusable')
           if (focusable) {
             tdWarp.focus()
             focusable.focus()
-            console.log(focusable)
           }
         } else console.error('请添加jQuery、jQuery-Ui,否则不能对自定义组件设置焦点')
         // let focusAbleNode = this.getFocusNode(tdWarp)
@@ -303,29 +286,48 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-  .td_normal {
+  @import "../../style/vars.scss";
+
+  td {
     box-sizing: border-box;
     font-family: Arial, 微软雅黑, serif;
     font-size: 11px;
   }
 
-  .td_select {
-    @extend .td_normal;
-    border: 1px #66CC66 solid;
+  .td-select {
+    border: 1px $theme-color-5 solid;
+    box-shadow: 0 1px 6px 0 $theme-color-5;
   }
 
-  .td_lock {
-    @extend .td_normal;
-    border: 1px #3fcc2c solid;
+  .td-lock {
+    border: 1px $theme-color solid;
+    box-shadow: 0 1px 6px 0 $theme-color;
   }
 
-  .td_warp {
+  .td-border {
+    border-color: $border-color;
+  }
+
+  .text-area-style {
+    flex-grow: 1;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .custom-render-style {
+    flex-grow: 1;
+  }
+
+  .td-head-style {
+    flex-grow: 0;
+  }
+
+  .td-warp {
     outline: none;
     border: none;
     overflow: hidden;
-    display: flex;
-    flex-direction: row;
-    align-items: left;
-    align-content: left;
+    @include flex_h;
+    align-items: flex-start;
+    align-content: flex-start;
   }
 </style>

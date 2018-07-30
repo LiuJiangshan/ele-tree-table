@@ -1,53 +1,33 @@
 <template>
-  <div class="expand_warp">
-    <img class="image" @click.stop="table.onExpandIconClick(data)" :style="imageStyle"
-         :src="expand?openIcon:closeIcon"/>
+  <div class="m-expand">
+    <font-awesome-icon :icon="icon" @click.stop="handClick"/>
   </div>
 </template>
 
 <script>
-import closeIcon from '../image/expand_close.png'
-import openIcon from '../image/expand_open.png'
-
 export default {
-  name: 'm-expand',
+  name: 'm-check-expand',
   props: {
     data: {type: Object},
-    table: {type: Object}
-  },
-  computed: {
-    expand: {
-      get () { return this.data.expand === true }
-    },
-    imageStyle: {
-      get () { return {visibility: (this.show ? 'visible' : 'hidden')} }
-    },
-    show: {
-      get () { return (typeof this.data.kids) === 'number' && this.data.kids > 0 }
-    }
+    table: {type: Object},
+    value: {type: Boolean}
   },
   data () {
-    return {openIcon, closeIcon}
+    return {check: this.value}
+  },
+  computed: {
+    icon () {
+      if (this.check) return ['fas', 'minus-square']
+      else return ['fas', 'plus-square']
+    },
+    imageStyle: {get () { return {visibility: (this.show ? 'visible' : 'hidden')} }}
+  },
+  methods: {
+    handClick () {
+      this.check = !this.check
+      this.$emit('input', this.check)
+      this.$emit('expand-changed', this.check)
+    }
   }
 }
 </script>
-
-<style lang="scss" scoped>
-  .expand_warp {
-    width: 11px;
-    height: 23px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin: 4px;
-    justify-content: center;
-    justify-items: center;
-    align-content: center;
-  }
-
-  .image {
-    width: 11px;
-    height: 11px;
-    cursor: pointer;
-  }
-</style>

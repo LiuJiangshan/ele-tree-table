@@ -1,15 +1,15 @@
 <template>
   <div class="test">
-    <font-awesome-icon prefix="fas" icon="check-square" size="lg"/>
+    <m-check-box :value="false"/>
   </div>
 </template>
 
 <script>
-import LjsTreeTable from '../../lib/ljs-tree-table/ljs-tree-table'
+import MCheckBox from '../../lib/m-check-box/m-check-box'
 
 export default {
   name: 'test',
-  components: {LjsTreeTable},
+  components: {MCheckBox},
   data () {
     return {columns: []}
   }

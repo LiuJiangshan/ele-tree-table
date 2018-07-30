@@ -1,18 +1,19 @@
 <template>
   <tr v-if="expand&&data.remove!==true" :class="this.table.trBorder?'tr_border':'tr'" :style="trStyle" tabindex="0"
       @contextmenu.prevent="table.$refs.menu.open($event.x - table.$el.offsetLeft,$event.y - table.$el.offsetTop,table.getContextItems(data),table.getMenuContext(data))">
-    <LjsEditTd v-for="(column,columnIndex) in table.columns" :key="columnIndex" :index="columnIndex" :data="data"
+    <m-edit-td v-for="(column,columnIndex) in table.columns" :key="columnIndex" :index="columnIndex" :data="data"
                :column="column" :trHeight="height"
                :ref="'td'+columnIndex" :tr="getThis()"/>
   </tr>
 </template>
 
 <script>
-import LjsEditTd from '../m-edit-td/m-edit-td.vue'
+
+import MEditTd from '../m-edit-td/m-edit-td'
 
 export default {
   name: 'm-tr',
-  components: {LjsEditTd},
+  components: {MEditTd},
   props: {
     index: {
       type: Number
