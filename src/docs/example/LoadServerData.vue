@@ -1,17 +1,24 @@
 <template>
-  <div class="panel">
-    <LjsTreeTable :border="border" :datas="datas" :columns="columns" :driver="driver"
-                  :rightMenu="rightMenu"
-                  :onExpand="onExpand" style="width:100%;height: 500px;" :onClose="onClose" :debug="debug"
-                  :fixLeft="fixLeft" :fixRight="fixRight"
-                  @on-check="onCheck"/>
+  <div>
+    <div class="panel">
+      <ljs-tree-table :root-loader="rootLoader" :border="border" :columns="columns" :driver="driver"
+                      :rightMenu="rightMenu"
+                      :onExpand="onExpand" style="width:100%;height:100%;" :onClose="onClose" :debug="debug"
+                      :fixLeft="fixLeft" :fixRight="fixRight"
+                      @on-check="onCheck"/>
+    </div>
     <input type="button" @click="debug=!debug" :value="debug?'关闭调试':'打开调试'"/>
     <input type="button" :value="border?'隐藏边框':'显示边框'" @click="border=!border"/>
   </div>
 </template>
 <script>
-import LjsTreeTable from '../../lib/ljs-tree-table/ljs-tree-table.vue'
+/* eslint-disable no-proto */
+
 import axios from 'axios'
+import LjsTreeTable from '../../lib/ljs-tree-table/ljs-tree-table'
+import baseService from '../../utils/baseService.js'
+
+const productLineService = baseService('productline.json')
 
 export default {
   components: {LjsTreeTable},
@@ -280,14 +287,13 @@ export default {
       // 列定义
       columns: [
         {
-          type: 'selection',
-          key: 'id',
-          label: '编号',
-          width: 30
-        },
-        {
           type: 'expand',
           width: 100
+        },
+        {
+          type: 'selection',
+          key: 'id',
+          width: 50
         },
         {
           label: '名称',
@@ -329,8 +335,6 @@ export default {
           width: 100
         }
       ],
-      // 数据
-      datas: [],
       onExpand (data, go) {
         go()
       },
@@ -340,6 +344,9 @@ export default {
     }
   },
   methods: {
+    rootLoader (cb) {
+      productLineService.search({}).then(response => cb.load(response.data.data)).catch(cb.error).then(this.end)
+    },
     onCheck (selectDatas) {
       console.log('选择了' + selectDatas.length + '项', selectDatas)
     },
@@ -347,20 +354,7 @@ export default {
       if (response.data.ok) {
         this.datas = response.data.data
       }
-    },
-    loadRoot (cb) {
-      axios({
-        method: 'GET',
-        url: window.apiUrl + '/productline.json',
-        params: {superId: -1, onePageShow: 10000}
-      }).then(cb)
-        .catch(function (error) {
-          console.log(error)
-        })
     }
-  },
-  mounted () {
-    this.loadRoot(this.loadRootCB)
   }
 }
 </script>

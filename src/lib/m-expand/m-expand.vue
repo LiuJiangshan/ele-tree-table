@@ -5,8 +5,14 @@
 </template>
 
 <script>
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faMinusSquare, faPlusSquare } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
+library.add(faMinusSquare, faPlusSquare)
 export default {
   name: 'm-check-expand',
+  components: {FontAwesomeIcon},
   props: {
     data: {type: Object},
     table: {type: Object},

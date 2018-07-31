@@ -7,7 +7,7 @@
          @focus="handleFocus"
          ref="tdWarp" @blur="handleBlur">
       <m-td-head class="td-head-style" ref="tdHead" :td="getThis()"/>
-      <template v-if="match&&!canSelection">
+      <template v-if="match">
         <div v-if="debug" v-html="getState()+value"
              style="color: red;font-size: xx-small;"></div>
         <m-render v-if="column.render" class="custom-render-style"
@@ -323,6 +323,7 @@ export default {
   }
 
   .td-warp {
+    @include wh100;
     outline: none;
     border: none;
     overflow: hidden;

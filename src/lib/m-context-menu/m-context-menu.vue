@@ -1,51 +1,36 @@
 <template>
-  <div v-click-outside="close" v-if="show" class="m-context-menu" ref="menu" @click.prevent.stop="close"
-       :style="{top:y+'px',left:x+'px'}"
-       @blur.prevent="onBlur">
-    <div v-for="(item,itemIndex) in items" :key="itemIndex" class="item" @click.prevent="item.click()"
+  <div v-click-outside="close" class="m-context-menu" @click.prevent.stop="close" :style="menuStyle">
+    <div v-for="(item,index) in items" :key="index" class="item" @click.prevent="item.click?item.click():()=>{}"
          v-html="item.label"></div>
   </div>
 </template>
 <script>
 import ClickOutside from 'vue-click-outside'
+import { removeMenu } from './menu.js'
 
+const defaultItems = [{label: '选项为空', click: () => {}}]
 export default {
   name: 'm-context-menu',
-  props: {},
+  props: {
+    x: {type: Number, default: 0},
+    y: {type: Number, default: 0},
+    items: {type: Array, default: defaultItems}
+  },
   directives: {
     ClickOutside
   },
-  methods: {
-    onBlur () {
-    },
-    open (items, $event) {
-      let target = $event.target
-      console.log(target)
-      let x = $event.x
-      let y = $event.y
-      x += target.offsetLeft
-      y -= target.offsetTop
-      target = target.offsetParent
-      while (target) {
-        x -= target.offsetLeft
-        y -= target.offsetTop
-        console.log(x, y)
-        target = target.offsetParent
+  computed: {
+    menuStyle () {
+      return {
+        top: this.y + 'px',
+        left: this.x + 'px'
       }
-      console.log(x, y)
-      if (items && items.length > 0) {
-        this.items = items
-        this.show = true
-        this.x = x
-        this.y = y
-      }
-    },
-    close () {
-      this.show = false
     }
   },
-  data () {
-    return {items: [], show: false, x: 0, y: 0}
+  methods: {
+    close () {
+      removeMenu()
+    }
   }
 }
 </script>

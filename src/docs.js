@@ -6,22 +6,18 @@ import Message from 'iview/src/components/message'
 import 'element-ui/lib/theme-chalk/index.css'
 import 'iview/dist/styles/iview.css'
 import './docs/style/common.scss'
-import LjsTreeTable from './lib.js'
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { fas } from '@fortawesome/free-solid-svg-icons'
-import { fab } from '@fortawesome/free-brands-svg-icons'
-import { far } from '@fortawesome/free-regular-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import ljsTreeTable from './lib.js'
+// import ljsTreeTable from '../dist/lib/index.js'
 import './style/index.scss'
 import iview from 'iview'
+import elementUi from 'element-ui'
+import 'element-ui/packages/theme-chalk/src/index.scss'
 
-library.add(fab, far, fas)
-Vue.component('font-awesome-icon', FontAwesomeIcon)
-Vue.prototype.$Message = Message
-
-Message.config({top: 200})
-Vue.use(LjsTreeTable)
+Vue.use(ljsTreeTable)
 Vue.use(iview)
+Vue.use(elementUi)
+Message.config({top: 200})
+Vue.use(ljsTreeTable)
 
 Vue.prototype.axios = axios
 axios.defaults.headers['Client-Type'] = 'web'

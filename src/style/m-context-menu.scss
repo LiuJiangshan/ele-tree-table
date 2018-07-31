@@ -3,8 +3,8 @@
 .m-context-menu {
   outline: none;
   font-size: 12px;
+  z-index: 1000;
   position: absolute;
-  z-index: 1;
   box-shadow: 0 2px 12px 0 $border-color;
   background-color: #fafafa;
   white-space: nowrap;
@@ -14,20 +14,20 @@
   box-sizing: border-box;
   overflow: hidden;
   transition: 0.3s;
+  .item {
+    cursor: pointer;
+    display: block;
+    background-color: $text-bg-color;
+    color: $text-color;
+    padding: 5px 7px;
+    font-family: "Segoe UI", Calibri, Thonburi, Arial, Verdana, sans-serif, "Mongolian Baiti", "Microsoft Yi Baiti", "Javanese Text";
+    font-size: 9pt;
+    user-select: none;
+  }
+
+  .item:hover {
+    color: $text-color-hover;
+    background-color: $theme-color-9;
+  }
 }
 
-.item {
-  cursor: pointer;
-  display: block;
-  background-color: $text-bg-color;
-  color: $text-color;
-  padding: 5px 7px;
-  font-family: "Segoe UI", Calibri, Thonburi, Arial, Verdana, sans-serif, "Mongolian Baiti", "Microsoft Yi Baiti", "Javanese Text";
-  font-size: 9pt;
-  user-select: none;
-}
-
-.item:hover {
-  color: $text-color-hover;
-  background-color: $theme-color-9;
-}

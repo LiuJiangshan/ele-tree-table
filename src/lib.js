@@ -1,14 +1,16 @@
 import { installComponents } from './installUtils.js'
-import treeTable from './lib/ljs-tree-table/ljs-tree-table'
+import ljsTreeTable from './lib/ljs-tree-table'
+import mContextMenu from './lib/m-context-menu'
 
 const components = {
-  treeTable
+  ljsTreeTable
 }
 
 let API
 
 function install (Vue, option) {
   installComponents(API, Vue, option)
+  Vue.prototype.$menu = mContextMenu
 }
 
 /** cdn引用方式安装 */

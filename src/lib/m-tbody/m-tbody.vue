@@ -13,7 +13,7 @@
       </tbody>
     </table>
   </div>
-  <div v-else class="table_empty" :style="bodyStyle" ref="tableEmpty"
+  <div v-else class="table-empty" :style="bodyStyle" ref="tableEmpty"
        @contextmenu.prevent.stop="onRightMenuClick($event)">
     <span v-if="!fix" v-html="'暂无数据'"></span>
   </div>
@@ -67,7 +67,7 @@ export default {
   },
   methods: {
     onRightMenuClick ($event) {
-      this.table.$refs.menu.open(this.table.rightMenu.empty, $event)
+      this.$menu.rightMenu(this.table.rightMenu.empty, $event)
     },
     onScroll (event) {
       if (this.header) this.table.handleBodyScroll(event, this.header, this)
@@ -88,9 +88,10 @@ export default {
     background-color: white;
   }
 
-  .table_empty {
+  .table-empty {
     align-items: center;
     display: flex;
+    cursor: help;
     align-content: center;
     justify-content: center;
     justify-items: center;

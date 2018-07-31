@@ -6,8 +6,7 @@
       <m-expand v-model="expand" :data="data" :table="table" @expand-changed="onExpandChange"/>
     </template>
     <m-check-box v-else-if="canSelection" v-model="data.selection" @check-changed="column.onCheck?column.onCheck:()=>{}"
-                 :table="table">{{data[column.key]}}
-    </m-check-box>
+                 :table="table"/>
     <slot/>
   </div>
 </template>
@@ -70,6 +69,7 @@ export default {
   .m-td-head {
     display: inline-block;
     @include flex_h;
+    @include h100;
     align-items: center;
     justify-content: flex-start;
   }

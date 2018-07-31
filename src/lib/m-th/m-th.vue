@@ -1,8 +1,10 @@
 <template>
-  <th class="m-th" :class="{resizeable:column.resize!==false}">
-    <m-check-box v-if="canSelection" v-model="checkAll" @check-changed="onCheckChanged">{{column.label}}</m-check-box>
-    <template v-else>{{column.label}}</template>
-    <slot/>
+  <th class="m-th" :class="{resizeable:column.resize}">
+    <div class="m-th-wrap">
+      <m-check-box v-if="canSelection" v-model="checkAll" @check-changed="onCheckChanged"/>
+      <template v-else-if="canExpand"/>
+      <template v-else>{{column.label}}</template>
+    </div>
   </th>
 </template>
 
@@ -34,12 +36,20 @@ export default {
 <style lang="scss" scoped>
   @import "../../utils/mixin.scss";
 
-  th {
-    text-align: left;
+  .m-th-wrap {
+    @include wh100;
     white-space: nowrap;
+    @include flex_h;
+    align-items: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
-  th .border {
+  .m-th {
+
+  }
+
+  .m-th .border {
     box-sizing: border-box;
     border: 1px solid;
   }

@@ -1,5 +1,5 @@
 <template>
-  <div component="LjsTreeTable" author="LiuJiangshan"
+  <div component="LjsTreeTable" author="LiuJiangshan" v-resize="onReSize"
        github="https://github.com/LiuJiangshan/LjsTreeTable"
        class="ljs-treetable" @keyup.up="up"
        @keyup.down="down" :style="{width:width===0?600:width+'px'}"
@@ -11,7 +11,6 @@
       <div v-html="'canMove:'+canMove"></div>
       <div v-html="focusTd?('x:'+this.focusTd.x+',y:'+this.focusTd.y):'no focus'"></div>
     </div>
-    <m-context-menu ref="menu" :context="this"/>
     <m-thead @select-all="selectAll" :table="thisTable" :columns="columns" ref="header" :width="width"
              :fullWidth="fullWidth"/>
     <m-tbody :table="thisTable" :header="$refs.header" :width="width" :fullWidth="fullWidth"
@@ -49,11 +48,16 @@ import MTbody from '../m-tbody/m-tbody'
 import MTr from '../m-tr/m-tr'
 import MTableFix from '../m-table-fix/m-table-fix'
 import MEditTd from '../m-edit-td/m-edit-td'
+// import TreeNode from './TreeNode.js'
+import RootNode from './RootNode.js'
+import resize from 'vue-resize-directive'
 
 export default {
   name: 'ljs-tree-table',
+  directives: {resize},
   components: {MEditTd, MTableFix, MTr, MTbody, MThead, MContextMenu},
   props: {
+    rootLoader: {type: Function},
     // 子节点数据驱动
     driver: {
       type: Object,
@@ -70,13 +74,6 @@ export default {
     },
     // 列定义
     columns: {
-      type: Array,
-      default () {
-        return []
-      }
-    },
-    // 数据
-    datas: {
       type: Array,
       default () {
         return []
@@ -144,11 +141,6 @@ export default {
     }
   },
   watch: {
-    datas () {
-      this.formatRoot()
-      this.formatNode(this.datas)
-      this.refresh()
-    },
     columns () {
       this.formatColumns()
     }
@@ -205,20 +197,13 @@ export default {
         }
         return fullWidth
       }
-    },
-    // 获取组件当前高度
-    height: {
-      get () {
-        if (this.isMounted) return this.$refs.treetable.clientHeight
-        else return this.treeTableWidth
-      },
-      set (val) { this.treeTableWidth = val }
     }
   },
   data () {
     return {
-      treeTableWidth: 600,
       width: 0,
+      height: 0,
+      rootNode: new RootNode(),
       // 格式化数据
       expandDatas: [],
       // 当前焦点单元格vue对象
@@ -226,7 +211,6 @@ export default {
       fixLeftShow: true,
       fixRightShow: true,
       canMove: true,
-      isMounted: false,
       submitTypes: {add: 'add', remove: 'remove', update: 'update'}
     }
   },
@@ -499,7 +483,22 @@ export default {
     up () { this.move(0, -1) },
     down () { this.move(0, 1) },
     left () { this.move(-1, 0) },
-    right () { this.move(1, 0) }
+    right () { this.move(1, 0) },
+    onReSize () {
+      this.width = this.$el.clientWidth
+      this.height = this.$el.clientHeight
+      this.formatColumns()
+    },
+    loadRoot () {
+      this.rootLoader({
+        load: (data) => {
+        },
+        error: () => {
+        },
+        end: () => {
+        }
+      })
+    }
   },
   created () {
     this.formatRoot()
@@ -507,14 +506,8 @@ export default {
     this.refresh()
   },
   mounted () {
-    this.isMounted = true
-    this.width = this.$refs.treetable.clientWidth
-    this.formatColumns()
-    let _this = this
-    window.addEventListener('resize', function () {
-      _this.width = _this.$refs.treetable.clientWidth
-      _this.formatColumns()
-    })
+    this.onReSize()
+    this.loadRoot()
   }
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
   <tr v-if="expand&&data.remove!==true" :class="this.table.trBorder?'tr_border':'tr'" :style="trStyle" tabindex="0"
-      @contextmenu.prevent="onRightMenuClick($event)">
+      @contextmenu.prevent.stop="onRightMenuClick($event)">
     <m-edit-td v-for="(column,columnIndex) in table.columns" :key="columnIndex" :index="columnIndex" :data="data"
                :column="column" :trHeight="height"
                :ref="'td'+columnIndex" :tr="getThis()"/>
@@ -30,7 +30,7 @@ export default {
       return this
     },
     onRightMenuClick ($event) {
-      this.table.$refs.menu.open(this.table.getContextItems(this.data), $event)
+      this.$menu.rightMenu(this.table.getContextItems(this.data), $event)
     }
   },
   computed: {
