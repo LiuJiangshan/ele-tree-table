@@ -16,12 +16,15 @@ export default {
   name: 'm-check-box',
   components: {FontAwesomeIcon},
   props: {
-    data: {type: Object},
-    table: {type: Object},
     value: {type: Boolean}
   },
   data () {
     return {check: this.value}
+  },
+  watch: {
+    value (newVal) {
+      if (newVal !== this.check) this.check = newVal
+    }
   },
   computed: {
     icon () {

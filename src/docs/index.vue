@@ -8,7 +8,6 @@
       <ElMenuItem index="SubmitAllChange">批量提交示例</ElMenuItem>
       <ElMenuItem index="mCheckBoxTest">mCheckBoxTest</ElMenuItem>
       <ElMenuItem index="TreeNodeTest">TreeNodeTest</ElMenuItem>
-      <ElMenuItem index="DataLoaderTest">DataLoaderTest</ElMenuItem>
       <ElMenuItem index="mExpandTest">mExpandTest</ElMenuItem>
       <Submenu index="2">
         <template slot="title">我的工作台</template>

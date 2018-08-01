@@ -11,15 +11,10 @@
       <div v-html="'canMove:'+canMove"></div>
       <div v-html="focusTd?('x:'+this.focusTd.x+',y:'+this.focusTd.y):'no focus'"></div>
     </div>
-    <m-thead @select-all="selectAll" :table="thisTable" :columns="columns" ref="header" :width="width"
+    <m-thead :table="thisTable" :column-list="columnList" ref="header" :width="width"
              :fullWidth="fullWidth"/>
-    <m-tbody :table="thisTable" :header="$refs.header" :width="width" :fullWidth="fullWidth"
-             :columns="columns">
-      <m-tr v-for="(data,dataIndex) in expandDatas" :key="dataIndex" :index="dataIndex" :data="data"
-            :table="thisTable">
-      </m-tr>
-    </m-tbody>
-
+    <m-tbody :table="thisTable" :header="$refs.header" :width="width" :fullWidth="fullWidth" :column-list="columnList"
+             :nodes="expandNodes"/>
     <!--debug视图-->
     <div v-if="debug" style="position: absolute;bottom: 0;left: 0;border: 1px red solid;">
       <input type="button" value="原始数据" @click="printDatas"/>
@@ -45,19 +40,23 @@
 import MContextMenu from '../m-context-menu/m-context-menu'
 import MThead from '../m-thead/m-thead'
 import MTbody from '../m-tbody/m-tbody'
-import MTr from '../m-tr/m-tr'
 import MTableFix from '../m-table-fix/m-table-fix'
 import MEditTd from '../m-edit-td/m-edit-td'
-// import TreeNode from './TreeNode.js'
+import TreeNode from './TreeNode.js'
+import DataLoader from './DataLoader.js'
 import RootNode from './RootNode.js'
 import resize from 'vue-resize-directive'
+import ColumnList from './ColumnList'
 
 export default {
   name: 'ljs-tree-table',
   directives: {resize},
-  components: {MEditTd, MTableFix, MTr, MTbody, MThead, MContextMenu},
+  components: {MEditTd, MTableFix, MTbody, MThead, MContextMenu},
   props: {
-    rootLoader: {type: Function},
+    rootLoader: {type: DataLoader},
+    treeLoader: {type: DataLoader},
+    treeUpdater: {type: DataLoader},
+    menuGetter: {type: Function},
     // 子节点数据驱动
     driver: {
       type: Object,
@@ -146,6 +145,9 @@ export default {
     }
   },
   computed: {
+    expandNodes () {
+      return this.rootNode.getExpandNodes()
+    },
     trBorderColor () { return '#E4E4E4' },
     borderColor () {
       return this.border ? '#E4E4E4' : 'transparent'
@@ -204,6 +206,7 @@ export default {
       width: 0,
       height: 0,
       rootNode: new RootNode(),
+      columnList: new ColumnList(this.columns),
       // 格式化数据
       expandDatas: [],
       // 当前焦点单元格vue对象
@@ -225,10 +228,10 @@ export default {
         for (let i = 0; i < this.columns.length; i++) {
           let r
           let column = this.columns[i]
-          if (i === this.columns.length - 1) {
+          if (i === this.columns.length) {
             r = undefined
             // 最后一个单元格占满剩余宽度(减去边框宽度)
-            column.width = this.width - heapWidth - 1
+            column.width = this.width - heapWidth
           } else {
             r = column.width / this.fullWidth
             column.width = r * this.width
@@ -254,8 +257,8 @@ export default {
           column.dataType.search(`!^|${data.pojo}$`) >= 0)
     },
     // 全选
-    selectAll (check) {
-      this.expandDatas.forEach(item => { this.$set(item, 'selection', check) })
+    selectAll (newVal) {
+      this.expandNodes.forEach(it => it.setCheck(newVal))
     },
     // 获取右键菜单上下文
     getMenuContext (data) {
@@ -304,8 +307,23 @@ export default {
       }
       return array
     },
-    // 设置某个节点是否展开
     setExpand (node, expand) {
+      node.setExpand(expand)
+      if (!node.childs) {
+        this.treeLoader.load({
+          onLoad (data) {
+            node.childs = []
+            data.forEach(it => node.childs.push(new TreeNode(it).setParent(node)))
+          },
+          onError () {},
+          onEnd: () => {
+            this.rootLoader = this.rootLoader
+          }
+        })
+      }
+    },
+    // 设置某个节点是否展开
+    setExpand1 (node, expand) {
       let formatNode = this.formatNode
       let refresh = this.refresh
       let loader = this.driver.loader
@@ -448,7 +466,7 @@ export default {
       }
     },
     // 将tr组件vue实例与数据绑定
-    bindTr (tr) { tr.data.tr = tr },
+    bindTr (tr) { tr.node.tr = tr },
     // 将td组件vue实例与数据绑定
     bindTd (td) {
       if (!td.tr.tds) td.tr.tds = []
@@ -490,22 +508,20 @@ export default {
       this.formatColumns()
     },
     loadRoot () {
-      this.rootLoader({
-        load: (data) => {
+      this.rootLoader.load({
+        onLoad: data => {
+          this.rootNode.childs = []
+          data.forEach(it => this.rootNode.childs.push(new TreeNode(it).setParent(this.rootNode)))
         },
-        error: () => {
-        },
-        end: () => {
-        }
+        onError (e) {},
+        onEnd () {}
       })
     }
   },
   created () {
-    this.formatRoot()
-    this.formatNode(this.datas)
-    this.refresh()
   },
   mounted () {
+    window.ljsTreeTable = this
     this.onReSize()
     this.loadRoot()
   }

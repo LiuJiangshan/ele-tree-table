@@ -1,34 +1,22 @@
 <template>
-  <div class="deep"
-       :style="deepStyle"></div>
+  <div class="deep" :style="deepStyle">
+    <slot/>
+  </div>
 </template>
 
 <script>
 export default {
   name: 'm-deep',
   props: {
-    data: {
-      type: Object
-    },
-    column: {
-      type: Object
-    },
-    table: {
-      type: Object
-    }
+    value: {type: Number}
   },
   computed: {
     deepWidth: {
-      get () {
-        return this.data.deep * this.table.deepWidth
-      }
+      get () { return this.value * 15 }
     },
     deepStyle: {
       get () {
-        return {
-          width: this.deepWidth + 'px',
-          visibility: (this.data.deep > 0 ? 'visible' : 'hidden')
-        }
+        return {width: this.deepWidth + 'px'}
       }
     }
   }
@@ -37,7 +25,7 @@ export default {
 
 <style lang="scss" scoped>
   .deep {
-    height: 20px;
+    min-height: 1px;
     display: block;
   }
 </style>

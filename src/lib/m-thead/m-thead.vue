@@ -4,13 +4,13 @@
     <table @mouseup="mouseUp" @mouseleave="mouseUp" @mousemove="mouseMove($event)" class="head-table"
            :width="fullWidth?fullWidth:'100%'" border="1">
       <colgroup>
-        <col v-for="(column,columnIndex) in columns" :key="columnIndex" :width="column.width"
+        <col v-for="(column,columnIndex) in columnList.columns" :key="columnIndex" :width="column.width"
              :index="columnIndex">
       </colgroup>
       <thead>
       <tr>
-        <m-th v-for="(column,index) in columns" @mousedown="mouseDown($event,column)"
-              :key="index" :width="column.width" :height="table.headHeight" :table="table"
+        <m-th v-for="(column,index) in columnList.columns" @mousedown="mouseDown($event,column)"
+              :key="index" :height="table.headHeight" :table="table"
               :column="column"/>
       </tr>
       </thead>
@@ -21,6 +21,7 @@
 <script>
 import LjsCheckBox from '../m-check-box/m-check-box.vue'
 import MTh from '../m-th/m-th'
+import ColumnList from '../ljs-tree-table/ColumnList'
 
 export default {
   name: 'm-thead',
@@ -35,22 +36,17 @@ export default {
     fullWidth: {
       type: Number
     },
-    columns: {
-      type: Array
-    }
+    columnList: {type: ColumnList}
   },
   data () {
     return {
-      // 是否全选
-      check: false,
       x: 0,
       resizeColumn: undefined
     }
   },
   methods: {
-    onCheckChange () {
-      this.check = !this.check
-      this.table.selectAll(this.check)
+    onCheckChange (newVal) {
+      this.table.checkAll(newVal)
     },
     mouseDown (event, column) {
       if (column.resize !== false) {
@@ -78,14 +74,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import "../../utils/mixin.scss";
+  @import "../../style/vars.scss";
 
   .m-thead {
     overflow: hidden;
     .head-table {
+      background-color: $table-head-bg-color;
       box-sizing: border-box;
       border-collapse: collapse;
-      border: none transparent;
+      border: 1px $border-color solid;
       table-layout: fixed;
       word-break: break-all;
     }

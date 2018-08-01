@@ -14,8 +14,6 @@ export default {
   name: 'm-check-expand',
   components: {FontAwesomeIcon},
   props: {
-    data: {type: Object},
-    table: {type: Object},
     value: {type: Boolean}
   },
   data () {

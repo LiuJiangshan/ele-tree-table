@@ -8,13 +8,17 @@
 import ClickOutside from 'vue-click-outside'
 import { removeMenu } from './menu.js'
 
-const defaultItems = [{label: '选项为空', click: () => {}}]
 export default {
   name: 'm-context-menu',
   props: {
     x: {type: Number, default: 0},
     y: {type: Number, default: 0},
-    items: {type: Array, default: defaultItems}
+    items: {
+      type: Array,
+      default () {
+        return [{label: '选项为空', click: () => {}}]
+      }
+    }
   },
   directives: {
     ClickOutside

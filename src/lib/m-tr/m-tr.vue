@@ -1,15 +1,15 @@
 <template>
-  <tr v-if="expand&&data.remove!==true" :class="this.table.trBorder?'tr_border':'tr'" :style="trStyle" tabindex="0"
-      @contextmenu.prevent.stop="onRightMenuClick($event)">
-    <m-edit-td v-for="(column,columnIndex) in table.columns" :key="columnIndex" :index="columnIndex" :data="data"
-               :column="column" :trHeight="height"
+  <tr class="tr" tabindex="0">
+    <m-edit-td v-for="(column,columnIndex) in columnList.columns" :key="columnIndex" :index="columnIndex" :node="node"
+               :column="column" :trHeight="height" :table="table"
                :ref="'td'+columnIndex" :tr="getThis()"/>
   </tr>
 </template>
 
 <script>
-
+import TreeNode from '../ljs-tree-table/TreeNode.js'
 import MEditTd from '../m-edit-td/m-edit-td'
+import ColumnList from '../ljs-tree-table/ColumnList'
 
 export default {
   name: 'm-tr',
@@ -18,9 +18,8 @@ export default {
     index: {
       type: Number
     },
-    data: {
-      type: Object
-    },
+    node: {type: TreeNode},
+    columnList: {type: ColumnList},
     table: {
       type: Object
     }
@@ -28,18 +27,9 @@ export default {
   methods: {
     getThis () {
       return this
-    },
-    onRightMenuClick ($event) {
-      this.$menu.rightMenu(this.table.getContextItems(this.data), $event)
     }
   },
   computed: {
-    trStyle () {
-      let trStyle = {}
-      trStyle.borderColor = this.table.trBorderColor
-      return trStyle
-    },
-    expand () { return this.table.isExpand(this.data) },
     height () {
       let maxHeight = 0
       for (let height in this.heights) {

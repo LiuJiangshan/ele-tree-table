@@ -1,13 +1,13 @@
 <!--可编辑组件-->
 <template>
   <td :class="tdClass" :width="column.width" :height="trHeight"
+      @contextmenu.prevent.stop="onRightMenuClick($event)"
       @keyup.enter="handleEnter"
       @click="handleClick" @dblclick="handleDbClick">
-    <div class="td-warp" tabindex="0"
-         @focus="handleFocus"
+    <div class="td-warp" tabindex="0" @focus="handleFocus"
          ref="tdWarp" @blur="handleBlur">
-      <m-td-head class="td-head-style" ref="tdHead" :td="getThis()"/>
-      <template v-if="match">
+      <m-td-head class="td-head-style" :column="column" ref="tdHead" :node="node" :td="getThis()"/>
+      <template v-if="match&&column.allowEdit">
         <div v-if="debug" v-html="getState()+value"
              style="color: red;font-size: xx-small;"></div>
         <m-render v-if="column.render" class="custom-render-style"
@@ -15,7 +15,7 @@
         <m-text-area v-else :auto-size="this.column.autoLine"
                      :auto-select="true"
                      :one-line-height="tr.table.lineHeight"
-                     :disabled="column.edit===false"
+                     :disabled="!column.allowEdit"
                      class="text-area-style"
                      ref="input"
                      @blur="handleBlur"
@@ -31,34 +31,20 @@
 import MTdHead from '../m-td-head/m-td-head'
 import MRender from '../m-render/m-render'
 import MTextArea from '../m-text-area/m-text-area'
+import TreeNode from '../ljs-tree-table/TreeNode.js'
+import Column from '../ljs-tree-table/Column'
 
 let States = {normal: 0, select: 1, lock: 2}
 export default {
   name: 'm-edit-td',
   components: {MTextArea, MRender, MTdHead},
   props: {
-    trHeight: {
-      type: Number,
-      default: undefined
-    },
-    index: {
-      type: Number
-    },
-    tr: {
-      type: Object
-    },
-    data: {
-      type: Object,
-      default () {
-        return {}
-      }
-    },
-    column: {
-      type: Object,
-      default () {
-        return {}
-      }
-    }
+    trHeight: {type: Number},
+    index: {type: Number},
+    tr: {type: Object},
+    table: {type: Object},
+    node: {type: TreeNode},
+    column: {type: Column}
   },
   watch: {
     state () {
@@ -68,12 +54,16 @@ export default {
         case States.select:
           break
         case States.lock:
-          this.tr.table.canMove = false
+          this.table.canMove = false
           break
       }
     }
   },
   computed: {
+    treeUpdater () {
+      return this.table.treeUpdater
+    },
+    data () { return this.node.data },
     canSelection () { return this.column.type && this.column.type.indexOf('selection') !== -1 },
     inputStyle () {
       let re = {}
@@ -86,7 +76,6 @@ export default {
     },
     debug: {get () { return this.table.debug }},
     driver: {get () { return this.table.driver }},
-    table: {get () { return this.tr.table }},
     // 单元格x坐标
     x: {get () { return this.index }},
     // 单元格y坐标
@@ -110,15 +99,15 @@ export default {
     // 单元格边框样式
     tdClass: {
       get () {
-        let tdClass = {'td-select': false, 'td-lock': false, 'td-border': false}
+        let tdClass = {'select': false, 'lock': false}
         switch (this.state) {
           case States.normal:
             break
           case States.select:
-            tdClass['td-select'] = true
+            tdClass['select'] = true
             break
           case States.lock:
-            tdClass['td-lock'] = true
+            tdClass['lock'] = true
             break
         }
         return tdClass
@@ -162,6 +151,10 @@ export default {
     }
   },
   methods: {
+    onRightMenuClick ($event) {
+      const menuItems = this.table.menuGetter(this.column, this.node)
+      if (menuItems) this.$menu.rightMenu(menuItems, $event)
+    },
     handleInput () {
       if (!this.column.render) this.input = true
     },
@@ -292,20 +285,19 @@ export default {
     box-sizing: border-box;
     font-family: Arial, 微软雅黑, serif;
     font-size: 11px;
-  }
+    &.select {
+      border: 1px $theme-color-5 solid;
+      box-shadow: 0 1px 6px 0 $theme-color-5;
+    }
 
-  .td-select {
-    border: 1px $theme-color-5 solid;
-    box-shadow: 0 1px 6px 0 $theme-color-5;
-  }
+    &.lock {
+      border: 1px $theme-color solid;
+      box-shadow: 0 1px 6px 0 $theme-color;
+    }
 
-  .td-lock {
-    border: 1px $theme-color solid;
-    box-shadow: 0 1px 6px 0 $theme-color;
-  }
-
-  .td-border {
-    border-color: $border-color;
+    &.border {
+      border-color: $border-color;
+    }
   }
 
   .text-area-style {
@@ -323,7 +315,7 @@ export default {
   }
 
   .td-warp {
-    @include wh100;
+    @include h100;
     outline: none;
     border: none;
     overflow: hidden;

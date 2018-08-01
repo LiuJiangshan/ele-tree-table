@@ -1,8 +1,10 @@
 <template>
   <div>
     <div class="panel">
-      <ljs-tree-table :root-loader="rootLoader" :border="border" :columns="columns" :driver="driver"
-                      :rightMenu="rightMenu"
+      <ljs-tree-table :root-loader="rootLoader" :tree-loader="treeLoader"
+                      :border="border" :columns="columns"
+                      :driver="driver" :menu-getter="menuGetter"
+                      :tree-updater="treeUpdater"
                       :onExpand="onExpand" style="width:100%;height:100%;" :onClose="onClose" :debug="debug"
                       :fixLeft="fixLeft" :fixRight="fixRight"
                       @on-check="onCheck"/>
@@ -17,13 +19,17 @@
 import axios from 'axios'
 import LjsTreeTable from '../../lib/ljs-tree-table/ljs-tree-table'
 import baseService from '../../utils/baseService.js'
+import DataLoader from '../../lib/ljs-tree-table/DataLoader'
 
 const productLineService = baseService('productline.json')
-
+const productLineLoader = new DataLoader(cb => productLineService.search().then(response => response.data.ok ? cb.onLoad(response.data.data) : cb.onError(response.data.msg)).catch(cb.onError).then(this.onEnd))
 export default {
   components: {LjsTreeTable},
   data () {
     return {
+      rootLoader: productLineLoader,
+      treeLoader: productLineLoader,
+      treeUpdater: productLineLoader,
       debug: false,
       border: true,
       fixLeft: false,
@@ -164,125 +170,118 @@ export default {
           }
         }
       },
-      // 右键菜单定义
-      rightMenu: {
-        empty: [{
-          label: '添加产品线',
-          click (context) {
-            let adder = context.driver.adder
-            let add = adder['ProductLine']
-            let addData = {
-              name: '请输入产品线名称',
-              pojo: 'ProductLine',
-              nodes: false,
-              superId: -1
-            }
-            add(addData, function (response) {
-              if (response.data.ok) addData.id = response.data.id
-              context.root(addData)
-            })
-          }
-        }],
-        ProductLine: [
-          {
-            label: '删除产品线',
-            click (context) {
-              let driver = context.driver
-              let data = context.data
-              let _delete = driver.deleter['ProductLine']
-              _delete(data, function (response) {
-                if (response.data.ok) context.remove(data)
-              })
-            }
-          },
-          {
-            label: '添加同级产品线',
-            click (context) {
-              let data = context.data
-              let adder = context.driver.adder
-              let add = adder['ProductLine']
-              let addData = {
-                name: '请输入产品线名称',
-                pojo: 'ProductLine',
-                nodes: false,
-                superId: data.superId
-              }
-              add(addData, function (response) {
-                if (response.data.ok) addData.id = response.data.id
-                context.brother(data, addData)
-              })
-            }
-          },
-          {
-            label: '添加子级产品线',
-            click (context) {
-              let adder = context.driver.adder
-              let data = context.data
-              let add = adder['ProductLine']
-              let addData = {
-                name: '请输入产品线名称',
-                pojo: 'ProductLine',
-                superId: data.id,
-                nodes: false
-              }
-              add(addData, function (response) {
-                if (response.data.ok) {
-                  addData.id = response.data.id
-                  context.son(data, addData)
+      menuGetter (column, node) {
+        if (node) {
+          switch (node.data.pojo) {
+            case 'ProductLine':
+              return [
+                {
+                  label: '删除产品线',
+                  click (context) {
+                    let driver = context.driver
+                    let data = context.data
+                    let _delete = driver.deleter['ProductLine']
+                    _delete(data, function (response) {
+                      if (response.data.ok) context.remove(data)
+                    })
+                  }
+                },
+                {
+                  label: '添加同级产品线',
+                  click (context) {
+                    let data = context.data
+                    let adder = context.driver.adder
+                    let add = adder['ProductLine']
+                    let addData = {
+                      name: '请输入产品线名称',
+                      pojo: 'ProductLine',
+                      nodes: false,
+                      superId: data.superId
+                    }
+                    add(addData, function (response) {
+                      if (response.data.ok) addData.id = response.data.id
+                      context.brother(data, addData)
+                    })
+                  }
+                },
+                {
+                  label: '添加子级产品线',
+                  click (context) {
+                    let adder = context.driver.adder
+                    let data = context.data
+                    let add = adder['ProductLine']
+                    let addData = {
+                      name: '请输入产品线名称',
+                      pojo: 'ProductLine',
+                      superId: data.id,
+                      nodes: false
+                    }
+                    add(addData, function (response) {
+                      if (response.data.ok) {
+                        addData.id = response.data.id
+                        context.son(data, addData)
+                      }
+                    })
+                  }
+                },
+                {
+                  label: '添加子级产品',
+                  click (context) {
+                    let data = context.data
+                    let adder = context.driver.adder
+                    let add = adder['Product']
+                    let addData = {
+                      name: '请输入产品名称',
+                      pojo: 'Product',
+                      productLineId: data.id,
+                      nodes: false
+                    }
+                    add(addData, function (response) {
+                      if (response.data.ok) addData.id = response.data.id
+                      context.son(data, addData)
+                    })
+                  }
                 }
-              })
-            }
-          },
-          {
-            label: '添加子级产品',
-            click (context) {
-              let data = context.data
-              let adder = context.driver.adder
-              let add = adder['Product']
-              let addData = {
-                name: '请输入产品名称',
-                pojo: 'Product',
-                productLineId: data.id,
-                nodes: false
-              }
-              add(addData, function (response) {
-                if (response.data.ok) addData.id = response.data.id
-                context.son(data, addData)
-              })
-            }
+              ]
+            case 'Product':
+              return [
+                {
+                  label: '删除产品',
+                  click (context) {
+                    let driver = context.driver
+                    let data = context.data
+                    let _delete = driver.deleter['Product']
+                    _delete(data, function (response) {
+                      if (response.data.ok) context.remove(data)
+                    })
+                  }
+                },
+                {
+                  label: '添加同级产品',
+                  click (context) {
+                    let data = context.data
+                    let adder = context.driver.adder
+                    let add = adder['Product']
+                    let addData = {
+                      name: '请输入产品名称',
+                      pojo: 'Product',
+                      productLineId: data.productLineId,
+                      nodes: false
+                    }
+                    add(addData, function (response) {
+                      if (response.data.ok) addData.id = response.data.id
+                      context.brother(data, addData)
+                    })
+                  }
+                }
+              ]
           }
-        ],
-        Product: [
-          {
-            label: '删除产品',
-            click (context) {
-              let driver = context.driver
-              let data = context.data
-              let _delete = driver.deleter['Product']
-              _delete(data, function (response) {
-                if (response.data.ok) context.remove(data)
-              })
-            }
-          },
-          {
-            label: '添加同级产品',
-            click (context) {
-              let data = context.data
-              let adder = context.driver.adder
-              let add = adder['Product']
-              let addData = {
-                name: '请输入产品名称',
-                pojo: 'Product',
-                productLineId: data.productLineId,
-                nodes: false
-              }
-              add(addData, function (response) {
-                if (response.data.ok) addData.id = response.data.id
-                context.brother(data, addData)
-              })
-            }
-          }
-        ]
+        } else {
+          return [{
+            label: '添加产品线',
+            click (context) {}
+          }]
+        }
       },
       // 列定义
       columns: [
@@ -293,7 +292,7 @@ export default {
         {
           type: 'selection',
           key: 'id',
-          width: 50
+          width: 18
         },
         {
           label: '名称',
@@ -344,9 +343,6 @@ export default {
     }
   },
   methods: {
-    rootLoader (cb) {
-      productLineService.search({}).then(response => cb.load(response.data.data)).catch(cb.error).then(this.end)
-    },
     onCheck (selectDatas) {
       console.log('选择了' + selectDatas.length + '项', selectDatas)
     },
@@ -362,7 +358,7 @@ export default {
   @import "../../style/vars.scss";
 
   .panel {
-    @include debug;
+    //@include debug;
     position: absolute;
     top: 100px;
     left: 100px;

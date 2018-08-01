@@ -39,12 +39,6 @@ axios.interceptors.response.use(response => {
   }
 })
 
-/* eslint no-unused-vars: "off" */
-axios({
-  method: 'POST',
-  url: window.apiUrl + '/user/login',
-  params: {userName: 'user', passWord: '1234'}
-})
 window.app = new Vue({
   el: '#app',
   router,

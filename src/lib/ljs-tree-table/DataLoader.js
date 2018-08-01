@@ -1,12 +1,9 @@
 export default class DataLoader {
-  load () {
+  constructor (load) {
+    this.load = load
   }
 
-  onLoad (data) {
-  }
+  load (cb = {onLoad (data) {}, onError (e) {}, onEnd () {}}) {
 
-  onError (e) {
   }
-
-  onEnd () {}
 }

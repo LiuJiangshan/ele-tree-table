@@ -91,11 +91,6 @@ export default new Router({
           component: () => Promise.resolve(require('../test/TreeNodeTest.vue'))
         },
         {
-          path: 'DataLoaderTest',
-          name: 'DataLoaderTest',
-          component: () => Promise.resolve(require('../test/DataLoaderTest.vue'))
-        },
-        {
           path: 'mExpandTest',
           name: 'mExpandTest',
           component: () => Promise.resolve(require('../test/mExpandTest.vue'))

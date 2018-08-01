@@ -1,15 +1,14 @@
 <!--表格主体内容组件-->
 <template>
-  <div v-if="table.datas&&table.datas.length>0" :class="{fix_table_body_warp:fix,table_body_warp:!fix}"
-       :style="bodyStyle" @contextmenu.prevent.stop="1+1"
-       @scroll="onScroll">
+  <div v-if="nodes&&nodes.length>0" class="table-body-warp" :style="bodyStyle" @scroll="onScroll">
     <table class="body_table" :style="tableStyle" border="1" cellspacing="0"
            cellpadding="0">
       <colgroup>
-        <col v-for="(column,columnIndex) in columns" :key="columnIndex" :width="column.width">
+        <col v-for="(column,columnIndex) in columnList.columns" :key="columnIndex" :width="column.width">
       </colgroup>
       <tbody>
-      <slot/>
+      <m-tr v-for="(node,trIndex) in nodes" :key="trIndex" :index="trIndex" :column-list="columnList" :node="node"
+            :table="table"/>
       </tbody>
     </table>
   </div>
@@ -20,30 +19,21 @@
 </template>
 
 <script>
+import MTr from '../m-tr/m-tr'
+import ColumnList from '../ljs-tree-table/ColumnList'
+
 export default {
+  components: {MTr},
   props: {
-    table: {
-      type: Object
-    },
-    fix: {
-      type: Boolean,
-      default: false
-    },
-    header: {
-      type: Object,
-      default: null
-    },
-    columns: {
-      type: Array
-    },
+    table: {type: Object},
+    nodes: {type: Array},
+    fix: {type: Boolean},
+    header: {type: Object},
+    columnList: {type: ColumnList},
     // 表格包裹层宽度
-    width: {
-      type: Number
-    },
+    width: {type: Number},
     // 表格宽度
-    fullWidth: {
-      type: Number
-    }
+    fullWidth: {type: Number}
   },
   name: 'm-tbody',
   computed: {
@@ -67,7 +57,7 @@ export default {
   },
   methods: {
     onRightMenuClick ($event) {
-      this.$menu.rightMenu(this.table.rightMenu.empty, $event)
+      this.$menu.rightMenu(this.table.emptyMenus, $event)
     },
     onScroll (event) {
       if (this.header) this.table.handleBodyScroll(event, this.header, this)
@@ -77,13 +67,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .fix_table_body_warp {
-    overflow-x: auto;
-    overflow-y: hidden;
-    background-color: white;
-  }
 
-  .table_body_warp {
+  .table-body-warp {
     overflow: auto;
     background-color: white;
   }
