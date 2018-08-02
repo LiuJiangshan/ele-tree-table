@@ -28,7 +28,9 @@ var webpackConfig = merge(baseWebpackConfig, {
     libraryTarget: 'umd'
   },
   externals: {
-    vue: 'Vue'
+    vue: true
+    // '@fortawesome/fontawesome-svg-core': true,
+    // '@fortawesome/vue-fontawesome': true
   },
   plugins: [
     // http://vuejs.github.io/vue-loader/en/workflow/production.html

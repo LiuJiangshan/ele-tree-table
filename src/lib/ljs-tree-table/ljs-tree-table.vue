@@ -14,7 +14,7 @@
     <m-thead :table="thisTable" :column-list="columnList" ref="header" :width="width"
              :fullWidth="fullWidth"/>
     <m-tbody :table="thisTable" :header="$refs.header" :width="width" :fullWidth="fullWidth" :column-list="columnList"
-             :nodes="expandNodes"/>
+             :nodes="rootNode.childs"/>
     <!--debug视图-->
     <div v-if="debug" style="position: absolute;bottom: 0;left: 0;border: 1px red solid;">
       <input type="button" value="原始数据" @click="printDatas"/>
@@ -44,15 +44,16 @@ import MTableFix from '../m-table-fix/m-table-fix'
 import MEditTd from '../m-edit-td/m-edit-td'
 import TreeNode from './TreeNode.js'
 import DataLoader from './DataLoader.js'
-import RootNode from './RootNode.js'
 import resize from 'vue-resize-directive'
 import ColumnList from './ColumnList'
+import TreeStore from './TreeStore.js'
 
 export default {
   name: 'ljs-tree-table',
   directives: {resize},
   components: {MEditTd, MTableFix, MTbody, MThead, MContextMenu},
   props: {
+    dataTypeField: {type: String, default: 'pojo'},
     rootLoader: {type: DataLoader},
     treeLoader: {type: DataLoader},
     treeUpdater: {type: DataLoader},
@@ -145,9 +146,6 @@ export default {
     }
   },
   computed: {
-    expandNodes () {
-      return this.rootNode.getExpandNodes()
-    },
     trBorderColor () { return '#E4E4E4' },
     borderColor () {
       return this.border ? '#E4E4E4' : 'transparent'
@@ -202,10 +200,13 @@ export default {
     }
   },
   data () {
+    const store = new TreeStore(this.$props)
+    const rootNode = new TreeNode({store, expand: true})
     return {
       width: 0,
       height: 0,
-      rootNode: new RootNode(),
+      treeStore: store,
+      rootNode: rootNode,
       columnList: new ColumnList(this.columns),
       // 格式化数据
       expandDatas: [],
@@ -258,7 +259,6 @@ export default {
     },
     // 全选
     selectAll (newVal) {
-      this.expandNodes.forEach(it => it.setCheck(newVal))
     },
     // 获取右键菜单上下文
     getMenuContext (data) {
@@ -274,17 +274,6 @@ export default {
     },
     // 通过节点数据获取菜单数据
     getContextItems (data) { return this.rightMenu[data.pojo] },
-    // 展开图标点击事件
-    onExpandIconClick (data) {
-      let setExpand = this.setExpand
-      let goOn = function () {
-        setExpand(data, !data.expand)
-      }
-      // 收起
-      if (data.expand) this.onClose(data, goOn)
-      // 展开
-      else this.onExpand(data, goOn)
-    },
     // 判断某个节点的父节点是否被展开
     isExpand (data) {
       let re = false
@@ -312,14 +301,13 @@ export default {
       if (!node.childs) {
         this.treeLoader.load({
           onLoad (data) {
-            node.childs = []
-            data.forEach(it => node.childs.push(new TreeNode(it).setParent(node)))
+            data.forEach(it => TreeNode.Builder({data: it, parent: node, dataType: it[this.dataTypeField]}))
           },
           onError () {},
           onEnd: () => {
             this.rootLoader = this.rootLoader
           }
-        })
+        }, node)
       }
     },
     // 设置某个节点是否展开
@@ -511,7 +499,7 @@ export default {
       this.rootLoader.load({
         onLoad: data => {
           this.rootNode.childs = []
-          data.forEach(it => this.rootNode.childs.push(new TreeNode(it).setParent(this.rootNode)))
+          data.forEach(it => TreeNode.Builder({data: it, parent: this.rootNode, dataType: it[this.dataTypeField]}))
         },
         onError (e) {},
         onEnd () {}
@@ -523,7 +511,6 @@ export default {
   mounted () {
     window.ljsTreeTable = this
     this.onReSize()
-    this.loadRoot()
   }
 }
 </script>

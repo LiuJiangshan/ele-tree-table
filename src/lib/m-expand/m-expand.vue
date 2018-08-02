@@ -30,7 +30,6 @@ export default {
     handClick () {
       this.check = !this.check
       this.$emit('input', this.check)
-      this.$emit('expand-changed', this.check)
     }
   }
 }

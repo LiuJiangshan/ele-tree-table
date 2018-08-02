@@ -11,7 +11,7 @@
         <div v-if="debug" v-html="getState()+value"
              style="color: red;font-size: xx-small;"></div>
         <m-render v-if="column.render" class="custom-render-style"
-                  ref="input" :driver="driver" :render="column.render" :data="data" :column="column"/>
+                  ref="input" :render="column.render" :ctx="{node:node,column:column}"/>
         <m-text-area v-else :auto-size="this.column.autoLine"
                      :auto-select="true"
                      :one-line-height="tr.table.lineHeight"
@@ -117,7 +117,7 @@ export default {
     focusTd: {get () { return this.table.focusTd }},
     // 当前单元格所在列是否与该行数据类型匹配
     match () {
-      return this.table.matchType(this.column, this.data)
+      return this.column.matchNode(this.node)
     },
     // 当前单元格显示内容
     value: {
@@ -152,7 +152,7 @@ export default {
   },
   methods: {
     onRightMenuClick ($event) {
-      const menuItems = this.table.menuGetter(this.column, this.node)
+      const menuItems = this.table.menuGetter({node: this.node, column: this.column})
       if (menuItems) this.$menu.rightMenu(menuItems, $event)
     },
     handleInput () {
@@ -187,11 +187,8 @@ export default {
         // console.log(this.column.label + '不允许编辑,未更新')
       } else if (!this.match) {
         // console.log(this.data.pojo + '没有' + this.column.key + '(' + this.column.label + ')字段,未更新')
-      } else if (!this.driver || !this.driver.updater || !this.driver.updater.hasOwnProperty(this.data.pojo)) {
-        // console.log('未提供更新方法')
-      } else {
-        let update = this.driver.updater[this.data.pojo]
-        update(this.data, this.column)
+      } else if (this.treeUpdater) {
+        this.treeUpdater.load({onLoad (data) {}, onError (e) {}, onEnd () {}}, {node: this.node, column: this.column})
       }
       this.input = false
     },

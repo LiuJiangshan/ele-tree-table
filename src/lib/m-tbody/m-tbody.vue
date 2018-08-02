@@ -6,10 +6,7 @@
       <colgroup>
         <col v-for="(column,columnIndex) in columnList.columns" :key="columnIndex" :width="column.width">
       </colgroup>
-      <tbody>
-      <m-tr v-for="(node,trIndex) in nodes" :key="trIndex" :index="trIndex" :column-list="columnList" :node="node"
-            :table="table"/>
-      </tbody>
+      <m-render :render="renderTbody"/>
     </table>
   </div>
   <div v-else class="table-empty" :style="bodyStyle" ref="tableEmpty"
@@ -21,9 +18,10 @@
 <script>
 import MTr from '../m-tr/m-tr'
 import ColumnList from '../ljs-tree-table/ColumnList'
+import MRender from '../m-render/m-render'
 
 export default {
-  components: {MTr},
+  components: {MRender, MTr},
   props: {
     table: {type: Object},
     nodes: {type: Array},
@@ -56,6 +54,20 @@ export default {
     }
   },
   methods: {
+    renderTbody (h) {
+      return h('tbody', this.renderTr(h, this.nodes))
+    },
+    renderTr (h, nodes) {
+      const el = []
+      if (nodes) {
+        nodes.forEach(it => {
+          console.log(`render:${it.data.name},expand:${it.expand}`)
+          el.push(h(MTr, {props: {columnList: this.columnList, node: it, table: this.table}}))
+          if (it.expand) this.renderTr(h, it.childs).forEach(childIt => el.push(childIt))
+        })
+      }
+      return el
+    },
     onRightMenuClick ($event) {
       this.$menu.rightMenu(this.table.emptyMenus, $event)
     },

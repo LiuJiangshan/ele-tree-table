@@ -3,10 +3,9 @@
   <div v-resize="onReSize" class="m-td-head" ref="mTdHead">
     <template v-if="column.allowExpand">
       <m-deep :value="node.level"/>
-      <m-expand v-model="node.expand" @expand-changed="onExpandChange"/>
+      <m-expand v-model="node.expand"/>{{node.expand}}
     </template>
-    <m-check-box v-else-if="column.allowSelection" v-model="node.check"
-                 @check-changed="onCheckChanged"/>
+    <m-check-box v-else-if="column.allowSelection" v-model="node.check"/>
     <slot/>
   </div>
 </template>
@@ -35,12 +34,6 @@ export default {
     data () { return this.node.data }
   },
   methods: {
-    onExpandChange (value) {
-      this.table.setExpand(this.node, value)
-    },
-    onCheckChanged (newVal) {
-      this.node.onCheckChanged(newVal)
-    },
     onReSize () {
       this.width = this.$el.clientWidth
     }

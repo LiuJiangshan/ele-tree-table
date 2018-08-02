@@ -8,9 +8,20 @@ export default class Column {
     this.autoLine = data.autoLine
     this.key = data.key
     this.label = data.label
+    this.dataType = data.dataType
     this.check = undefined
     this.allowExpand = this.data.type && this.data.type === 'expand'
     this.allowSelection = this.data.type && this.data.type === 'selection'
     this.allowEdit = !this.allowExpand && !this.allowSelection
+  }
+
+  matchNode (node) {
+    const columnType = this.dataType
+    const nodeType = node.dataType
+    return !this.dataType ||
+      (columnType.search(`^${nodeType}$`) >= 0 ||
+        columnType.search(`!^|${nodeType}|!$`) >= 0 ||
+        columnType.search(`^${nodeType}|!$`) >= 0 ||
+        columnType.search(`!^|${nodeType}$`) >= 0)
   }
 }
