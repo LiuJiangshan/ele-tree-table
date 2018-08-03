@@ -12,7 +12,7 @@
       <div v-html="focusTd?('x:'+this.focusTd.x+',y:'+this.focusTd.y):'no focus'"></div>
     </div>
     <m-thead :table="thisTable" :column-list="columnList" ref="header" :width="width"
-             :fullWidth="fullWidth"/>
+             :fullWidth="fullWidth" :root-node="rootNode"/>
     <m-tbody :table="thisTable" :header="$refs.header" :width="width" :fullWidth="fullWidth" :column-list="columnList"
              :nodes="rootNode.childs"/>
     <!--debug视图-->

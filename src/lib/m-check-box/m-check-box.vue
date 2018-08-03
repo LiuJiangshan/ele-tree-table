@@ -7,11 +7,11 @@
 <script>
 
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faCheckSquare } from '@fortawesome/free-solid-svg-icons'
+import { faCheckSquare, faMinusSquare } from '@fortawesome/free-solid-svg-icons'
 import { faSquare } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-library.add(faCheckSquare, faSquare)
+library.add(faCheckSquare, faSquare, faMinusSquare)
 export default {
   name: 'm-check-box',
   components: {FontAwesomeIcon},
@@ -28,8 +28,9 @@ export default {
   },
   computed: {
     icon () {
-      if (this.check) return ['fas', 'check-square']
-      else return ['far', 'square']
+      if (this.check === true) return ['fas', 'check-square']
+      else if (this.check === false) return ['far', 'square']
+      else return ['fas', 'minus-square']
     },
     imageStyle: {get () { return {visibility: (this.show ? 'visible' : 'hidden')} }}
   },

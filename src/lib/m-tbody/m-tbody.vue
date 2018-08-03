@@ -55,15 +55,14 @@ export default {
   },
   methods: {
     renderTbody (h) {
-      return h('tbody', this.renderTr(h, this.nodes))
+      return h('tbody', this.renderTr(h, this.nodes, 0))
     },
-    renderTr (h, nodes) {
+    renderTr (h, nodes, key) {
       const el = []
       if (nodes) {
         nodes.forEach(it => {
-          console.log(`render:${it.data.name},expand:${it.expand}`)
           el.push(h(MTr, {props: {columnList: this.columnList, node: it, table: this.table}}))
-          if (it.expand) this.renderTr(h, it.childs).forEach(childIt => el.push(childIt))
+          if (it.expand) this.renderTr(h, it.childs, key++).forEach(childIt => el.push(childIt))
         })
       }
       return el

@@ -1,7 +1,7 @@
 <template>
   <th class="m-th" :class="{resizeable:column.resize}">
     <div class="m-th-wrap">
-      <m-check-box v-if="column.allowSelection" v-model="checkAll" @check-changed="onCheckChanged"/>
+      <m-check-box v-if="column.allowSelection" v-model="rootNode.check"/>
       <template v-else-if="column.allowExpand"/>
       <template v-else>{{column.label}}</template>
     </div>
@@ -11,20 +11,18 @@
 <script>
 import MCheckBox from '../m-check-box/m-check-box'
 import Column from '../ljs-tree-table/Column'
+import TreeNode from '../ljs-tree-table/TreeNode'
 
 export default {
   name: 'm-th',
   components: {MCheckBox},
   props: {
     table: {type: Object},
-    column: {type: Column}
+    column: {type: Column},
+    rootNode: {type: TreeNode}
   },
   computed: {},
-  methods: {
-    onCheckChanged (newValue) {
-      this.table.selectAll(newValue)
-    }
-  },
+  methods: {},
   data () {
     return {checkAll: false}
   }

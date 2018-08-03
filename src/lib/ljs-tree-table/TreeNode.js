@@ -1,19 +1,21 @@
 class TreeNode {
   constructor (opt = {}) {
     this.expandVal = false
+    this.checkVal = false
     //
     this.data = undefined
     this.parent = undefined
     this.store = undefined
     this.dataType = undefined
     this.childs = undefined
-    this.check = false
     this.level = 0
     for (let name in opt) if (opt.hasOwnProperty(name)) this[name] = opt[name]
     if (!this.store && opt.parent && opt.parent.store) this.store = opt.parent.store
 
     if (!this.store) throw new Error('store can\'t null')
     if (!this.level && this.parent) this.level = this.parent.level + 1
+    // check事件是否冒泡到父节点
+    this.checkBubble = true
   }
 
   setDataType (dataType) {
@@ -26,8 +28,57 @@ class TreeNode {
     if (!this.childs) this.load()
   }
 
+  halfCheck () {
+    this.check = undefined
+  }
+
   get expand () {
     return this.expandVal
+  }
+
+  isEmpty () {
+    return !this.childs || this.childs.length === 0
+  }
+
+  allChildCheck () {
+    let re = this.childs[0].check
+    for (let i = 0; i < this.childs.length; i++) {
+      let child = this.childs[i]
+      if (child.check !== re) {
+        re = undefined
+        break
+      }
+    }
+    return re
+  }
+
+  onParentCheckChanged () {
+    if (this.parent.check === true || this.parent.check === false) {
+      this.checkBubble = false
+      this.check = this.parent.check
+      this.checkBubble = true
+    }
+  }
+
+  onChildCheckChanged () {
+    let newCheck = this.allChildCheck()
+    if (newCheck !== this.check) {
+      this.check = newCheck
+    }
+  }
+
+  set check (newVal) {
+    this.checkVal = newVal
+    // 设置子节点
+    this.childs && this.childs.forEach(it => {
+      it.onParentCheckChanged()
+    })
+    // 提醒父节点
+    this.checkBubble && this.parent && this.parent.onChildCheckChanged()
+  }
+
+  get check () {
+    return this.checkVal
   }
 
   setParent (parent) {
@@ -70,7 +121,8 @@ class TreeNode {
       onLoad: data => data.forEach(it => this.childs.push(new TreeNode({
         data: it,
         parent: this,
-        store: this.store
+        store: this.store,
+        check: this.check
       }))),
       onError (e) {},
       onEnd () {}

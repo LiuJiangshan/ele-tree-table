@@ -203,6 +203,11 @@ export default {
           width: 18
         },
         {
+          key: 'id',
+          label: '编号',
+          width: 20
+        },
+        {
           label: '名称',
           key: 'name',
           dataType: 'Product|ProductLine',

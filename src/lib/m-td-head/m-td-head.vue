@@ -3,7 +3,7 @@
   <div v-resize="onReSize" class="m-td-head" ref="mTdHead">
     <template v-if="column.allowExpand">
       <m-deep :value="node.level"/>
-      <m-expand v-model="node.expand"/>{{node.expand}}
+      <m-expand v-model="node.expand"/>
     </template>
     <m-check-box v-else-if="column.allowSelection" v-model="node.check"/>
     <slot/>

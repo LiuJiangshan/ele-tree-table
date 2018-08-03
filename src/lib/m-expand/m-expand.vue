@@ -19,6 +19,11 @@ export default {
   data () {
     return {check: this.value}
   },
+  watch: {
+    value (newVal) {
+      if (newVal !== this.check) this.check = newVal
+    }
+  },
   computed: {
     icon () {
       if (this.check) return ['fas', 'minus-square']

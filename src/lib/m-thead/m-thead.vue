@@ -10,7 +10,7 @@
       <thead>
       <tr>
         <m-th v-for="(column,index) in columnList.columns" @mousedown="mouseDown($event,column)"
-              :key="index" :height="table.headHeight" :table="table"
+              :key="index" :height="table.headHeight" :table="table" :root-node="rootNode"
               :column="column"/>
       </tr>
       </thead>
@@ -22,11 +22,13 @@
 import LjsCheckBox from '../m-check-box/m-check-box.vue'
 import MTh from '../m-th/m-th'
 import ColumnList from '../ljs-tree-table/ColumnList'
+import TreeNode from '../ljs-tree-table/TreeNode'
 
 export default {
   name: 'm-thead',
   components: {MTh, LjsCheckBox},
   props: {
+    rootNode: {type: TreeNode},
     table: {
       type: Object
     },
