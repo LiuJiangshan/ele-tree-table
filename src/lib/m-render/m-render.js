@@ -8,6 +8,6 @@ export default {
     }
   },
   render (h) {
-    return this.render(h, this.ctx)
+    return this.$props.render(h, this.ctx)
   }
 }

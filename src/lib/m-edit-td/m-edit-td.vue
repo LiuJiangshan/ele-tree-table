@@ -305,6 +305,9 @@ export default {
 
   .custom-render-style {
     flex-grow: 1;
+    @include flex_h;
+    justify-content: center;
+    align-items: center;
   }
 
   .td-head-style {
@@ -317,7 +320,7 @@ export default {
     border: none;
     overflow: hidden;
     @include flex_h;
-    align-items: flex-start;
-    align-content: flex-start;
+    align-items: center;
+    align-content: center;
   }
 </style>

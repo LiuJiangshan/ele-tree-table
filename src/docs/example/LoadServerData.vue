@@ -22,7 +22,7 @@ import baseService from '../../utils/baseService.js'
 import DataLoader from '../../lib/ljs-tree-table/DataLoader'
 
 const productLineService = baseService('productline.json')
-const productLineLoader = new DataLoader((cb, ctx) => productLineService.search().then(response => response.data.ok ? cb.onLoad(response.data.data) : cb.onError(response.data.msg)).catch(cb.onError).then(this.onEnd))
+const productLineLoader = new DataLoader((cb, ctx) => productLineService.search().then(response => response.data.ok ? cb.onLoad(response.data.data) : cb.onError(response.data.msg)).catch(cb.onError).then(cb.onEnd))
 export default {
   components: {LjsTreeTable},
   data () {
@@ -177,6 +177,16 @@ export default {
             case 'ProductLine':
               return [
                 {
+                  label: '刷新',
+                  click () {
+                    node.load()
+                  }
+                },
+                {
+                  label: '添加产品线',
+                  click () {}
+                },
+                {
                   label: '删除产品线',
                   click () {
                     node.remove()
@@ -201,6 +211,13 @@ export default {
           type: 'selection',
           key: 'id',
           width: 18
+        },
+        {
+          label: '下级数量',
+          width: 50,
+          render (h, ctx) {
+            return (<div>{ctx.node.data.kids}</div>)
+          }
         },
         {
           key: 'id',
@@ -237,9 +254,7 @@ export default {
           dataType: 'Product',
           width: 100,
           render (h, ctx) {
-            const node = ctx.node
-            const column = ctx.column
-            return h('DatePicker', {props: {value: node.data[column.label]}})
+            return h('DatePicker')
           }
         },
         {

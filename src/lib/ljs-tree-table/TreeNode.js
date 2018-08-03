@@ -5,15 +5,18 @@ class TreeNode {
     //
     this.data = undefined
     this.parent = undefined
+    this.loading = false
     this.store = undefined
     this.dataType = undefined
     this.childs = undefined
+    this.isLeaf = undefined
     this.level = 0
     for (let name in opt) if (opt.hasOwnProperty(name)) this[name] = opt[name]
     if (!this.store && opt.parent && opt.parent.store) this.store = opt.parent.store
 
     if (!this.store) throw new Error('store can\'t null')
     if (!this.level && this.parent) this.level = this.parent.level + 1
+    if (this.isLeaf === undefined) this.isLeaf = this.store.isLeaf(this)
     // check事件是否冒泡到父节点
     this.checkBubble = true
   }
@@ -70,9 +73,7 @@ class TreeNode {
   set check (newVal) {
     this.checkVal = newVal
     // 设置子节点
-    this.childs && this.childs.forEach(it => {
-      it.onParentCheckChanged()
-    })
+    this.childs && this.childs.forEach(it => it.onParentCheckChanged())
     // 提醒父节点
     this.checkBubble && this.parent && this.parent.onChildCheckChanged()
   }
@@ -115,17 +116,20 @@ class TreeNode {
   }
 
   load () {
+    this.loading = true
     this.childs = []
     this.setExpand(true)
     this.store.treeLoader.load({
-      onLoad: data => data.forEach(it => this.childs.push(new TreeNode({
-        data: it,
-        parent: this,
-        store: this.store,
-        check: this.check
-      }))),
+      onLoad: data => {
+        data.forEach(it => this.childs.push(new TreeNode({
+          data: it,
+          parent: this,
+          store: this.store,
+          check: this.check
+        })))
+      },
       onError (e) {},
-      onEnd () {}
+      onEnd: () => { setTimeout(() => { this.loading = false }, 100) }
     }, this)
   }
 
@@ -140,6 +144,9 @@ class TreeNode {
   remove () {
     const index = this.indexOfParent()
     if (index !== -1) this.parent.childs.splice(index, 1)
+  }
+
+  insert (opt) {
   }
 }
 

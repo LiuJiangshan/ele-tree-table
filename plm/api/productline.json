@@ -4,23 +4,27 @@
   "data": [
     {
       "pojo": "ProductLine",
-      "nodes": true,
       "name": "产品线",
-      "id": 5,
-      "managerName": "test1",
-      "info": "info1",
+      "id": 1,
+      "managerName": "经理名称",
+      "info": "产品线详情",
       "superId": -1,
-      "kids": 1
+      "kids": 2
     },
     {
       "pojo": "ProductLine",
-      "nodes": true,
-      "managerName": "test2",
-      "info": "info2",
+      "managerName": "经理名称",
+      "info": "产品线详情",
       "name": "产品线",
-      "id": 6,
+      "id": 1,
       "superId": -1,
-      "kids": 3
+      "kids": 2
+    },
+    {
+      "pojo": "Product",
+      "managerName": "经理名称",
+      "name": "产品",
+      "info": "产品详情"
     }
   ],
   "page": {

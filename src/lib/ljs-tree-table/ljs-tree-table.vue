@@ -58,6 +58,13 @@ export default {
     treeLoader: {type: DataLoader},
     treeUpdater: {type: DataLoader},
     menuGetter: {type: Function},
+    isLeaf: {
+      type: Function,
+      default (node) {
+        if (node.parent === undefined) return false
+        return node.data.kids === undefined || !node.data.kids || node.kids <= 0
+      }
+    },
     // 子节点数据驱动
     driver: {
       type: Object,

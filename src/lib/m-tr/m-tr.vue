@@ -1,6 +1,7 @@
 <template>
   <tr class="tr" tabindex="0">
-    <m-edit-td v-for="(column,columnIndex) in columnList.columns" :key="columnIndex" :index="columnIndex" :node="node"
+    <m-edit-td v-for="(column,columnIndex) in columnList.columns"
+               :key="columnIndex" :index="columnIndex" :node="node"
                :column="column" :trHeight="height" :table="table"
                :ref="'td'+columnIndex" :tr="getThis()"/>
   </tr>
