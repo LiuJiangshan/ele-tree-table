@@ -148,6 +148,13 @@ class TreeNode {
 
   insert (opt) {
   }
+
+  getCheckedNode () {
+    const checked = []
+    if (this.check === true) checked.push(this)
+    if (this.childs) this.childs.forEach(it => it.getCheckedNode().forEach(cIt => checked.push(cIt)))
+    return checked
+  }
 }
 
 export default TreeNode

@@ -13,8 +13,8 @@
     </div>
     <m-thead :table="thisTable" :column-list="columnList" ref="header" :width="width"
              :fullWidth="fullWidth" :root-node="rootNode"/>
-    <m-tbody :table="thisTable" :header="$refs.header" :width="width" :fullWidth="fullWidth" :column-list="columnList"
-             :nodes="rootNode.childs"/>
+    <m-tbody :table="thisTable" :header="$refs.header" :width="width" :fullWidth="fullWidth"
+             :column-list="columnList" :nodes="rootNode.childs" :tree-store="treeStore"/>
     <!--debug视图-->
     <div v-if="debug" style="position: absolute;bottom: 0;left: 0;border: 1px red solid;">
       <input type="button" value="原始数据" @click="printDatas"/>
@@ -64,6 +64,14 @@ export default {
         if (node.parent === undefined) return false
         return node.data.kids === undefined || !node.data.kids || node.kids <= 0
       }
+    },
+    childCountField: {
+      type: String,
+      default: 'kids'
+    },
+    customCountField: {
+      type: String,
+      default: undefined
     },
     // 子节点数据驱动
     driver: {

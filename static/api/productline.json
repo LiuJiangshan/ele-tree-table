@@ -21,6 +21,15 @@
       "kids": 2
     },
     {
+      "pojo": "ProductLine",
+      "managerName": "经理名称",
+      "info": "产品线详情",
+      "name": "产品线kids=0",
+      "id": 1,
+      "superId": -1,
+      "kids": 0
+    },
+    {
       "pojo": "Product",
       "managerName": "经理名称",
       "name": "产品",

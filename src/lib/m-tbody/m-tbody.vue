@@ -19,6 +19,7 @@
 import MTr from '../m-tr/m-tr'
 import ColumnList from '../ljs-tree-table/ColumnList'
 import MRender from '../m-render/m-render'
+import TreeStore from '../ljs-tree-table/TreeStore'
 
 export default {
   components: {MRender, MTr},
@@ -31,7 +32,8 @@ export default {
     // 表格包裹层宽度
     width: {type: Number},
     // 表格宽度
-    fullWidth: {type: Number}
+    fullWidth: {type: Number},
+    treeStore: {type: TreeStore}
   },
   name: 'm-tbody',
   computed: {
@@ -61,7 +63,14 @@ export default {
       const el = []
       if (nodes) {
         nodes.forEach(it => {
-          el.push(h(MTr, {props: {columnList: this.columnList, node: it, table: this.table}}))
+          el.push(h(MTr, {
+            props: {
+              columnList: this.columnList,
+              node: it,
+              table: this.table,
+              treeStore: this.treeStore
+            }
+          }))
           if (it.expand) this.renderTr(h, it.childs, key++).forEach(childIt => el.push(childIt))
         })
       }

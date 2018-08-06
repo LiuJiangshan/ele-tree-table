@@ -1,6 +1,6 @@
 ### 预览
 ![avatar](pre.png)
-[查看Demo演示](https://liujiangshan.github.io/ljs-tree-table/index.html)：(api使用静态数据模拟)
+[查看Demo演示](https://liujiangshan.github.io/ljs-tree-table/dist/docs/index.html)：(api使用静态数据模拟)
 ## 运行此项目:
 ##### 1.[安装yarn](https://yarnpkg.com/zh-Hans/docs/install)
 ##### 2.克隆项目
@@ -13,7 +13,7 @@ cd LjsTreeTable
 ```
 ##### 4.安装依赖库
 ```bash
-yarn install
+yarn
 ```
 ##### 5.运行项目
 ```bash
@@ -22,31 +22,32 @@ yarn run dev
 ##### 6.打开浏览器访问:[http://localhost:8080](http://localhost:8080)
 
 ## 使用组件:
-###方法1(cdn引用)
+### 方法1(cdn引用)
 ##### 1.在index.html中
 ```javascript
-<script type="application/javascript" src="//liujiangshan.github.io/LjsTreeTable/dist/index.js"></script>
+<script type="application/javascript" src="//liujiangshan.github.io/LjsTreeTable/dist/lib/index.js"></script>
 ```
 #### 2.main.js中
 ```
-Vue.component("LjsTreeTable",LjsTreeTable.default)
+Vue.component(ljsTreeTable.name,ljsTreeTable)
 ```
 #### 3.Vue文件中(同方法二中第4步)
-### 方法2(node_modules引用,太懒没有上传npm)
-##### 1.复制该项目dist文件夹至你的项目node_modules文件夹
-##### 2.将dist命名为LjsTreeTable
+### 方法2(yarn安装)
+```
+yarn add liujiangshan/ljs-tree-table
+```
 ##### 3.在main.js中引入该组件:
 ```javascript
-import LjsTreeTable from 'LjsTreeTable'
+import ljsTreeTable from 'ljs-tree-table'
 ...
-Vue.component("LjsTreeTable",LjsTreeTable)
+Vue.use(ljsTreeTable)
 ...
 ```
 ##### 4.vue文件:
 ```javascript
 <template>
   <div>
-    <LjsTreeTable :datas="datas" :columns="columns"/>
+    <ljs-tree-table :datas="datas" :columns="columns"/>
     ...
   </div>
 </template>
@@ -57,7 +58,7 @@ Vue.component("LjsTreeTable",LjsTreeTable)
 ...
 </style>
 ```
-## 编译自己的LjsTreeTable组件
+## 编译组件
 ```bash
 yarn run build
 ```

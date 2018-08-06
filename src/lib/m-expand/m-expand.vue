@@ -1,8 +1,7 @@
 <template>
   <div class="m-expand">
-    <font-awesome-icon :icon="icon" @click.stop="handClick"/>
-    <font-awesome-icon v-if="showLoading" class="rotate-animation" :icon="['fas', 'spinner']"
-                       style="margin-left: 5pt;"/>
+    <font-awesome-icon v-if="showLoading" class="rotate-animation" :icon="['fas', 'spinner']"/>
+    <font-awesome-icon v-else :icon="icon" @click.stop="handClick"/>
   </div>
 </template>
 <script>

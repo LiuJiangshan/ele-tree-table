@@ -1,5 +1,5 @@
 /** 后台API地址配置 */
-const contextPath = '/plm'
+const contextPath = './static'
 const apiUrl = `${contextPath}/api`
 const getFileUrl = function (staticFile) {
   let url = `${contextPath}/api/staticfile/play?`

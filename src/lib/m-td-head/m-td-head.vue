@@ -3,7 +3,13 @@
   <div v-resize="onReSize" class="m-td-head" ref="mTdHead">
     <template v-if="column.allowExpand">
       <m-deep :value="node.level"/>
-      <m-expand v-model="node.expand" :loading="node.loading"/>
+      <m-expand v-if="childCount!==0" v-model="node.expand" :loading="node.loading"/>
+      <div v-if="childCount">
+        {{'('+childCount+')'}}
+      </div>
+      <div v-if="customCount">
+        {{'('+customCount+')'}}
+      </div>
     </template>
     <m-check-box v-else-if="column.allowSelection" v-model="node.check"/>
     <slot/>
@@ -17,6 +23,7 @@ import MCheckBox from '../m-check-box/m-check-box'
 import TreeNode from '../ljs-tree-table/TreeNode.js'
 import resize from 'vue-resize-directive'
 import Column from '../ljs-tree-table/Column'
+import TreeStore from '../ljs-tree-table/TreeStore'
 
 export default {
   name: 'm-td-head',
@@ -25,9 +32,17 @@ export default {
   props: {
     td: {type: Object},
     node: {type: TreeNode},
-    column: {type: Column}
+    column: {type: Column},
+    treeStore: {type: TreeStore}
   },
   computed: {
+    childCount () {
+      if (this.node.isEmpty()) return this.node.data[this.treeStore.childCountField]
+      else return this.node.childs.length
+    },
+    customCount () {
+      return this.node.data[this.treeStore.customCountField]
+    },
     canExpand () { return this.column.type && this.column.type.indexOf('expand') !== -1 },
     canSelection () { return this.column.type && this.column.type.indexOf('selection') !== -1 },
     table: {get () { return this.td.tr.table }},

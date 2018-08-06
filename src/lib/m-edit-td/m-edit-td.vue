@@ -6,7 +6,8 @@
       @click="handleClick" @dblclick="handleDbClick">
     <div class="td-warp" tabindex="0" @focus="handleFocus"
          ref="tdWarp" @blur="handleBlur">
-      <m-td-head class="td-head-style" :column="column" ref="tdHead" :node="node" :td="getThis()"/>
+      <m-td-head class="td-head-style" :column="column" ref="tdHead"
+                 :node="node" :tree-store="treeStore" :td="getThis()"/>
       <template v-if="match&&column.allowEdit">
         <div v-if="debug" v-html="getState()+value"
              style="color: red;font-size: xx-small;"></div>
@@ -33,6 +34,7 @@ import MRender from '../m-render/m-render'
 import MTextArea from '../m-text-area/m-text-area'
 import TreeNode from '../ljs-tree-table/TreeNode.js'
 import Column from '../ljs-tree-table/Column'
+import TreeStore from '../ljs-tree-table/TreeStore'
 
 let States = {normal: 0, select: 1, lock: 2}
 export default {
@@ -44,7 +46,8 @@ export default {
     tr: {type: Object},
     table: {type: Object},
     node: {type: TreeNode},
-    column: {type: Column}
+    column: {type: Column},
+    treeStore: {type: TreeStore}
   },
   watch: {
     state () {

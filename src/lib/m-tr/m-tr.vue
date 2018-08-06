@@ -3,7 +3,7 @@
     <m-edit-td v-for="(column,columnIndex) in columnList.columns"
                :key="columnIndex" :index="columnIndex" :node="node"
                :column="column" :trHeight="height" :table="table"
-               :ref="'td'+columnIndex" :tr="getThis()"/>
+               :tree-store="treeStore" :ref="'td'+columnIndex" :tr="getThis()"/>
   </tr>
 </template>
 
@@ -11,19 +11,17 @@
 import TreeNode from '../ljs-tree-table/TreeNode.js'
 import MEditTd from '../m-edit-td/m-edit-td'
 import ColumnList from '../ljs-tree-table/ColumnList'
+import TreeStore from '../ljs-tree-table/TreeStore'
 
 export default {
   name: 'm-tr',
   components: {MEditTd},
   props: {
-    index: {
-      type: Number
-    },
+    index: {type: Number},
     node: {type: TreeNode},
     columnList: {type: ColumnList},
-    table: {
-      type: Object
-    }
+    table: {type: Object},
+    treeStore: {type: TreeStore}
   },
   methods: {
     getThis () {
