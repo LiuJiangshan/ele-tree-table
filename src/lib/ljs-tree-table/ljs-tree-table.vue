@@ -1,20 +1,18 @@
 <template>
   <div component="LjsTreeTable" author="LiuJiangshan" v-resize="onReSize"
        github="https://github.com/LiuJiangshan/LjsTreeTable"
-       class="ljs-treetable" @keyup.up="up"
-       @keyup.down="down" :style="{width:width===0?600:width+'px'}"
-       @keyup.left="left" @keyup.right="right" ref="treetable">
+       class="ljs-tree-table" @keyup.up="up" @scroll="onScroll"
+       @keyup.down="down" @keyup.left="left" @keyup.right="right" ref="treetable">
     <div v-if="debug"
          style="position: absolute;border:1px red solid;font-size: xx-small;color: red;right: 0;bottom: 50px;">
       <div v-html="'width:'+width"></div>
-      <div v-html="'fullWidth:'+fullWidth"></div>
       <div v-html="'canMove:'+canMove"></div>
       <div v-html="focusTd?('x:'+this.focusTd.x+',y:'+this.focusTd.y):'no focus'"></div>
     </div>
-    <m-thead :table="thisTable" :column-list="columnList" ref="header" :width="width"
-             :fullWidth="fullWidth" :root-node="rootNode"/>
-    <m-tbody :table="thisTable" :header="$refs.header" :width="width" :fullWidth="fullWidth"
-             :column-list="columnList" :nodes="rootNode.childs" :tree-store="treeStore"/>
+    <m-tbody :table="thisTable" :header="$refs.header" :width="width" :column-list="columnList" :nodes="rootNode.childs"
+             :tree-store="treeStore"/>
+    <m-thead :table="thisTable" ref="tableHeader" :column-list="columnList" :width="width"
+             :root-node="rootNode"/>
     <!--debug视图-->
     <div v-if="debug" style="position: absolute;bottom: 0;left: 0;border: 1px red solid;">
       <input type="button" value="原始数据" @click="printDatas"/>
@@ -45,12 +43,13 @@ import MEditTd from '../m-edit-td/m-edit-td'
 import TreeNode from './TreeNode.js'
 import DataLoader from './DataLoader.js'
 import resize from 'vue-resize-directive'
+import scroll from 'vue-scroll'
 import ColumnList from './ColumnList'
 import TreeStore from './TreeStore.js'
 
 export default {
   name: 'ljs-tree-table',
-  directives: {resize},
+  directives: {resize, scroll},
   components: {MEditTd, MTableFix, MTbody, MThead, MContextMenu},
   props: {
     dataTypeField: {type: String, default: 'pojo'},
@@ -58,21 +57,9 @@ export default {
     treeLoader: {type: DataLoader},
     treeUpdater: {type: DataLoader},
     menuGetter: {type: Function},
-    isLeaf: {
-      type: Function,
-      default (node) {
-        if (node.parent === undefined) return false
-        return node.data.kids === undefined || !node.data.kids || node.kids <= 0
-      }
-    },
-    childCountField: {
-      type: String,
-      default: 'kids'
-    },
-    customCountField: {
-      type: String,
-      default: undefined
-    },
+    isLeaf: {type: Function},
+    childCountField: {type: String},
+    customCountField: {type: String},
     // 子节点数据驱动
     driver: {
       type: Object,
@@ -155,11 +142,6 @@ export default {
       default: 28
     }
   },
-  watch: {
-    columns () {
-      this.formatColumns()
-    }
-  },
   computed: {
     trBorderColor () { return '#E4E4E4' },
     borderColor () {
@@ -199,19 +181,6 @@ export default {
         })
         return width
       }
-    },
-    // 自动计算表格宽度
-    fullWidth: {
-      get () {
-        let fullWidth = 0
-        for (let v = 0; v < this.columns.length; v++) {
-          let column = this.columns[v]
-          // 注册响应式布局
-          if (!column.width) this.$set(column, 'width', 100)
-          fullWidth += column.width
-        }
-        return fullWidth
-      }
     }
   },
   data () {
@@ -230,39 +199,17 @@ export default {
       fixLeftShow: true,
       fixRightShow: true,
       canMove: true,
-      submitTypes: {add: 'add', remove: 'remove', update: 'update'}
+      submitTypes: {add: 'add', remove: 'remove', update: 'update'},
+      scrollTop: 0
     }
   },
   methods: {
+    onScroll () {
+      this.$refs.tableHeader.$el.style.transform = `translateY(${this.$el.scrollTop}px)`
+    },
     // 获取提交数据
     getSubmitData () {
       return this.getAllData(this.datas, false, true)
-    },
-    formatColumns () {
-      if (this.fullWidth < this.width) {
-        let heapWidth = 0
-        for (let i = 0; i < this.columns.length; i++) {
-          let r
-          let column = this.columns[i]
-          if (i === this.columns.length) {
-            r = undefined
-            // 最后一个单元格占满剩余宽度(减去边框宽度)
-            column.width = this.width - heapWidth
-          } else {
-            r = column.width / this.fullWidth
-            column.width = r * this.width
-            column.width = Math.trunc(column.width)
-          }
-          heapWidth += column.width
-        }
-      }
-    },
-    refresh () { this.expandDatas = this.getAllData(this.datas) },
-    // 同步表头、固定列滚动
-    handleBodyScroll ($event, header, body) {
-      header.$el.scrollLeft = body.$el.scrollLeft
-      if (this.fixLeft) this.$refs.fixLeft.$el.scrollTop = body.$el.scrollTop
-      if (this.fixRight) this.$refs.fixRight.$el.scrollTop = body.$el.scrollTop
     },
     // 判断该数据是否在此列有数据
     matchType (column, data) {
@@ -271,45 +218,6 @@ export default {
           column.dataType.search(`!^|${data.pojo}|!$`) >= 0 ||
           column.dataType.search(`^${data.pojo}|!$`) >= 0 ||
           column.dataType.search(`!^|${data.pojo}$`) >= 0)
-    },
-    // 全选
-    selectAll (newVal) {
-    },
-    // 获取右键菜单上下文
-    getMenuContext (data) {
-      return {
-        // 当前行数据
-        data: data,
-        driver: this.driver,
-        brother: this.brother,
-        son: this.son,
-        remove: this.remove,
-        root: this.root
-      }
-    },
-    // 通过节点数据获取菜单数据
-    getContextItems (data) { return this.rightMenu[data.pojo] },
-    // 判断某个节点的父节点是否被展开
-    isExpand (data) {
-      let re = false
-      if (this.isRoot(data)) re = true
-      else if (data.father && data.father.expand === true) re = true
-      return re
-    },
-    // 将嵌套型数据转换为简单列表型数据
-    getAllData (datas, checkExpand = true, checkSubmit = false) {
-      let array = []
-      if (datas instanceof Array) {
-        for (let v = 0; v < datas.length; v++) {
-          let data = datas[v]
-          if (this.isExpand(data) || checkExpand) {
-            if (!checkSubmit || data.submitType) array.push(data)
-          }
-          // 递归子节点
-          if (!checkExpand || (data.expand && data.nodes)) array = [...array, ...this.getAllData(data.nodes, checkExpand, checkSubmit)]
-        }
-      }
-      return array
     },
     setExpand (node, expand) {
       node.setExpand(expand)
@@ -325,63 +233,6 @@ export default {
         }, node)
       }
     },
-    // 设置某个节点是否展开
-    setExpand1 (node, expand) {
-      let formatNode = this.formatNode
-      let refresh = this.refresh
-      let loader = this.driver.loader
-
-      node.expand = expand
-      // 格式化待展开节点
-      if (node.nodes instanceof Array) for (let v = 0; v < node.nodes.length; v++) formatNode(node.nodes[v], node)
-
-      // 展开
-      if (expand) {
-        // 加载子节点
-        if (node.nodes === true) {
-          let loadFunction
-          loadFunction = loader[node.pojo]
-          if (loadFunction instanceof Function) {
-            let okDo = function () {
-              formatNode(node.nodes, node)
-              refresh()
-            }
-            loadFunction(node, okDo)
-          }
-        } else refresh()
-      } else refresh()
-    },
-    // 递归格式化节点
-    formatNode (node, father) {
-      let formatNode = this.formatNode
-      father = (father === undefined) ? false : father
-      if (node instanceof Array) {
-        node.map(function (v) {
-          formatNode(v, father)
-        })
-      } else if (node instanceof Object) {
-        if (node.check === undefined) this.$set(node, 'check', false)
-        if (node.kids === undefined) this.$set(node, 'kids', node.nodes instanceof Array ? node.nodes.length : false)
-        // 格式化root节点
-        if (this.isRoot(node)) {
-          this.$set(node, 'father', false)
-          this.$set(node, 'deep', 0)
-          if (node.expand === undefined) this.$set(node, 'expand', false)
-        } else {
-          // 格式化子节点
-          this.$set(node, 'father', father)
-          this.$set(node, 'deep', father.deep + 1)
-          if (node.expand === undefined) this.$set(node, 'expand', false)
-          else if (node.expand === true) {
-            if (node.nodes instanceof Array) {
-              node.nodes.forEach(function (value) {
-                formatNode(value, node)
-              })
-            }
-          }
-        }
-      }
-    },
     showRightMenu () { console.log(this.rightMenu) },
     showColunm () { console.log(this.columns) },
     showLeftFixColumn () { console.log(this.leftColumns) },
@@ -393,81 +244,6 @@ export default {
     printDatas () { console.log(this.datas) },
     printColumns () { console.log(this.columns) },
     printFormated () { console.log(this.expandDatas) },
-    // 添加根节点
-    root (data) {
-      this.formatNode(data, undefined)
-      data.submitType = this.submitTypes.add
-      this.datas.push(data)
-    },
-    // 添加兄弟节点
-    brother (data, brother) {
-      brother.submitType = this.submitTypes.add
-      this.formatNode(brother, data.father)
-      if (this.isRoot(data)) this.datas.push(brother)
-      else data.father.nodes.push(brother)
-      this.refresh()
-    },
-    // 添加子节点
-    son (data, son) {
-      if (this.submitTypes.add !== data.submitType) son.submitType = this.submitTypes.add
-      this.formatNode(son, data)
-      data.kids++
-      // 节点已经展开
-      if (data.expand || !this.driver || !this.driver.adder) {
-        if (!(data.nodes instanceof Array)) data.nodes = []
-        data.nodes.push(son)
-        this.refresh()
-      } else data.nodes = true
-    },
-    // 删除节点
-    remove (data) {
-      if (data.submitType) {
-        let nodes
-        let father
-        if (this.isRoot(data)) nodes = this.datas
-        else if (data.father) {
-          father = data.father
-          nodes = data.father.nodes
-        }
-        if (nodes instanceof Array) {
-          for (let v = 0; v < nodes.length; v++) {
-            if (nodes[v] === data) {
-              nodes.splice(v, 1)
-              if (father) father.kids--
-              this.refresh()
-              break
-            }
-          }
-        }
-      } else {
-        this.$set(data, 'remove', true)
-        data.submitType = this.submitTypes.remove
-      }
-      this.refresh()
-      // let nodes
-      // let father
-      // if (this.isRoot(data)) nodes = this.datas
-      // else if (data.father) {
-      //   father = data.father
-      //   nodes = data.father.nodes
-      // }
-      // if (nodes instanceof Array) {
-      //   for (let v = 0; v < nodes.length; v++) {
-      //     if (nodes[v] === data) {
-      //       nodes.splice(v, 1)
-      //       if (father) father.kids--
-      //       this.refresh()
-      //       break
-      //     }
-      //   }
-      // }
-    },
-    formatRoot () {
-      for (let v; v < this.datas.length; v++) {
-        let data = this.datas[v]
-        this.$set(data, 'supperId', -1)
-      }
-    },
     // 将tr组件vue实例与数据绑定
     bindTr (tr) { tr.node.tr = tr },
     // 将td组件vue实例与数据绑定
@@ -508,7 +284,6 @@ export default {
     onReSize () {
       this.width = this.$el.clientWidth
       this.height = this.$el.clientHeight
-      this.formatColumns()
     },
     loadRoot () {
       this.rootLoader.load({
@@ -526,10 +301,16 @@ export default {
   mounted () {
     window.ljsTreeTable = this
     this.onReSize()
+    this.onScroll()
   }
 }
 </script>
 <style lang="scss" scoped>
-  .ljs-treetable {
+  @import "../../style/vars.scss";
+
+  .ljs-tree-table {
+    overflow: auto;
+    position: relative;
+    @include wh100;
   }
 </style>

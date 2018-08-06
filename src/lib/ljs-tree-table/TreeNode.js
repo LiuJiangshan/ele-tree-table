@@ -16,7 +16,7 @@ class TreeNode {
 
     if (!this.store) throw new Error('store can\'t null')
     if (!this.level && this.parent) this.level = this.parent.level + 1
-    if (this.isLeaf === undefined) this.isLeaf = this.store.isLeaf(this)
+    if (this.isLeaf === undefined) this.isLeaf = this.isRoot() ? false : this.store.isLeaf(this)
     // check事件是否冒泡到父节点
     this.checkBubble = true
   }
@@ -24,6 +24,10 @@ class TreeNode {
   setDataType (dataType) {
     this.dataType = dataType
     return this
+  }
+
+  isRoot () {
+    return !this.parent
   }
 
   set expand (newVal) {

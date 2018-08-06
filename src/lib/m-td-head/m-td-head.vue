@@ -37,11 +37,12 @@ export default {
   },
   computed: {
     childCount () {
-      if (this.node.isEmpty()) return this.node.data[this.treeStore.childCountField]
-      else return this.node.childs.length
+      if (this.node.isEmpty()) {
+        if (this.treeStore.childCountField) return this.node.data[this.treeStore.childCountField]
+      } else return this.node.childs.length
     },
     customCount () {
-      return this.node.data[this.treeStore.customCountField]
+      if (this.treeStore.customCountField) return this.node.data[this.treeStore.customCountField]
     },
     canExpand () { return this.column.type && this.column.type.indexOf('expand') !== -1 },
     canSelection () { return this.column.type && this.column.type.indexOf('selection') !== -1 },

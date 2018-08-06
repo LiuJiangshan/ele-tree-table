@@ -35,7 +35,7 @@ module.exports = {
     env: require('./dev.env'),
     port: 1215,
     autoOpenBrowser: true,
-    assetsSubDirectory: 'plm',
+    assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
       // '/plm': {

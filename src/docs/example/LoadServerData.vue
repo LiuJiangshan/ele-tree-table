@@ -4,7 +4,7 @@
       <ljs-tree-table :root-loader="rootLoader" :tree-loader="treeLoader"
                       :border="border" :columns="columns"
                       :driver="driver" :menu-getter="menuGetter"
-                      :tree-updater="treeUpdater"
+                      :tree-updater="treeUpdater" :is-leaf="isLeaf"
                       :onExpand="onExpand" style="width:100%;height:100%;" :onClose="onClose" :debug="debug"
                       :fixLeft="fixLeft" :fixRight="fixRight"
                       @on-check="onCheck"/>
@@ -30,6 +30,9 @@ export default {
       rootLoader: productLineLoader,
       treeLoader: productLineLoader,
       treeUpdater: productLineLoader,
+      isLeaf: node => {
+        return node.data.kids === 0
+      },
       debug: false,
       border: true,
       fixLeft: false,
@@ -222,7 +225,7 @@ export default {
         {
           key: 'id',
           label: '编号',
-          width: 20
+          width: '10%'
         },
         {
           label: '名称',

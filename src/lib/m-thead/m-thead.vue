@@ -1,8 +1,8 @@
 <!--表头组件-->
 <template>
-  <div class="m-thead" :style="{width:width+'px',height:table.headHeight+'px'}" ref="header">
-    <table @mouseup="mouseUp" @mouseleave="mouseUp" @mousemove="mouseMove($event)" class="head-table"
-           :width="fullWidth?fullWidth:'100%'" border="1">
+  <div class="m-thead" :style="{height:table.headHeight+'px'}"
+       ref="header">
+    <table @mouseup="mouseUp" @mouseleave="mouseUp" @mousemove="mouseMove($event)" border="1">
       <colgroup>
         <col v-for="(column,columnIndex) in columnList.columns" :key="columnIndex" :width="column.width"
              :index="columnIndex">
@@ -29,15 +29,7 @@ export default {
   components: {MTh, LjsCheckBox},
   props: {
     rootNode: {type: TreeNode},
-    table: {
-      type: Object
-    },
-    width: {
-      type: Number
-    },
-    fullWidth: {
-      type: Number
-    },
+    table: {type: Object},
     columnList: {type: ColumnList}
   },
   data () {
@@ -79,8 +71,12 @@ export default {
   @import "../../style/vars.scss";
 
   .m-thead {
+    position: absolute;
+    left: 0;
+    top: 0;
     overflow: hidden;
-    .head-table {
+    table {
+      @include w100;
       background-color: $table-head-bg-color;
       box-sizing: border-box;
       border-collapse: collapse;

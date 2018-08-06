@@ -1,5 +1,6 @@
 /** 后台API地址配置 */
-const contextPath = './static'
+const dev = (process.env.NODE_ENV === 'development')
+const contextPath = dev ? '/static' : './static'
 const apiUrl = `${contextPath}/api`
 const getFileUrl = function (staticFile) {
   let url = `${contextPath}/api/staticfile/play?`

@@ -4,5 +4,6 @@ export default class TreeStore {
     this.dataTypeField = undefined
     this.isLeaf = undefined
     for (let name in opt) if (opt.hasOwnProperty(name)) this[name] = opt[name]
+    if (!this.isLeaf) throw new Error('isLeaf can\'t null')
   }
 }

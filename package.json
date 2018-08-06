@@ -33,17 +33,18 @@
     "vue": "^2.3.3",
     "vue-click-outside": "^1.0.7",
     "vue-resize-directive": "^1.0.1",
-    "vue-router": "^2.6.0"
+    "vue-router": "^2.6.0",
+    "vue-scroll": "^2.1.7"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
-    "babel-helper-vue-jsx-merge-props": "^2.0.3",
-    "babel-plugin-syntax-jsx": "^6.18.0",
-    "babel-plugin-transform-vue-jsx": "^3.7.0",
     "babel-core": "^6.22.1",
     "babel-eslint": "^7.1.1",
+    "babel-helper-vue-jsx-merge-props": "^2.0.3",
     "babel-loader": "^7.1.1",
+    "babel-plugin-syntax-jsx": "^6.18.0",
     "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-plugin-transform-vue-jsx": "^3.7.0",
     "babel-preset-env": "^1.3.2",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-2": "^6.22.0",

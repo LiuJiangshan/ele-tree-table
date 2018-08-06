@@ -1,17 +1,16 @@
 <!--表格主体内容组件-->
 <template>
-  <div v-if="nodes&&nodes.length>0" class="table-body-warp" :style="bodyStyle" @scroll="onScroll">
-    <table class="body_table" :style="tableStyle" border="1" cellspacing="0"
-           cellpadding="0">
+  <div class="table-body-warp" :style="warpStyle">
+    <table v-if="nodes&&nodes.length>0" border="1" cellspacing="0" cellpadding="0">
       <colgroup>
         <col v-for="(column,columnIndex) in columnList.columns" :key="columnIndex" :width="column.width">
       </colgroup>
       <m-render :render="renderTbody"/>
     </table>
-  </div>
-  <div v-else class="table-empty" :style="bodyStyle" ref="tableEmpty"
-       @contextmenu.prevent.stop="onRightMenuClick($event)">
-    <span v-if="!fix" v-html="'暂无数据'"></span>
+    <div v-else class="table-empty" ref="tableEmpty"
+         @contextmenu.prevent.stop="onRightMenuClick($event)">
+      <span v-if="!fix" v-html="'暂无数据'"></span>
+    </div>
   </div>
 </template>
 
@@ -20,42 +19,32 @@ import MTr from '../m-tr/m-tr'
 import ColumnList from '../ljs-tree-table/ColumnList'
 import MRender from '../m-render/m-render'
 import TreeStore from '../ljs-tree-table/TreeStore'
+import resize from 'vue-resize-directive'
 
 export default {
   components: {MRender, MTr},
+  directives: {resize},
   props: {
     table: {type: Object},
     nodes: {type: Array},
     fix: {type: Boolean},
     header: {type: Object},
     columnList: {type: ColumnList},
-    // 表格包裹层宽度
-    width: {type: Number},
-    // 表格宽度
-    fullWidth: {type: Number},
     treeStore: {type: TreeStore}
   },
   name: 'm-tbody',
   computed: {
-    // 表体高度
-    height: {get () { return this.table.height - this.table.headHeight }},
-    tableStyle: {
-      get () {
-        return {
-          borderColor: this.table.borderColor,
-          width: this.fix ? 'auto' : this.fullWidth + 'px'
-        }
-      }
-    },
-    bodyStyle: {
-      get () {
-        let bodyStyle = {width: this.width + 'px'}
-        if (this.height) { bodyStyle.height = this.height + 'px' }
-        return bodyStyle
+    warpStyle () {
+      return {
+        paddingTop: `${this.table.headHeight}px`,
+        height: `calc(100%-${this.table.headHeight}px)`
       }
     }
   },
   methods: {
+    onReSize () {
+      console.log('resize')
+    },
     renderTbody (h) {
       return h('tbody', this.renderTr(h, this.nodes, 0))
     },
@@ -78,19 +67,25 @@ export default {
     },
     onRightMenuClick ($event) {
       this.$menu.rightMenu(this.table.emptyMenus, $event)
-    },
-    onScroll (event) {
-      if (this.header) this.table.handleBodyScroll(event, this.header, this)
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+  @import "../../style/vars.scss";
 
   .table-body-warp {
-    overflow: auto;
+    @include w100;
+    position: relative;
+    overflow: hidden;
     background-color: white;
+    > table {
+      table-layout: fixed;
+      @include w100;
+      border-collapse: collapse;
+      border: none;
+    }
   }
 
   .table-empty {
@@ -101,11 +96,5 @@ export default {
     justify-content: center;
     justify-items: center;
     background-color: white;
-  }
-
-  .body_table {
-    table-layout: fixed;
-    border-collapse: collapse;
-    border: none;
   }
 </style>

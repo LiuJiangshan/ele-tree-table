@@ -2,8 +2,8 @@ const minWidth = 80
 export default class Column {
   constructor (data) {
     this.data = data
-    this.mixWidth = this.data.minWidth ? this.data.minWidth : minWidth
-    this.width = this.data.width ? this.data.width : this.mixWidth
+    this.minWidth = this.data.minWidth ? this.data.minWidth : minWidth
+    this.width = this.data.width ? this.data.width : this.minWidth
     this.render = data.render
     this.autoLine = data.autoLine
     this.key = data.key

@@ -1,6 +1,6 @@
 <!--可编辑组件-->
 <template>
-  <td :class="tdClass" :width="column.width" :height="trHeight"
+  <td :class="tdClass" :height="trHeight"
       @contextmenu.prevent.stop="onRightMenuClick($event)"
       @keyup.enter="handleEnter"
       @click="handleClick" @dblclick="handleDbClick">
@@ -283,6 +283,7 @@ export default {
 
   td {
     box-sizing: border-box;
+    @include w100;
     font-family: Arial, 微软雅黑, serif;
     font-size: 11px;
     &.select {
