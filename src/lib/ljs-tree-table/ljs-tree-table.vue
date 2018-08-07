@@ -10,28 +10,9 @@
       <div v-html="focusTd?('x:'+this.focusTd.x+',y:'+this.focusTd.y):'no focus'"></div>
     </div>
     <m-tbody :table="thisTable" :header="$refs.header" :width="width" :column-list="columnList" :nodes="rootNode.childs"
-             :tree-store="treeStore"/>
+             :header-height="headerHeight" :tree-store="treeStore"/>
     <m-thead :table="thisTable" ref="tableHeader" :column-list="columnList" :width="width"
              :root-node="rootNode"/>
-    <!--debug视图-->
-    <div v-if="debug" style="position: absolute;bottom: 0;left: 0;border: 1px red solid;">
-      <input type="button" value="原始数据" @click="printDatas"/>
-      <input type="button" value="列定义" @click="printColumns"/>
-      <input type="button" value="转换后的数据" @click="printFormated"/>
-      <input type="button" value="重新格式化数据" @click="formatNode(datas)"/>
-      <input type="button" value="刷新" @click="refresh"/>
-      <input type="button" value="当前焦点行" @click="nowFocus"/>
-      <input type="button" value="全选" @click="selectAll"/>
-      <input type="button" value="查看右键菜单定义" @click="showRightMenu"/>
-      <input type="button" value="查看列定义" @click="showColunm"/>
-      <input type="button" value="查看左边固定列定义" @click="showLeftFixColumn"/>
-      <input type="button" value="查看中间列定义" @click="showBodyColumn"/>
-      <input type="button" value="查看右边列定义" @click="showRightColumn"/>
-      <input type="button" :value="(fixLeftShow?'隐藏':'显示')+'左边固定列'" @click="fixLeftShow=!fixLeftShow"/>
-      <input type="button" :value="(fixRightShow?'隐藏':'显示')+'右边边固定列'" @click="fixRightShow=!fixRightShow"/>
-      <input type="button" value="show $Refs" @click="showRefs"/>
-      <input type="button" value="getSubmitData" @click="showSubmitData"/>
-    </div>
   </div>
 </template>
 <script>
@@ -52,8 +33,7 @@ export default {
   directives: {resize, scroll},
   components: {MEditTd, MTableFix, MTbody, MThead, MContextMenu},
   props: {
-    dataTypeField: {type: String, default: 'pojo'},
-    rootLoader: {type: DataLoader},
+    dataTypeField: {type: String},
     treeLoader: {type: DataLoader},
     treeUpdater: {type: DataLoader},
     menuGetter: {type: Function},
@@ -81,107 +61,18 @@ export default {
         return []
       }
     },
-    // 展开事件
-    onExpand: {
-      type: Function,
-      default (data, goOn) { goOn() }
-    },
-    // 收起事件
-    onClose: {
-      type: Function,
-      default (data, goOn) { goOn() }
-    },
-    // 判断是否root节点
-    isRoot: {
-      type: Function,
-      default (data) {
-        return data && data.father === false
-      }
-    },
     // 是否显示debug视图
     debug: {
       type: Boolean,
       default: false
     },
-    // 是否显示表格边框
-    border: {
-      type: Boolean,
-      default: true
-    },
-    // 是否显示行边框
-    trBorder: {
-      type: Boolean,
-      default: false
-    },
-    // 固定第一列到最左边
-    fixLeft: {
-      type: Boolean,
-      default: false
-    },
-    // 固定第一列到最右边
-    fixRight: {
-      type: Boolean,
-      default: false
-    },
-    // 表头高
-    headHeight: {
-      type: Number,
-      default: 30
-    },
     // 表格数据为空时显示的提示
     nullString: {
       default: ''
-    },
-    // 层级区分宽度
-    deepWidth: {
-      type: Number,
-      default: 19
-    },
-    lineHeight: {
-      type: Number,
-      default: 28
     }
   },
   computed: {
-    trBorderColor () { return '#E4E4E4' },
-    borderColor () {
-      return this.border ? '#E4E4E4' : 'transparent'
-    },
-    thisTable: {get () { return this }},
-    // 获取非固定列定义
-    bodyColumns () {
-      let start = this.fixLeft ? 1 : 0
-      let end = this.fixRight ? (this.columns.length - 2) : (this.columns.length - 1)
-      return this.columns.slice(start, end)
-    },
-    // 获取第一列定义
-    leftColumns: {
-      get () { return [this.columns[0]] }
-    },
-    // 获取最后一列定义
-    rightColumns: {
-      get () { return [this.columns[this.columns.length - 1]] }
-    },
-    // 左边固定列总宽度
-    leftFixWidth: {
-      get () {
-        let width = 0
-        this.leftColumns.forEach(function (column) {
-          width += column.width
-        })
-        return width
-      }
-    },
-    // 右边固定列总宽度
-    rightFixWidth: {
-      get () {
-        let width = 0
-        this.rightColumns.forEach(function (column) {
-          width += column.width
-        })
-        return width
-      }
-    }
+    thisTable () { return this }
   },
   data () {
     const store = new TreeStore(this.$props)
@@ -189,6 +80,7 @@ export default {
     return {
       width: 0,
       height: 0,
+      headerHeight: 0,
       treeStore: store,
       rootNode: rootNode,
       columnList: new ColumnList(this.columns),
@@ -196,8 +88,6 @@ export default {
       expandDatas: [],
       // 当前焦点单元格vue对象
       focusTd: undefined,
-      fixLeftShow: true,
-      fixRightShow: true,
       canMove: true,
       submitTypes: {add: 'add', remove: 'remove', update: 'update'},
       scrollTop: 0
@@ -227,23 +117,10 @@ export default {
             data.forEach(it => TreeNode.Builder({data: it, parent: node, dataType: it[this.dataTypeField]}))
           },
           onError () {},
-          onEnd: () => {
-            this.rootLoader = this.rootLoader
-          }
+          onEnd: () => { }
         }, node)
       }
     },
-    showRightMenu () { console.log(this.rightMenu) },
-    showColunm () { console.log(this.columns) },
-    showLeftFixColumn () { console.log(this.leftColumns) },
-    showBodyColumn () { console.log(this.bodyColumns) },
-    showRightColumn () { console.log(this.rightColumns) },
-    showRefs () { console.log(this.$refs, this.$refs.treetable.clientWidth, this.width) },
-    showSubmitData () { console.log(this.getSubmitData()) },
-    nowFocus () { console.log(this.focusTd.data, this.focusTd.column) },
-    printDatas () { console.log(this.datas) },
-    printColumns () { console.log(this.columns) },
-    printFormated () { console.log(this.expandDatas) },
     // 将tr组件vue实例与数据绑定
     bindTr (tr) { tr.node.tr = tr },
     // 将td组件vue实例与数据绑定
@@ -284,16 +161,17 @@ export default {
     onReSize () {
       this.width = this.$el.clientWidth
       this.height = this.$el.clientHeight
+      this.headerHeight = this.$refs.tableHeader.$el.clientHeight
     },
     loadRoot () {
-      this.rootLoader.load({
+      this.treeLoader.load({
         onLoad: data => {
           this.rootNode.childs = []
           data.forEach(it => TreeNode.Builder({data: it, parent: this.rootNode, dataType: it[this.dataTypeField]}))
         },
         onError (e) {},
         onEnd () {}
-      })
+      }, this.rootNode)
     }
   },
   created () {

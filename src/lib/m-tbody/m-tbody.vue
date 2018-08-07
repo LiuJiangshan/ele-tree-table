@@ -30,14 +30,15 @@ export default {
     fix: {type: Boolean},
     header: {type: Object},
     columnList: {type: ColumnList},
-    treeStore: {type: TreeStore}
+    treeStore: {type: TreeStore},
+    headerHeight: {type: Number}
   },
   name: 'm-tbody',
   computed: {
     warpStyle () {
       return {
-        paddingTop: `${this.table.headHeight}px`,
-        height: `calc(100%-${this.table.headHeight}px)`
+        paddingTop: `${this.headerHeight}px`,
+        height: `calc(100%-${this.headerHeight}px)`
       }
     }
   },

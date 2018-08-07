@@ -10,6 +10,7 @@ class TreeNode {
     this.dataType = undefined
     this.childs = undefined
     this.isLeaf = undefined
+    this.tds = {}
     this.level = 0
     for (let name in opt) if (opt.hasOwnProperty(name)) this[name] = opt[name]
     if (!this.store && opt.parent && opt.parent.store) this.store = opt.parent.store
@@ -17,6 +18,8 @@ class TreeNode {
     if (!this.store) throw new Error('store can\'t null')
     if (!this.level && this.parent) this.level = this.parent.level + 1
     if (this.isLeaf === undefined) this.isLeaf = this.isRoot() ? false : this.store.isLeaf(this)
+    let dataTypeField = this.store.dataTypeField
+    dataTypeField && this.data && this.data.hasOwnProperty(dataTypeField) && (this.dataType = this.data[dataTypeField])
     // check事件是否冒泡到父节点
     this.checkBubble = true
   }
@@ -115,10 +118,6 @@ class TreeNode {
     return this
   }
 
-  onCheckChanged (newValue) {
-    this.getExpandNodes().forEach(it => it.setCheck(newValue))
-  }
-
   load () {
     this.loading = true
     this.childs = []
@@ -150,7 +149,13 @@ class TreeNode {
     if (index !== -1) this.parent.childs.splice(index, 1)
   }
 
-  insert (opt) {
+  insert (data) {
+    return new TreeNode({
+      data: data,
+      parent: this,
+      store: this.store,
+      check: this.check
+    })
   }
 
   getCheckedNode () {
@@ -158,6 +163,10 @@ class TreeNode {
     if (this.check === true) checked.push(this)
     if (this.childs) this.childs.forEach(it => it.getCheckedNode().forEach(cIt => checked.push(cIt)))
     return checked
+  }
+
+  bindTd (td, column) {
+    this.tds[column.index] = td
   }
 }
 

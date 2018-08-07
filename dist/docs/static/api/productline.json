@@ -9,7 +9,8 @@
       "managerName": "经理名称",
       "info": "产品线详情",
       "superId": -1,
-      "kids": 2
+      "kids": 2,
+      "kids1": 20
     },
     {
       "pojo": "ProductLine",

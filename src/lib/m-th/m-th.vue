@@ -42,7 +42,6 @@ export default {
   }
 
   .m-th {
-
   }
 
   .m-th .border {

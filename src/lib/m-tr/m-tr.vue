@@ -43,12 +43,6 @@ export default {
       lineHeight: this.table.lineHeight,
       heights: {}
     }
-  },
-  mounted () {
-    this.table.bindTr(this)
-  },
-  updated () {
-    this.table.bindTr(this)
   }
 }
 </script>

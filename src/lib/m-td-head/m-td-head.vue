@@ -4,11 +4,15 @@
     <template v-if="column.allowExpand">
       <m-deep :value="node.level"/>
       <m-expand v-if="childCount!==0" v-model="node.expand" :loading="node.loading"/>
-      <div v-if="childCount">
-        {{'('+childCount+')'}}
+      <div v-if="customCount!==undefined">
+        <template v-if="customCount!==0">
+          {{`(${customCount})`}}
+        </template>
       </div>
-      <div v-if="customCount">
-        {{'('+customCount+')'}}
+      <div v-else-if="childCount!==undefined">
+        <template v-if="childCount!==0">
+          {{`(${childCount})`}}
+        </template>
       </div>
     </template>
     <m-check-box v-else-if="column.allowSelection" v-model="node.check"/>

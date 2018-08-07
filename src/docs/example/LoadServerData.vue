@@ -1,22 +1,17 @@
 <template>
   <div>
     <div class="panel">
-      <ljs-tree-table :root-loader="rootLoader" :tree-loader="treeLoader"
-                      :border="border" :columns="columns"
-                      :driver="driver" :menu-getter="menuGetter"
-                      :tree-updater="treeUpdater" :is-leaf="isLeaf"
-                      :onExpand="onExpand" style="width:100%;height:100%;" :onClose="onClose" :debug="debug"
-                      :fixLeft="fixLeft" :fixRight="fixRight"
-                      @on-check="onCheck"/>
+      <ljs-tree-table :tree-loader="treeProps.treeLoader" :columns="treeProps.columns"
+                      :data-type-field="treeProps.dataTypeField" :child-count-field="treeProps.childCountField"
+                      :custom-count-field="treeProps.customCountField" :menu-getter="treeProps.menuGetter"
+                      :tree-updater="treeProps.treeUpdater" :is-leaf="treeProps.isLeaf" class="tree-style"
+                      :debug="debug"/>
     </div>
     <input type="button" @click="debug=!debug" :value="debug?'关闭调试':'打开调试'"/>
-    <input type="button" :value="border?'隐藏边框':'显示边框'" @click="border=!border"/>
   </div>
 </template>
 <script>
 /* eslint-disable no-proto */
-
-import axios from 'axios'
 import LjsTreeTable from '../../lib/ljs-tree-table/ljs-tree-table'
 import baseService from '../../utils/baseService.js'
 import DataLoader from '../../lib/ljs-tree-table/DataLoader'
@@ -27,267 +22,127 @@ export default {
   components: {LjsTreeTable},
   data () {
     return {
-      rootLoader: productLineLoader,
-      treeLoader: productLineLoader,
-      treeUpdater: productLineLoader,
-      isLeaf: node => {
-        return node.data.kids === 0
-      },
-      debug: false,
-      border: true,
-      fixLeft: false,
-      fixRight: false,
-      // 数据驱动
-      driver: {
-        // 子节点加载器
-        loader: {
-          ProductLine (node, refresh) {
-            node['nodes'] = []
-            // 加载子产品组
-            axios({
-              method: 'GET',
-              url: window.apiUrl + '/productline.json',
-              params: {superId: node.id, onePageShow: 10000}
-            })
-              .then(function (response) {
-                let datas = response.data.data
-                if (datas instanceof Array) datas.map(function (val) { node.nodes.push(val) })
-                refresh()
-              })
-              .catch(function (error) {
-                console.log(error)
-              })
-            // 加载子产品
-            axios({
-              method: 'GET',
-              url: window.apiUrl + '/product.json',
-              params: {productLineId: node.id, onePageShow: 10000}
-            }).then(function (response) {
-              let datas = response.data.data
-              if (datas instanceof Array) datas.map(function (val) { node.nodes.push(val) })
-              refresh()
-            }).catch(function (error) {
-              console.log(error)
-            })
-          },
-          Product (node, refresh) {
-            node['nodes'] = []
-            axios({
-              method: 'GET',
-              url: window.apiUrl + '/product.json',
-              params: {superId: node.id, onePageShow: 10000}
-            })
-              .then(function (response) {
-                let datas = response.data.data
-                if (datas instanceof Array) datas.map(function (val) { node.nodes.push(val) })
-                refresh()
-              })
-              .catch(function (error) {
-                console.log(error)
-              })
-          }
+      treeProps: {
+        dataTypeField: 'pojo',
+        childCountField: 'kids',
+        customCountField: 'kids1',
+        treeLoader: productLineLoader,
+        treeUpdater: productLineLoader,
+        isLeaf: node => {
+          return node.data.kids === 0
         },
-        // 更新器
-        updater: {
-          ProductLine (data, column) {
-            let params = {id: data.id}
-            params[column.key] = data[column.key]
-            axios({
-              method: 'put',
-              url: window.apiUrl + '/productline.json',
-              data: params
-            })
-              .then(function (response) {
-                let msg = response.data.msg
-                console.log(msg)
-              })
-              .catch(function (error) {
-                console.log(error)
-              })
-          },
-          Product (data, column) {
-            let params = {id: data.id}
-            params[column.key] = data[column.key]
-            axios({
-              method: 'put',
-              url: window.apiUrl + '/product.json',
-              data: params
-            })
-              .then(function (response) {
-                let msg = response.data.msg
-                console.log(msg)
-              })
-              .catch(function (error) {
-                console.log(error)
-              })
-          }
-        },
-        // 添加器
-        adder: {
-          Product (data, cb) {
-            axios({
-              method: 'POST',
-              url: window.apiUrl + '/product.json',
-              data: data
-            })
-              .then(cb)
-              .catch(function (error) {
-                console.log(error)
-              })
-          },
-          ProductLine (data, cb) {
-            axios({
-              method: 'POST',
-              url: window.apiUrl + '/productline.json',
-              data: data
-            })
-              .then(cb)
-              .catch(function (error) {
-                console.log(error)
-              })
-          }
-        },
-        // 删除器
-        deleter: {
-          Product (data, cb) {
-            axios({
-              method: 'delete',
-              url: window.apiUrl + '/product.json',
-              data: [data.id]
-            })
-              .then(cb)
-              .catch(function (error) {
-                console.log(error)
-              })
-          },
-          ProductLine (data, cb) {
-            axios({
-              method: 'delete',
-              url: window.apiUrl + '/productline.json',
-              data: [data.id]
-            })
-              .then(cb)
-              .catch(function (error) {
-                console.log(error)
-              })
-          }
-        }
-      },
-      menuGetter (ctx) {
-        if (ctx) {
-          const node = ctx.node
-          switch (node.data.pojo) {
-            case 'ProductLine':
-              return [
-                {
-                  label: '刷新',
-                  click () {
-                    node.load()
+        menuGetter (ctx) {
+          if (ctx) {
+            const node = ctx.node
+            switch (node.data.pojo) {
+              case 'ProductLine':
+                return [
+                  {
+                    label: '刷新',
+                    click () {
+                      node.load()
+                    }
+                  },
+                  {
+                    label: '添加产品线',
+                    click () {}
+                  },
+                  {
+                    label: '删除产品线',
+                    click () {
+                      node.remove()
+                    }
                   }
-                },
-                {
-                  label: '添加产品线',
-                  click () {}
-                },
-                {
-                  label: '删除产品线',
-                  click () {
-                    node.remove()
-                  }
-                }
-              ]
+                ]
+            }
+          } else {
+            return [{
+              label: '添加产品线',
+              click (context) {}
+            }]
           }
-        } else {
-          return [{
-            label: '添加产品线',
-            click (context) {}
-          }]
-        }
+        },
+        // 列定义
+        columns: [
+          {
+            type: 'expand',
+            width: 100
+          },
+          {
+            type: 'selection',
+            key: 'id',
+            width: 18
+          },
+          {
+            label: '下级数量',
+            width: 50,
+            render (h, ctx) {
+              return (<div>{ctx.node.data.kids}</div>)
+            }
+          },
+          {
+            key: 'id',
+            label: '编号',
+            width: '10%'
+          },
+          {
+            label: '名称',
+            key: 'name',
+            dataType: 'Product|ProductLine',
+            width: 100
+          },
+          {
+            label: '经理',
+            key: 'managerName',
+            width: 100
+          },
+          {
+            dataType: 'Product',
+            label: '产品ID',
+            key: 'id',
+            width: 100
+          },
+          {
+            label: '详情',
+            key: 'info',
+            edit: true,
+            width: 100
+          },
+          {
+            label: '计划发布日期',
+            key: 'planPublish',
+            dataType: 'Product',
+            width: 100,
+            render (h, ctx) {
+              return h('DatePicker')
+            }
+          },
+          {
+            label: '生产厂家',
+            key: 'factory',
+            edit: true,
+            dataType: 'Product',
+            width: 100
+          }
+        ]
       },
-      // 列定义
-      columns: [
-        {
-          type: 'expand',
-          width: 100
-        },
-        {
-          type: 'selection',
-          key: 'id',
-          width: 18
-        },
-        {
-          label: '下级数量',
-          width: 50,
-          render (h, ctx) {
-            return (<div>{ctx.node.data.kids}</div>)
-          }
-        },
-        {
-          key: 'id',
-          label: '编号',
-          width: '10%'
-        },
-        {
-          label: '名称',
-          key: 'name',
-          dataType: 'Product|ProductLine',
-          width: 100
-        },
-        {
-          edit: false,
-          label: '经理',
-          key: 'managerName',
-          width: 100
-        },
-        {
-          edit: false,
-          dataType: 'Product',
-          label: '产品ID',
-          key: 'id',
-          width: 100
-        },
-        {
-          label: '详情',
-          key: 'info',
-          width: 100
-        },
-        {
-          label: '计划发布日期',
-          key: 'planPublish',
-          dataType: 'Product',
-          width: 100,
-          render (h, ctx) {
-            return h('DatePicker')
-          }
-        },
-        {
-          label: '生产厂家',
-          key: 'factory',
-          dataType: 'Product',
-          width: 100
-        }
-      ],
-      onExpand (data, go) {
-        go()
-      },
-      onClose (data, go) {
-        go()
-      }
-    }
-  },
-  methods: {
-    onCheck (selectDatas) {
-      console.log('选择了' + selectDatas.length + '项', selectDatas)
-    },
-    loadRootCB (response) {
-      if (response.data.ok) {
-        this.datas = response.data.data
-      }
+      debug: false
     }
   }
 }
 </script>
 <style lang="scss">
+  .ivu-date-picker {
+    .ivu-date-picker-focused input {
+      border: none;
+    }
+    .ivu-input {
+      height: auto;
+      border: none;
+    }
+  }
+</style>
+<style lang="scss" scoped>
   @import "../../style/vars.scss";
 
   .panel {
@@ -299,14 +154,4 @@ export default {
     height: 500px;
   }
 
-  .ivu-date-picker {
-    .ivu-date-picker-focused input {
-      border: none;
-    }
-
-    .ivu-input {
-      height: auto;
-      border: none;
-    }
-  }
 </style>

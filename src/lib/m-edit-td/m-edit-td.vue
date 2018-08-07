@@ -8,12 +8,12 @@
          ref="tdWarp" @blur="handleBlur">
       <m-td-head class="td-head-style" :column="column" ref="tdHead"
                  :node="node" :tree-store="treeStore" :td="getThis()"/>
-      <template v-if="match&&column.allowEdit">
-        <div v-if="debug" v-html="getState()+value"
-             style="color: red;font-size: xx-small;"></div>
-        <m-render v-if="column.render" class="custom-render-style"
-                  ref="input" :render="column.render" :ctx="{node:node,column:column}"/>
-        <m-text-area v-else :auto-size="this.column.autoLine"
+      <div v-if="debug" v-html="getState()+value"
+           style="color: red;font-size: xx-small;"></div>
+      <m-render v-if="column.render" class="custom-render-style"
+                ref="input" :render="column.render" :ctx="{node:node,column:column}"/>
+      <template v-else-if="column.haveContent">
+        <m-text-area v-if="match" :auto-size="this.column.autoLine"
                      :auto-select="true"
                      :one-line-height="tr.table.lineHeight"
                      :disabled="!column.allowEdit"

@@ -1,7 +1,6 @@
 <!--表头组件-->
 <template>
-  <div class="m-thead" :style="{height:table.headHeight+'px'}"
-       ref="header">
+  <div class="m-thead" ref="header">
     <table @mouseup="mouseUp" @mouseleave="mouseUp" @mousemove="mouseMove($event)" border="1">
       <colgroup>
         <col v-for="(column,columnIndex) in columnList.columns" :key="columnIndex" :width="column.width"
@@ -73,6 +72,7 @@ export default {
   .m-thead {
     position: absolute;
     left: 0;
+    min-height: 15px;
     top: 0;
     overflow: hidden;
     table {
@@ -83,6 +83,9 @@ export default {
       border: 1px $border-color solid;
       table-layout: fixed;
       word-break: break-all;
+    }
+    th {
+      height: 30px;
     }
   }
 </style>
