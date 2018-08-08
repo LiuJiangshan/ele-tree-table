@@ -150,12 +150,15 @@ class TreeNode {
   }
 
   insert (data) {
-    return new TreeNode({
+    const newNode = new TreeNode({
       data: data,
       parent: this,
       store: this.store,
       check: this.check
     })
+    if (!this.childs) this.childs = []
+    this.childs.push(newNode)
+    return newNode
   }
 
   getCheckedNode () {
