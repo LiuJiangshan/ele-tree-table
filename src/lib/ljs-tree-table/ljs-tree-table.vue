@@ -1,8 +1,7 @@
 <template>
   <div component="LjsTreeTable" author="LiuJiangshan" v-resize="onReSize"
        github="https://github.com/LiuJiangshan/LjsTreeTable"
-       class="ljs-tree-table" @keyup.up="up" @scroll="onScroll"
-       @keyup.down="down" @keyup.left="left" @keyup.right="right" ref="treetable">
+       class="ljs-tree-table" @scroll="onScroll" ref="treetable">
     <div v-if="debug"
          style="position: absolute;border:1px red solid;font-size: xx-small;color: red;right: 0;bottom: 50px;">
       <div v-html="'width:'+width"></div>
@@ -11,8 +10,7 @@
     </div>
     <m-tbody :table="thisTable" :header="$refs.header" :width="width" :column-list="columnList" :nodes="rootNode.childs"
              :header-height="headerHeight" :tree-store="treeStore"/>
-    <m-thead :table="thisTable" ref="tableHeader" :column-list="columnList" :width="width"
-             :root-node="rootNode"/>
+    <m-thead :table="thisTable" ref="tableHeader" :column-list="columnList" :root-node="rootNode"/>
   </div>
 </template>
 <script>

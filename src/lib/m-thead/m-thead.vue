@@ -72,6 +72,7 @@ export default {
   .m-thead {
     position: absolute;
     left: 0;
+    @include w100;
     min-height: 15px;
     top: 0;
     overflow: hidden;

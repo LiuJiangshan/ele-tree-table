@@ -10,7 +10,8 @@ class TreeNode {
     this.dataType = undefined
     this.childs = undefined
     this.isLeaf = undefined
-    this.tds = {}
+    this.tds = []
+    this.index = undefined
     this.level = 0
     for (let name in opt) if (opt.hasOwnProperty(name)) this[name] = opt[name]
     if (!this.store && opt.parent && opt.parent.store) this.store = opt.parent.store
@@ -168,8 +169,17 @@ class TreeNode {
     return checked
   }
 
-  bindTd (td, column) {
-    this.tds[column.index] = td
+  bindTd (td) {
+    this.tds[td.column.index] = td
+  }
+
+  xTd (xindex) {
+    if (xindex >= 0 && xindex < this.tds.length) return this.tds[xindex]
+  }
+
+  yNode (move) {
+    const yIndex = this.index + move
+    if (yIndex >= 0 && yIndex < this.store.nodes.length) return this.store.nodes[yIndex]
   }
 }
 

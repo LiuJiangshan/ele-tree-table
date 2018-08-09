@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-button @click="getExpandNodesTest">getExpandNodesTest</el-button>
+    <i-button @click="getExpandNodesTest">getExpandNodesTest</i-button>
   </div>
 </template>
 

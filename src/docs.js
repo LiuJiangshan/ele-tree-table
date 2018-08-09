@@ -7,17 +7,13 @@ import 'element-ui/lib/theme-chalk/index.css'
 import 'iview/dist/styles/iview.css'
 import './docs/style/common.scss'
 import ljsTreeTable from './lib.js'
-// import ljsTreeTable from '../dist/lib/index.js'
 import './style/index.scss'
 import iview from 'iview'
-import elementUi from 'element-ui'
 import 'element-ui/packages/theme-chalk/src/index.scss'
 
 Vue.use(ljsTreeTable)
 Vue.use(iview)
-Vue.use(elementUi)
 Message.config({top: 200})
-Vue.use(ljsTreeTable)
 
 Vue.prototype.axios = axios
 axios.defaults.headers['Client-Type'] = 'web'

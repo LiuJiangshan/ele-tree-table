@@ -29,7 +29,7 @@ yarn run dev
 ```
 #### 2.main.js中
 ```
-Vue.component(ljsTreeTable.name,ljsTreeTable)
+Vue.use(ljsTreeTable)
 ```
 #### 3.Vue文件中(同方法二中第4步)
 ### 方法2(yarn安装)
@@ -60,11 +60,15 @@ Vue.use(ljsTreeTable)
 ```
 ## 编译组件
 ```bash
-yarn run build
+npm run build
+```
+## 编译并启动代码分析
+```bash
+npm run build:lib --report
 ```
 ## 编译该项目示例
 ```bash
-yarn run doc
+npm run build:docs
 ```
 ## 其他
 依赖jquery、jquery-ui(仅在焦点控制时用到)

@@ -1,9 +1,9 @@
 <!--可编辑组件-->
 <template>
-  <td :class="tdClass" :height="trHeight"
+  <td :class="tdClass" class="m-edit-td" :height="trHeight"
       @contextmenu.prevent.stop="onRightMenuClick($event)"
-      @keyup.enter="handleEnter"
-      @click="handleClick" @dblclick="handleDbClick">
+      @keyup.up="move(0,-1)" @keyup.down="move(0,1)" @keyup.left="move(-1,0)" @keyup.right="move(1,0)"
+      @keyup.enter="handleEnter" @click="handleClick" @dblclick="handleDbClick">
     <div class="td-warp" tabindex="0" @focus="handleFocus"
          ref="tdWarp" @blur="handleBlur">
       <m-td-head class="td-head-style" :column="column" ref="tdHead"
@@ -68,37 +68,12 @@ export default {
     },
     data () { return this.node.data },
     canSelection () { return this.column.type && this.column.type.indexOf('selection') !== -1 },
-    inputStyle () {
-      let re = {}
-      re.width = this.bodyWidth + 'px'
-      if (!this.column.autoLine) {
-        re.height = this.table.lineHeight + 'px'
-        re.overflow = 'hidden'
-      }
-      return re
-    },
     debug: {get () { return this.table.debug }},
     driver: {get () { return this.table.driver }},
     // 单元格x坐标
     x: {get () { return this.index }},
     // 单元格y坐标
     y: {get () { return this.tr.index }},
-    // 内容宽度
-    bodyWidth: {
-      get () {
-        let bodyWidth = this.column.width - this.headWidth
-        return bodyWidth
-      }
-    },
-    headWidth: {
-      get () {
-        let headWidth = 0
-        let tdHead = this.$refs.tdHead
-        if (this.isMounted && tdHead) headWidth = tdHead.width
-        else headWidth = 0
-        return headWidth
-      }
-    },
     // 单元格边框样式
     tdClass: {
       get () {
@@ -154,6 +129,14 @@ export default {
     }
   },
   methods: {
+    move (x, y) {
+      if (this.state === States.lock) return
+      const node = this.node.yNode(y)
+      if (node) {
+        const td = node.xTd(this.column.index + x)
+        td && td.focus()
+      }
+    },
     onRightMenuClick ($event) {
       const menuItems = this.table.menuGetter({node: this.node, column: this.column})
       if (menuItems) this.$menu.rightMenu(menuItems, $event)
@@ -203,11 +186,7 @@ export default {
     },
     handleDbClick () { this.state = States.lock },
     handleClick () {
-      if (this.focusTd) this.focusTd.state = States.normal
-      this.table.focusTd = this
-      this.input = false
-      this.state = States.select
-      if (this.match && this.column.edit !== false) this.$refs.input.$el.focus()
+      this.focus()
     },
     blur () {
       this.state = States.normal
@@ -234,50 +213,39 @@ export default {
       }
     },
     focus () {
-      let tdWarp = this.$refs.tdWarp
-      if (!this.match) {
-        tdWarp.focus()
-        // console.log('空白获取到焦点:', this.column.label)
-      } else if (this.column.edit === false) {
-        tdWarp.focus()
-        // console.log('不能编辑获取到焦点:', this.column.label)
-      } else if (this.column.render) {
-        if (window.$) {
-          let focusable = window.$(tdWarp).find(':focusable')
-          if (focusable) {
-            tdWarp.focus()
-            focusable.focus()
-          }
-        } else console.error('请添加jQuery、jQuery-Ui,否则不能对自定义组件设置焦点')
-        // let focusAbleNode = this.getFocusNode(tdWarp)
-        // tdWarp.click()
-        // if (focusAbleNode) {
-        //   focusAbleNode.focus()
-        //   this.state = States.select
-        //   // console.log('可焦点元素:', focusAbleNode)
-        // }
-        // console.log('自定义组件获取到焦点:', this.column.label)
-      } else {
-        this.$refs.input.$el.focus()
-        // console.log('文本框获取到焦点:', this.column.label)
-      }
+      if (this.state === States.normal) window.$(this.$el).find(':focusable').focus()
     }
   },
   data () {
     return {
-      isMounted: false,
       state: States.normal,
       // 是否输入了内容
       input: false
     }
   },
   mounted () {
-    this.isMounted = true
-    this.table.bindTd(this)
+    this.node.bindTd(this)
   },
-  updated () { this.table.bindTd(this) }
+  updated () { this.node.bindTd(this) }
 }
 </script>
+<style lang="scss">
+  @import "../../style/vars.scss";
+
+  .m-edit-td {
+    .ivu-date-picker {
+      .ivu-date-picker-focused input {
+        border: 1px $theme-color-5 solid;
+        box-shadow: 0 1px 6px 0 $theme-color-5;
+      }
+      .ivu-input {
+        border-radius: 0;
+        height: auto;
+        border: none;
+      }
+    }
+  }
+</style>
 <style lang="scss" scoped>
   @import "../../style/vars.scss";
 
@@ -296,7 +264,7 @@ export default {
       box-shadow: 0 1px 6px 0 $theme-color;
     }
 
-    &.border {
+    :focus {
       border-color: $border-color;
     }
   }

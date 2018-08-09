@@ -10,7 +10,7 @@ function resolve (dir) {
 module.exports = {
   entry: {
     docs: './src/docs.js',
-    ['ljs-tree-table']: './src/lib.js'
+    ['ljsTreeTable']: './src/lib.js'
   },
   output: {
     path: config.build.assetsRoot,

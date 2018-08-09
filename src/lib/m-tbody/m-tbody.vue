@@ -47,13 +47,16 @@ export default {
       console.log('resize')
     },
     renderTbody (h) {
-      return h('tbody', this.renderTr(h, this.nodes, 0))
+      const trs = []
+      this.renderTr(h, this.nodes, trs)
+      return h('tbody', trs)
     },
-    renderTr (h, nodes, key) {
-      const el = []
+    renderTr (h, nodes, trs) {
       if (nodes) {
         nodes.forEach(it => {
-          el.push(h(MTr, {
+          it.index = trs.length
+          this.treeStore.nodes[it.index] = it
+          trs.push(h(MTr, {
             props: {
               columnList: this.columnList,
               node: it,
@@ -61,10 +64,9 @@ export default {
               treeStore: this.treeStore
             }
           }))
-          if (it.expand) this.renderTr(h, it.childs, key++).forEach(childIt => el.push(childIt))
+          if (it.expand) this.renderTr(h, it.childs, trs)
         })
       }
-      return el
     },
     onRightMenuClick ($event) {
       this.$menu.rightMenu(this.table.emptyMenus, $event)
@@ -79,7 +81,6 @@ export default {
   .table-body-warp {
     @include w100;
     position: relative;
-    overflow: hidden;
     background-color: white;
     > table {
       table-layout: fixed;
@@ -91,6 +92,7 @@ export default {
 
   .table-empty {
     align-items: center;
+    @include wh100;
     display: flex;
     cursor: help;
     align-content: center;

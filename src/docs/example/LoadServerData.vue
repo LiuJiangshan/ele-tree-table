@@ -12,9 +12,9 @@
 </template>
 <script>
 /* eslint-disable no-proto */
-import LjsTreeTable from '../../lib/ljs-tree-table/ljs-tree-table'
 import baseService from '../../utils/baseService.js'
 import DataLoader from '../../lib/ljs-tree-table/DataLoader'
+import LjsTreeTable from '../../lib/ljs-tree-table/ljs-tree-table'
 
 const productLineService = baseService('productline.json')
 const productLineLoader = new DataLoader((cb, ctx) => productLineService.search().then(response => response.data.ok ? cb.onLoad(response.data.data) : cb.onError(response.data.msg)).catch(cb.onError).then(cb.onEnd))
@@ -25,7 +25,7 @@ export default {
       treeProps: {
         dataTypeField: 'pojo',
         childCountField: 'kids',
-        customCountField: 'kids1',
+        customCountField: 'kids',
         treeLoader: productLineLoader,
         treeUpdater: productLineLoader,
         isLeaf: node => {
@@ -74,10 +74,10 @@ export default {
             width: 18
           },
           {
-            label: '下级数量',
+            label: '索引',
             width: 50,
             render (h, ctx) {
-              return (<div>{ctx.node.data.kids}</div>)
+              return (<div>{ctx.node.index}</div>)
             }
           },
           {
@@ -131,17 +131,6 @@ export default {
   }
 }
 </script>
-<style lang="scss">
-  .ivu-date-picker {
-    .ivu-date-picker-focused input {
-      border: none;
-    }
-    .ivu-input {
-      height: auto;
-      border: none;
-    }
-  }
-</style>
 <style lang="scss" scoped>
   @import "../../style/vars.scss";
 

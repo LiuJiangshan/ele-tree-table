@@ -10,7 +10,7 @@ var OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 var env = config.lib.env
 
 baseWebpackConfig.entry = {
-  'ljs-tree-table': './src/lib.js'
+  'ljsTreeTable': './src/lib.js'
 }
 
 var webpackConfig = merge(baseWebpackConfig, {

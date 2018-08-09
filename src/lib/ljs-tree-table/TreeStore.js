@@ -3,6 +3,7 @@ export default class TreeStore {
     this.treeLoader = undefined
     this.dataTypeField = undefined
     this.isLeaf = undefined
+    this.nodes = []
     for (let name in opt) if (opt.hasOwnProperty(name)) this[name] = opt[name]
     if (!this.isLeaf) throw new Error('isLeaf can\'t null')
   }
