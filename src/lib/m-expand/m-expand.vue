@@ -1,15 +1,16 @@
 <template>
   <div class="m-expand">
-    <font-awesome-icon v-if="showLoading" class="rotate-animation" :icon="['fas', 'spinner']"/>
-    <font-awesome-icon v-else :icon="icon" @click.stop="handClick"/>
+    <font-awesome-icon :icon="icon" @click.stop="handClick"/>
+    <font-awesome-icon style="margin-left: 5px;margin-right: 5px" v-if="showLoading" class="rotate-animation"
+                       :icon="['fas', 'spinner']"/>
   </div>
 </template>
 <script>
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faMinusSquare, faPlusSquare, faSpinner } from '@fortawesome/free-solid-svg-icons'
+import { faCaretDown, faCaretRight, faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-library.add(faMinusSquare, faPlusSquare, faSpinner)
+library.add(faCaretDown, faCaretRight, faSpinner)
 export default {
   name: 'm-check-expand',
   components: {FontAwesomeIcon},
@@ -30,8 +31,8 @@ export default {
   },
   computed: {
     icon () {
-      if (this.check) return ['fas', 'minus-square']
-      else return ['fas', 'plus-square']
+      if (this.check) return ['fas', 'caret-down']
+      else return ['fas', 'caret-right']
     },
     imageStyle: {get () { return {visibility: (this.show ? 'visible' : 'hidden')} }}
   },

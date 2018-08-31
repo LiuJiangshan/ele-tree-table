@@ -36,10 +36,11 @@ export default {
   name: 'm-tbody',
   computed: {
     warpStyle () {
-      return {
-        paddingTop: `${this.headerHeight}px`,
+      const warpStyle = {
         height: `calc(100%-${this.headerHeight}px)`
       }
+      if (this.table.showHead) warpStyle.paddingTop = `${this.headerHeight}px`
+      return warpStyle
     }
   },
   methods: {

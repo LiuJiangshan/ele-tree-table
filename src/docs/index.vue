@@ -2,6 +2,7 @@
   <div class="body">
     <Menu :router="true" class="ElMenu-demo" mode="horizontal">
       <ElMenuItem index="LoadServerData">异步加载示例</ElMenuItem>
+      <ElMenuItem index="NavTree">NavTree</ElMenuItem>
       <ElMenuItem index="LoadLocalData">简单列表示例</ElMenuItem>
       <ElMenuItem index="autoLine">自动换行示例</ElMenuItem>
       <ElMenuItem index="border">边框示例</ElMenuItem>

@@ -16,6 +16,11 @@ export default new Router({
           component: () => Promise.resolve(require('../example/LoadServerData'))
         },
         {
+          path: 'NavTree',
+          name: 'NavTree',
+          component: () => Promise.resolve(require('../example/NavTree'))
+        },
+        {
           path: 'LoadLocalData',
           name: 'LoadLocalData',
           component: () => Promise.resolve(require('../example/LoadLocalData'))

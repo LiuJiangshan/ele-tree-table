@@ -14,6 +14,7 @@ $text-color: #606266 !default;
 $text-bg-color: white !default;
 $text-color-hover: $theme-color-1 !default;
 $table-head-bg-color: #fafafa !default;
+$tr-height: 28px !default;
 @import "../utils/mixin.scss";
 
 .rotate-animation {

@@ -90,6 +90,12 @@ class TreeNode {
     return this.checkVal
   }
 
+  get childCount () {
+    if (this.isEmpty()) {
+      if (this.store.childCountField) return this.data[this.store.childCountField]
+    } else return this.childs.length
+  }
+
   setParent (parent) {
     this.parent = parent
     this.level = parent.level ? parent.level + 1 : 1

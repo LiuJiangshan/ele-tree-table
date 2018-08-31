@@ -1,6 +1,6 @@
 <!--可编辑组件-->
 <template>
-  <td :class="tdClass" class="m-edit-td" :height="trHeight"
+  <td :class="tdClass" class="m-edit-td"
       @contextmenu.prevent.stop="onRightMenuClick($event)"
       @keyup.up="move(0,-1)" @keyup.down="move(0,1)" @keyup.left="move(-1,0)" @keyup.right="move(1,0)"
       @keyup.enter="handleEnter" @click="handleClick" @dblclick="handleDbClick">
@@ -41,7 +41,6 @@ export default {
   name: 'm-edit-td',
   components: {MTextArea, MRender, MTdHead},
   props: {
-    trHeight: {type: Number},
     index: {type: Number},
     tr: {type: Object},
     table: {type: Object},
@@ -186,7 +185,8 @@ export default {
     },
     handleDbClick () { this.state = States.lock },
     handleClick () {
-      this.focus()
+      if (this.column.allowExpand && this.node.childCount > 0) this.node.expand = !this.node.expand
+      else this.focus()
     },
     blur () {
       this.state = States.normal
@@ -250,6 +250,7 @@ export default {
   @import "../../style/vars.scss";
 
   td {
+    height: $tr-height;
     box-sizing: border-box;
     @include w100;
     font-family: Arial, 微软雅黑, serif;

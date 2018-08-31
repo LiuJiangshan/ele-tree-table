@@ -25,7 +25,7 @@
     "axios": "^0.18.0",
     "dateformat": "^3.0.3",
     "element-ui": "^2.4.3",
-    "iview": "^3.0.0",
+    "iview": "^3.0.1",
     "jquery": "^3.3.1",
     "jquery-ui": "^1.12.1",
     "less": "^3.5.3",

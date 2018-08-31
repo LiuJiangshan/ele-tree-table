@@ -9,7 +9,6 @@
                       :debug="treeProps.debug"/>
     </div>
     <el-switch v-model="treeProps.debug" active-text="打开调试" inactive-text="关闭调试"/>
-    <el-switch v-model="treeProps.showHead" active-text="显示表头" inactive-text="隐藏表头"/>
   </div>
 </template>
 <script>
@@ -26,7 +25,7 @@ export default {
     return {
       treeProps: {
         debug: false,
-        showHead: true,
+        showHead: false,
         dataTypeField: 'pojo',
         childCountField: 'kids',
         customCountField: 'kids',
@@ -71,62 +70,6 @@ export default {
           {
             type: 'expand',
             key: 'name',
-            width: 100
-          },
-          {
-            type: 'selection',
-            key: 'id',
-            width: 18
-          },
-          {
-            label: '索引',
-            width: 50,
-            render (h, ctx) {
-              return (<div>{ctx.node.index}</div>)
-            }
-          },
-          {
-            key: 'id',
-            label: '编号',
-            width: '10%'
-          },
-          {
-            label: '名称',
-            key: 'name',
-            dataType: 'Product|ProductLine',
-            width: 100
-          },
-          {
-            label: '经理',
-            key: 'managerName',
-            width: 100
-          },
-          {
-            dataType: 'Product',
-            label: '产品ID',
-            key: 'id',
-            width: 100
-          },
-          {
-            label: '详情',
-            key: 'info',
-            edit: true,
-            width: 100
-          },
-          {
-            label: '计划发布日期',
-            key: 'planPublish',
-            dataType: 'Product',
-            width: 100,
-            render (h, ctx) {
-              return h('DatePicker')
-            }
-          },
-          {
-            label: '生产厂家',
-            key: 'factory',
-            edit: true,
-            dataType: 'Product',
             width: 100
           }
         ]

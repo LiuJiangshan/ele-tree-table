@@ -10,7 +10,7 @@
     </div>
     <m-tbody :table="thisTable" :header="$refs.header" :width="width" :column-list="columnList" :nodes="rootNode.childs"
              :header-height="headerHeight" :tree-store="treeStore"/>
-    <m-thead :table="thisTable" ref="tableHeader" :column-list="columnList" :root-node="rootNode"/>
+    <m-thead :table="thisTable" ref="tableHeader" :column-list="columnList" :root-node="rootNode" v-if="showHead"/>
   </div>
 </template>
 <script>
@@ -31,6 +31,7 @@ export default {
   directives: {resize, scroll},
   components: {MEditTd, MTableFix, MTbody, MThead, MContextMenu},
   props: {
+    showHead: {type: Boolean, default: true},
     dataTypeField: {type: String},
     treeLoader: {type: DataLoader},
     treeUpdater: {type: DataLoader},
@@ -93,7 +94,7 @@ export default {
   },
   methods: {
     onScroll () {
-      this.$refs.tableHeader.$el.style.transform = `translateY(${this.$el.scrollTop}px)`
+      if (this.showHead) this.$refs.tableHeader.$el.style.transform = `translateY(${this.$el.scrollTop}px)`
     },
     // 获取提交数据
     getSubmitData () {
@@ -159,7 +160,7 @@ export default {
     onReSize () {
       this.width = this.$el.clientWidth
       this.height = this.$el.clientHeight
-      this.headerHeight = this.$refs.tableHeader.$el.clientHeight
+      if (this.showHead) this.headerHeight = this.$refs.tableHeader.$el.clientHeight
     },
     loadRoot () {
       this.treeLoader.load({

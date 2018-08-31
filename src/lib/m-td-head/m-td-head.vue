@@ -3,7 +3,9 @@
   <div v-resize="onReSize" class="m-td-head" ref="mTdHead">
     <template v-if="column.allowExpand">
       <m-deep :value="node.level"/>
-      <m-expand v-if="childCount!==0" v-model="node.expand" :loading="node.loading"/>
+      <m-expand :style="{visibility:node.childCount===0?'hidden':'visible'}" v-model="node.expand"
+                :loading="node.loading"/>
+      <div class="label">{{node.data[column.key]}}</div>
       <div v-if="customCount!==undefined">
         <template v-if="customCount!==0">
           {{`(${customCount})`}}
@@ -40,11 +42,6 @@ export default {
     treeStore: {type: TreeStore}
   },
   computed: {
-    childCount () {
-      if (this.node.isEmpty()) {
-        if (this.treeStore.childCountField) return this.node.data[this.treeStore.childCountField]
-      } else return this.node.childs.length
-    },
     customCount () {
       if (this.treeStore.customCountField) return this.node.data[this.treeStore.customCountField]
     },
@@ -71,17 +68,23 @@ export default {
   @import "../../utils/mixin.scss";
 
   .m-td-head {
-    display: inline-block;
     @include flex_h;
+    flex-wrap: nowrap;
     @include h100;
     align-items: center;
     justify-content: flex-start;
+    > .label {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
   }
 
   .td_head {
+    user-select: none;
     display: flex;
     flex-direction: row;
     align-items: center;
-    align-content: left;
+    align-content: flex-start;
   }
 </style>

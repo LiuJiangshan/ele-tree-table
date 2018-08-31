@@ -3,16 +3,17 @@ import router from './docs/router'
 import App from './docs/App'
 import axios from 'axios'
 import Message from 'iview/src/components/message'
-import 'element-ui/lib/theme-chalk/index.css'
-import 'iview/dist/styles/iview.css'
+import 'iview/src/styles/index.less'
 import './docs/style/common.scss'
 import ljsTreeTable from './lib.js'
 import './style/index.scss'
 import iview from 'iview'
 import 'element-ui/packages/theme-chalk/src/index.scss'
+import elementUi from 'element-ui'
 
 Vue.use(ljsTreeTable)
 Vue.use(iview)
+Vue.use(elementUi)
 Message.config({top: 200})
 
 Vue.prototype.axios = axios
