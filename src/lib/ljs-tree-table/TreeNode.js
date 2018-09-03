@@ -35,8 +35,8 @@ class TreeNode {
   }
 
   set expand (newVal) {
-    this.expandVal = newVal
-    if (!this.childs) this.load()
+    if (newVal && !this.childs) this.load()
+    else this.expandVal = newVal
   }
 
   halfCheck () {

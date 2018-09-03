@@ -32,6 +32,7 @@ export default {
   components: {MEditTd, MTableFix, MTbody, MThead, MContextMenu},
   props: {
     showHead: {type: Boolean, default: true},
+    noBorder: {type: Boolean, default: false},
     dataTypeField: {type: String},
     treeLoader: {type: DataLoader},
     treeUpdater: {type: DataLoader},

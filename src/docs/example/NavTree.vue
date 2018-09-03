@@ -5,10 +5,11 @@
                       :data-type-field="treeProps.dataTypeField" :child-count-field="treeProps.childCountField"
                       :custom-count-field="treeProps.customCountField" :menu-getter="treeProps.menuGetter"
                       :tree-updater="treeProps.treeUpdater" :is-leaf="treeProps.isLeaf" class="tree-style"
-                      :show-head="treeProps.showHead"
+                      :show-head="treeProps.showHead" :show-border="treeProps.noBorder"
                       :debug="treeProps.debug"/>
     </div>
     <el-switch v-model="treeProps.debug" active-text="打开调试" inactive-text="关闭调试"/>
+    <el-switch v-model="treeProps.noBorder" active-text="无边框" inactive-text="有边框"/>
   </div>
 </template>
 <script>
@@ -24,6 +25,7 @@ export default {
   data () {
     return {
       treeProps: {
+        noBorder: true,
         debug: false,
         showHead: false,
         dataTypeField: 'pojo',
@@ -89,5 +91,4 @@ export default {
     width: 1000px;
     height: 500px;
   }
-
 </style>

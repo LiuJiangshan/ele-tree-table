@@ -1,12 +1,7 @@
 @import "./vars.scss";
 
 .m-expand {
-  width: 11px;
-  height: 11px;
-  @include flex_h;
-  align-items: center;
-  justify-content: center;
+  display: inline-block;
   cursor: pointer;
-  margin: 4px;
   color: $theme-color;
 }

@@ -1,8 +1,8 @@
 <template>
   <div class="m-expand">
-    <font-awesome-icon :icon="icon" @click.stop="handClick"/>
-    <font-awesome-icon style="margin-left: 5px;margin-right: 5px" v-if="showLoading" class="rotate-animation"
-                       :icon="['fas', 'spinner']"/>
+    <font-awesome-icon :icon="icon" @click.stop="handClick" style="margin-right: 5px;"/>
+    <font-awesome-icon v-if="loading" style="margin-right: 5px;"
+                       class="rotate-animation" :icon="['fas', 'spinner']"/>
   </div>
 </template>
 <script>
@@ -19,14 +19,11 @@ export default {
     value: {type: Boolean}
   },
   data () {
-    return {check: this.value, showLoading: this.loading}
+    return {check: this.value}
   },
   watch: {
     value (newVal) {
       if (newVal !== this.check) this.check = newVal
-    },
-    loading (newVal) {
-      if (newVal !== this.showLoading) this.showLoading = newVal
     }
   },
   computed: {

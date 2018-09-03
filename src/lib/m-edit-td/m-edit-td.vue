@@ -87,6 +87,8 @@ export default {
             tdClass['lock'] = true
             break
         }
+        if (this.table.noBorder) tdClass['no-border'] = true
+        else tdClass['border'] = true
         return tdClass
       }
     },
@@ -250,11 +252,15 @@ export default {
   @import "../../style/vars.scss";
 
   td {
-    height: $tr-height;
-    box-sizing: border-box;
     @include w100;
+    height: $tr-height;
     font-family: Arial, 微软雅黑, serif;
     font-size: 11px;
+  }
+
+  .border {
+    box-sizing: border-box;
+    border: 1px $border-color solid;
     &.select {
       border: 1px $theme-color-5 solid;
       box-shadow: 0 1px 6px 0 $theme-color-5;
@@ -267,6 +273,19 @@ export default {
 
     :focus {
       border-color: $border-color;
+    }
+  }
+
+  .no-border {
+    box-shadow: none;
+    border: none;
+    &.select {
+    }
+
+    &.lock {
+    }
+
+    :focus {
     }
   }
 
