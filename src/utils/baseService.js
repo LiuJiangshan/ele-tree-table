@@ -1,4 +1,4 @@
-import config from '../config.js'
+import config from './config.js'
 import axios from 'axios'
 
 export default function getService (name) {

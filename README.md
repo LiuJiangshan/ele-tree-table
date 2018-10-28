@@ -1,6 +1,10 @@
+<a href="LICENSE">
+  <img src="https://img.shields.io/badge/License-MIT-yellow.svg">
+</a>
+
 ### 预览
 ![avatar](pre.png)
-[查看Demo演示](https://liujiangshan.github.io/ljs-tree-table/dist/docs/index.html)：(api使用静态数据模拟)
+[查看Demo演示](https://ljs-tree-table.netlify.com)：(api使用静态数据模拟)
 ## 运行此项目:
 ##### 1.[安装yarn](https://yarnpkg.com/zh-Hans/docs/install)
 ##### 2.克隆项目

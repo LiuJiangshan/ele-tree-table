@@ -1,9 +1,8 @@
 require('./check-versions')()
 
+process.env.NODE_ENV = 'dev'
+
 var config = require('../config')
-if (!process.env.NODE_ENV) {
-  process.env.NODE_ENV = JSON.parse(config.dev.env.NODE_ENV)
-}
 
 var opn = require('opn')
 var path = require('path')
@@ -13,12 +12,13 @@ var proxyMiddleware = require('http-proxy-middleware')
 var webpackConfig = require('./webpack.dev.conf')
 
 // default port where dev server listens for incoming traffic
-var port = process.env.PORT || config.dev.port
+const port = process.env.PORT || config[process.env.NODE_ENV].port
+const host  =process.env.HOST || config[process.env.NODE_ENV].host
 // automatically open browser, if not set will be false
-var autoOpenBrowser = !!config.dev.autoOpenBrowser
+var autoOpenBrowser = !!config[process.env.NODE_ENV].autoOpenBrowser
 // Define HTTP proxies to your custom API backend
 // https://github.com/chimurai/http-proxy-middleware
-var proxyTable = config.dev.proxyTable
+var proxyTable = config[process.env.NODE_ENV].proxyTable
 
 var app = express()
 var compiler = webpack(webpackConfig)
@@ -29,7 +29,8 @@ var devMiddleware = require('webpack-dev-middleware')(compiler, {
 })
 
 var hotMiddleware = require('webpack-hot-middleware')(compiler, {
-  log: () => {},
+  log: () => {
+  },
   heartbeat: 2000
 })
 // force page reload when html-webpack-plugin template changes
@@ -60,10 +61,10 @@ app.use(devMiddleware)
 app.use(hotMiddleware)
 
 // serve pure static assets
-var staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory)
+var staticPath = path.posix.join(config[process.env.NODE_ENV].assetsPublicPath, config[process.env.NODE_ENV].assetsSubDirectory)
 app.use(staticPath, express.static('./static'))
 
-var uri = 'http://localhost:' + port
+var uri = `http://${host}:${port}`
 
 var _resolve
 var readyPromise = new Promise(resolve => {

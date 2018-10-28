@@ -9,15 +9,13 @@ function resolve (dir) {
 
 module.exports = {
   entry: {
-    docs: './src/docs.js',
-    ['ljsTreeTable']: './src/lib.js'
+    example: './examples/index.js',
+    ljsTreeTable: './src/index.js'
   },
   output: {
-    path: config.build.assetsRoot,
+    path: config[process.env.NODE_ENV].assetsRoot,
     filename: '[name].js',
-    publicPath: process.env.NODE_ENV === 'production'
-      ? config.build.assetsPublicPath
-      : config.dev.assetsPublicPath
+    publicPath: config[process.env.NODE_ENV].assetsPublicPath
   },
   resolve: {
     extensions: ['.js', '.vue', '.json'],
