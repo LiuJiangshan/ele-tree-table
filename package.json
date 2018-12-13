@@ -1,9 +1,26 @@
 {
   "name": "ljs-tree-table",
-  "version": "0.0.1",
-  "description": "A Vue.js project",
-  "author": "ljs",
-  "main": "dist/lib/ljs-tree-table.min.js",
+  "version": "0.0.1-beta-1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LiuJiangshan/ljs-tree-table.git"
+  },
+  "author": {
+    "name": "liujiangshan",
+    "email": "ljs234@qq.com"
+  },
+  "keywords": [
+    "treetable",
+    "table",
+    "vue",
+    "js",
+    "javascript",
+    "html",
+    "ts",
+    "typescript"
+  ],
+  "description": "treetable by vue",
+  "main": "src/lib.js",
   "private": false,
   "license": "MIT",
   "scripts": {
