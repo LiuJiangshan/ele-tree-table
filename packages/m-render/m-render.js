@@ -1,7 +1,7 @@
 export default {
   name: 'm-render',
   props: {
-    ctx: {type: Object},
+    ctx: { type: Object },
     render: {
       type: Function,
       default: undefined

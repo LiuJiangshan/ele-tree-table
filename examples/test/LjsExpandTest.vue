@@ -19,7 +19,7 @@ export default {
     }
   },
   data () {
-    return {expand: true, show: true}
+    return { expand: true, show: true }
   }
 }
 </script>

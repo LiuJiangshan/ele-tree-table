@@ -15,6 +15,6 @@ library.add(faCaretDown, faCaretRight, faSpinner)
 
 export default {
   name: 'mExpandTest',
-  components: {MExpand, FontAwesomeIcon}
+  components: { MExpand, FontAwesomeIcon }
 }
 </script>

@@ -22,16 +22,16 @@ import TreeStore from '../ljs-tree-table/TreeStore'
 import resize from 'vue-resize-directive'
 
 export default {
-  components: {MRender, MTr},
-  directives: {resize},
+  components: { MRender, MTr },
+  directives: { resize },
   props: {
-    table: {type: Object},
-    nodes: {type: Array},
-    fix: {type: Boolean},
-    header: {type: Object},
-    columnList: {type: ColumnList},
-    treeStore: {type: TreeStore},
-    headerHeight: {type: Number}
+    table: { type: Object },
+    nodes: { type: Array },
+    fix: { type: Boolean },
+    header: { type: Object },
+    columnList: { type: ColumnList },
+    treeStore: { type: TreeStore },
+    headerHeight: { type: Number }
   },
   name: 'm-tbody',
   computed: {

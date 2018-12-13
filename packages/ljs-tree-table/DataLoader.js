@@ -3,7 +3,7 @@ export default class DataLoader {
     this.load = load
   }
 
-  load (cb = {onLoad (data) {}, onError (e) {}, onEnd () {}}, ctx) {
+  load (cb = { onLoad (data) {}, onError (e) {}, onEnd () {} }, ctx) {
 
   }
 }

@@ -15,13 +15,13 @@ import TreeStore from '../ljs-tree-table/TreeStore'
 
 export default {
   name: 'm-tr',
-  components: {MEditTd},
+  components: { MEditTd },
   props: {
-    index: {type: Number},
-    node: {type: TreeNode},
-    columnList: {type: ColumnList},
-    table: {type: Object},
-    treeStore: {type: TreeStore}
+    index: { type: Number },
+    node: { type: TreeNode },
+    columnList: { type: ColumnList },
+    table: { type: Object },
+    treeStore: { type: TreeStore }
   },
   methods: {
     getThis () {

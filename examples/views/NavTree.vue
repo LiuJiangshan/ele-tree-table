@@ -14,14 +14,14 @@
 </template>
 <script>
 /* eslint-disable no-proto */
-import baseService from '../../src/utils/baseService.js'
+import BaseService from 'js-utils/src/base-service'
 import DataLoader from '../../packages/ljs-tree-table/DataLoader'
 import LjsTreeTable from '../../packages/ljs-tree-table/ljs-tree-table'
 
-const productLineService = baseService('productline.json')
+const productLineService = new BaseService({ name: 'productline.json' })
 const productLineLoader = new DataLoader((cb, ctx) => productLineService.search().then(response => response.data.ok ? cb.onLoad(response.data.data) : cb.onError(response.data.msg)).catch(cb.onError).then(cb.onEnd))
 export default {
-  components: {LjsTreeTable},
+  components: { LjsTreeTable },
   data () {
     return {
       treeProps: {

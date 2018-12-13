@@ -62,17 +62,47 @@ Vue.use(ljsTreeTable)
 ...
 </style>
 ```
-## 编译组件
+## 安装依赖
 ```bash
-npm run build
+npm install
+# OR
+yarn install
 ```
-## 编译并启动代码分析
+## 运行
 ```bash
-npm run build:lib --report
+npm run dev
+# OR
+yarn run dev
 ```
-## 编译该项目示例
+## 编译examples
 ```bash
-npm run build:docs
+npm run build:example
+# OR
+yarn run build:example
+```
+## 编译ljs-tree-table
+```bash
+npm run build:table
+# OR
+yarn run build:table
+```
+## 单元测试(mocha)
+```bash
+npm run test:unit
+# OR
+yarn run test:unit
+```
+## 单元测试(karma)
+```bash
+npm run test:karma
+# OR
+yarn run test:karma
+```
+## e2e测试
+```bash
+npm run test:e2e
+# OR
+yarn run test:e2e
 ```
 ## 其他
 依赖jquery、jquery-ui(仅在焦点控制时用到)

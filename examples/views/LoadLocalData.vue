@@ -14,7 +14,7 @@ import LjsTreeTable from '../../packages/ljs-tree-table/ljs-tree-table.vue'
 
 export default {
   name: 'LoadLocalData',
-  components: {LjsTreeTable},
+  components: { LjsTreeTable },
   data () {
     return {
       border: true,
@@ -41,7 +41,7 @@ export default {
                 transfer: true,
                 value: ctx.data[ctx.column.key]
               }
-            }, [h('option', {props: {value: '男'}}, '男'), h('Option', {props: {value: '女'}}, '女')])
+            }, [h('option', { props: { value: '男' } }, '男'), h('Option', { props: { value: '女' } }, '女')])
             return re
           }
         },
@@ -53,7 +53,7 @@ export default {
           key: 'birthday',
           label: '生日',
           render (h, ctx) {
-            return h('input', {attrs: {type: 'date', value: ctx.data.birthday}})
+            return h('input', { attrs: { type: 'date', value: ctx.data.birthday } })
           }
         },
         {

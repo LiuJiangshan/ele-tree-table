@@ -25,11 +25,11 @@ import TreeNode from '../ljs-tree-table/TreeNode'
 
 export default {
   name: 'm-thead',
-  components: {MTh, LjsCheckBox},
+  components: { MTh, LjsCheckBox },
   props: {
-    rootNode: {type: TreeNode},
-    table: {type: Object},
-    columnList: {type: ColumnList}
+    rootNode: { type: TreeNode },
+    table: { type: Object },
+    columnList: { type: ColumnList }
   },
   data () {
     return {

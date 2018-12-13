@@ -36,17 +36,17 @@ import TreeNode from '../ljs-tree-table/TreeNode.js'
 import Column from '../ljs-tree-table/Column'
 import TreeStore from '../ljs-tree-table/TreeStore'
 
-let States = {normal: 0, select: 1, lock: 2}
+let States = { normal: 0, select: 1, lock: 2 }
 export default {
   name: 'm-edit-td',
-  components: {MTextArea, MRender, MTdHead},
+  components: { MTextArea, MRender, MTdHead },
   props: {
-    index: {type: Number},
-    tr: {type: Object},
-    table: {type: Object},
-    node: {type: TreeNode},
-    column: {type: Column},
-    treeStore: {type: TreeStore}
+    index: { type: Number },
+    tr: { type: Object },
+    table: { type: Object },
+    node: { type: TreeNode },
+    column: { type: Column },
+    treeStore: { type: TreeStore }
   },
   watch: {
     state () {
@@ -67,16 +67,16 @@ export default {
     },
     data () { return this.node.data },
     canSelection () { return this.column.type && this.column.type.indexOf('selection') !== -1 },
-    debug: {get () { return this.table.debug }},
-    driver: {get () { return this.table.driver }},
+    debug: { get () { return this.table.debug } },
+    driver: { get () { return this.table.driver } },
     // 单元格x坐标
-    x: {get () { return this.index }},
+    x: { get () { return this.index } },
     // 单元格y坐标
-    y: {get () { return this.tr.index }},
+    y: { get () { return this.tr.index } },
     // 单元格边框样式
     tdClass: {
       get () {
-        let tdClass = {'select': false, 'lock': false}
+        let tdClass = { 'select': false, 'lock': false }
         switch (this.state) {
           case States.normal:
             break
@@ -93,7 +93,7 @@ export default {
       }
     },
     // 当前焦点单元格
-    focusTd: {get () { return this.table.focusTd }},
+    focusTd: { get () { return this.table.focusTd } },
     // 当前单元格所在列是否与该行数据类型匹配
     match () {
       return this.column.matchNode(this.node)
@@ -139,7 +139,7 @@ export default {
       }
     },
     onRightMenuClick ($event) {
-      const menuItems = this.table.menuGetter({node: this.node, column: this.column})
+      const menuItems = this.table.menuGetter({ node: this.node, column: this.column })
       if (menuItems) this.$menu.rightMenu(menuItems, $event)
     },
     handleInput () {
@@ -175,7 +175,7 @@ export default {
       } else if (!this.match) {
         // console.log(this.data.pojo + '没有' + this.column.key + '(' + this.column.label + ')字段,未更新')
       } else if (this.treeUpdater) {
-        this.treeUpdater.load({onLoad (data) {}, onError (e) {}, onEnd () {}}, {node: this.node, column: this.column})
+        this.treeUpdater.load({ onLoad (data) {}, onError (e) {}, onEnd () {} }, { node: this.node, column: this.column })
       }
       this.input = false
     },

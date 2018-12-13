@@ -28,18 +28,18 @@ import TreeStore from './TreeStore.js'
 
 export default {
   name: 'ljs-tree-table',
-  directives: {resize, scroll},
-  components: {MEditTd, MTableFix, MTbody, MThead, MContextMenu},
+  directives: { resize, scroll },
+  components: { MEditTd, MTableFix, MTbody, MThead, MContextMenu },
   props: {
-    showHead: {type: Boolean, default: true},
-    noBorder: {type: Boolean, default: false},
-    dataTypeField: {type: String},
-    treeLoader: {type: DataLoader},
-    treeUpdater: {type: DataLoader},
-    menuGetter: {type: Function},
-    isLeaf: {type: Function},
-    childCountField: {type: String},
-    customCountField: {type: String},
+    showHead: { type: Boolean, default: true },
+    noBorder: { type: Boolean, default: false },
+    dataTypeField: { type: String },
+    treeLoader: { type: DataLoader },
+    treeUpdater: { type: DataLoader },
+    menuGetter: { type: Function },
+    isLeaf: { type: Function },
+    childCountField: { type: String },
+    customCountField: { type: String },
     // 子节点数据驱动
     driver: {
       type: Object,
@@ -76,7 +76,7 @@ export default {
   },
   data () {
     const store = new TreeStore(this.$props)
-    const rootNode = new TreeNode({store, expand: true})
+    const rootNode = new TreeNode({ store, expand: true })
     return {
       width: 0,
       height: 0,
@@ -89,7 +89,7 @@ export default {
       // 当前焦点单元格vue对象
       focusTd: undefined,
       canMove: true,
-      submitTypes: {add: 'add', remove: 'remove', update: 'update'},
+      submitTypes: { add: 'add', remove: 'remove', update: 'update' },
       scrollTop: 0
     }
   },
@@ -114,7 +114,7 @@ export default {
       if (!node.childs) {
         this.treeLoader.load({
           onLoad (data) {
-            data.forEach(it => TreeNode.Builder({data: it, parent: node, dataType: it[this.dataTypeField]}))
+            data.forEach(it => TreeNode.Builder({ data: it, parent: node, dataType: it[this.dataTypeField] }))
           },
           onError () {},
           onEnd: () => { }
@@ -167,7 +167,7 @@ export default {
       this.treeLoader.load({
         onLoad: data => {
           this.rootNode.childs = []
-          data.forEach(it => TreeNode.Builder({data: it, parent: this.rootNode, dataType: it[this.dataTypeField]}))
+          data.forEach(it => TreeNode.Builder({ data: it, parent: this.rootNode, dataType: it[this.dataTypeField] }))
         },
         onError (e) {},
         onEnd () {}

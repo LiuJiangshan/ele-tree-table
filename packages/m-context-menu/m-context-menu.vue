@@ -11,12 +11,12 @@ import { removeMenu } from './menu.js'
 export default {
   name: 'm-context-menu',
   props: {
-    x: {type: Number, default: 0},
-    y: {type: Number, default: 0},
+    x: { type: Number, default: 0 },
+    y: { type: Number, default: 0 },
     items: {
       type: Array,
       default () {
-        return [{label: '选项为空', click: () => {}}]
+        return [{ label: '选项为空', click: () => {} }]
       }
     }
   },

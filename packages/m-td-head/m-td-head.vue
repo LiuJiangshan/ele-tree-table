@@ -33,13 +33,13 @@ import TreeStore from '../ljs-tree-table/TreeStore'
 
 export default {
   name: 'm-td-head',
-  components: {MCheckBox, MExpand, MDeep},
-  directives: {resize},
+  components: { MCheckBox, MExpand, MDeep },
+  directives: { resize },
   props: {
-    td: {type: Object},
-    node: {type: TreeNode},
-    column: {type: Column},
-    treeStore: {type: TreeStore}
+    td: { type: Object },
+    node: { type: TreeNode },
+    column: { type: Column },
+    treeStore: { type: TreeStore }
   },
   computed: {
     customCount () {
@@ -47,7 +47,7 @@ export default {
     },
     canExpand () { return this.column.type && this.column.type.indexOf('expand') !== -1 },
     canSelection () { return this.column.type && this.column.type.indexOf('selection') !== -1 },
-    table: {get () { return this.td.tr.table }},
+    table: { get () { return this.td.tr.table } },
     data () { return this.node.data }
   },
   methods: {
@@ -56,7 +56,7 @@ export default {
     }
   },
   data () {
-    return {width: 0, expand: false}
+    return { width: 0, expand: false }
   },
   mounted () {
     this.onReSize()

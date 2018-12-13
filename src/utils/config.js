@@ -8,5 +8,5 @@ const getFileUrl = function (staticFile) {
   else if (staticFile.hash) url = `${url}hash=${staticFile.hash}`
   return url
 }
-const config = {contextPath, apiUrl, getFileUrl}
+const config = { contextPath, apiUrl, getFileUrl }
 export default config

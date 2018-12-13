@@ -1,20 +1,22 @@
 import Vue from 'vue'
 import router from './router/index'
-import App from './App'
+import app from './app'
 import axios from 'axios'
 import Message from 'iview/src/components/message'
 import ljsTreeTable from '../src/index.js'
 import '../packages/default-theme/index.scss'
-
+// import vuetify from './vuetify.js'
+import vuetify from 'vuetify'
+import 'vuetify/dist/vuetify.min.css'
+import 'material-design-icons-iconfont/dist/material-design-icons.css'
+import 'element-ui/lib/theme-chalk/index.css'
+Vue.use(vuetify)
 Vue.use(ljsTreeTable)
-Message.config({top: 200})
+Message.config({ top: 200 })
 
 Vue.prototype.axios = axios
 axios.defaults.headers['Client-Type'] = 'web'
-// static api
-window.contentPath = './plm'
-// window.contentPath = '/plm'
-window.apiUrl = window.contentPath + '/api'
+window.apiUrl = '/api'
 axios.interceptors.response.use(response => {
   if (response.data.ok) {
     Message.success(response.data.msg)
@@ -31,10 +33,7 @@ axios.interceptors.response.use(response => {
       return Promise.reject(error)
   }
 })
-
-window.app = new Vue({
-  el: '#app',
+new Vue({
   router,
-  template: '<App/>',
-  components: {App}
-})
+  render: h => h(app)
+}).$mount('#app')

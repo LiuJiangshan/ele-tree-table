@@ -9,7 +9,7 @@ import LjsTextArea from '../../packages/m-text-area/m-text-area.vue'
 
 export default {
   name: 'LjsTextAreaTest',
-  components: {LjsTextArea},
+  components: { LjsTextArea },
   data () { return {} }
 }
 </script>

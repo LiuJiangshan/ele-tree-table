@@ -10,7 +10,7 @@ export default {
   name: 'm-table-fix',
   props: {
     /** 对齐方式分别为:left、right */
-    fixType: {type: String}
+    fixType: { type: String }
   }
 }
 </script>

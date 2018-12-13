@@ -13,13 +13,13 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 library.add(faCaretDown, faCaretRight, faSpinner)
 export default {
   name: 'm-check-expand',
-  components: {FontAwesomeIcon},
+  components: { FontAwesomeIcon },
   props: {
-    loading: {type: Boolean, default: false},
-    value: {type: Boolean}
+    loading: { type: Boolean, default: false },
+    value: { type: Boolean }
   },
   data () {
-    return {check: this.value}
+    return { check: this.value }
   },
   watch: {
     value (newVal) {
@@ -31,7 +31,7 @@ export default {
       if (this.check) return ['fas', 'caret-down']
       else return ['fas', 'caret-right']
     },
-    imageStyle: {get () { return {visibility: (this.show ? 'visible' : 'hidden')} }}
+    imageStyle: { get () { return { visibility: (this.show ? 'visible' : 'hidden') } } }
   },
   methods: {
     handClick () {

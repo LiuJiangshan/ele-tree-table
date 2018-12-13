@@ -8,7 +8,7 @@
 export default {
   name: 'm-deep',
   props: {
-    value: {type: Number}
+    value: { type: Number }
   },
   computed: {
     deepWidth: {
@@ -16,7 +16,7 @@ export default {
     },
     deepStyle: {
       get () {
-        return {width: this.deepWidth + 'px'}
+        return { width: this.deepWidth + 'px' }
       }
     }
   }

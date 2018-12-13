@@ -15,16 +15,16 @@ import TreeNode from '../ljs-tree-table/TreeNode'
 
 export default {
   name: 'm-th',
-  components: {MCheckBox},
+  components: { MCheckBox },
   props: {
-    table: {type: Object},
-    column: {type: Column},
-    rootNode: {type: TreeNode}
+    table: { type: Object },
+    column: { type: Column },
+    rootNode: { type: TreeNode }
   },
   computed: {},
   methods: {},
   data () {
-    return {checkAll: false}
+    return { checkAll: false }
   }
 }
 </script>

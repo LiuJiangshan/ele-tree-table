@@ -13,7 +13,7 @@ import LjsTreeTable from '../../packages/ljs-tree-table/ljs-tree-table.vue'
 import axios from 'axios'
 
 export default {
-  components: {LjsTreeTable},
+  components: { LjsTreeTable },
   data () {
     return {
       debug: false,
@@ -27,7 +27,7 @@ export default {
             window.app.axios({
               method: 'GET',
               url: window.apiUrl + '/productline',
-              params: {superId: node.id, onePageShow: 10000}
+              params: { superId: node.id, onePageShow: 10000 }
             })
               .then(function (response) {
                 let datas = response.data.data
@@ -41,7 +41,7 @@ export default {
             axios({
               method: 'GET',
               url: window.apiUrl + '/product',
-              params: {productLineId: node.id, onePageShow: 10000}
+              params: { productLineId: node.id, onePageShow: 10000 }
             }).then(function (response) {
               let datas = response.data.data
               if (datas instanceof Array) datas.map(function (val) { node.nodes.push(val) })
@@ -55,7 +55,7 @@ export default {
             this.axios({
               method: 'GET',
               url: window.apiUrl + '/product',
-              params: {superId: node.id, onePageShow: 10000}
+              params: { superId: node.id, onePageShow: 10000 }
             })
               .then(function (response) {
                 let datas = response.data.data
@@ -70,7 +70,7 @@ export default {
         // 更新器
         updater: {
           ProductLine (data, column) {
-            let params = {id: data.id}
+            let params = { id: data.id }
             params[column.key] = data[column.key]
             this.axios({
               method: 'put',
@@ -86,7 +86,7 @@ export default {
               })
           },
           Product (data, column) {
-            let params = {id: data.id}
+            let params = { id: data.id }
             params[column.key] = data[column.key]
             this.axios({
               method: 'put',
@@ -326,7 +326,7 @@ export default {
           type: 'Product',
           width: 100,
           render (h, ctx) {
-            return h('DatePicker', {props: {value: ctx.data[ctx.column.key]}})
+            return h('DatePicker', { props: { value: ctx.data[ctx.column.key] } })
           }
         },
         {
@@ -353,7 +353,7 @@ export default {
       this.axios({
         method: 'GET',
         url: window.apiUrl + '/productline',
-        params: {superId: -1, onePageShow: 10000}
+        params: { superId: -1, onePageShow: 10000 }
       }).then(cb)
         .catch(function (error) {
           console.log(error)

@@ -20,9 +20,9 @@ import LjsInput from '../../packages/m-input/m-input.vue'
 
 export default {
   name: 'LjsInputTest',
-  components: {LjsInput},
+  components: { LjsInput },
   data () {
-    return {value: '123'}
+    return { value: '123' }
   }
 }
 </script>

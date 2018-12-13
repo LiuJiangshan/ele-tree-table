@@ -13,7 +13,7 @@ mContentMenu.rightMenu = function (items, $event) {
   mContentMenu.removeMenu()
   const vueInstance = new Vue({
     render (h) {
-      return h(mContentMenu, {props: {x: x, y: y, items: items}})
+      return h(mContentMenu, { props: { x: x, y: y, items: items } })
     }
   })
   window.nowMenu = vueInstance.$mount()

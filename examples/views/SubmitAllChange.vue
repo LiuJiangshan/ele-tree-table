@@ -11,7 +11,7 @@ import LjsTreeTable from '../../packages/ljs-tree-table/ljs-tree-table.vue'
 
 export default {
   name: 'submitAllChange',
-  components: {LjsTreeTable},
+  components: { LjsTreeTable },
   methods: {
     showChange () {
       let submitDatas = this.$refs.treetable.getSubmitData()

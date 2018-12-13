@@ -11,7 +11,7 @@
 <script>
 export default {
   name: 'm-input',
-  props: {value: {default: ''}},
+  props: { value: { default: '' } },
   computed: {
     textareaStyle: {
       get () {

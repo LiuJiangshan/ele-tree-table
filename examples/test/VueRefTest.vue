@@ -9,7 +9,7 @@ import Render from '../../packages/m-render/m-render.js'
 
 export default {
   name: 'VueRefTest',
-  components: {Render},
+  components: { Render },
   methods: {
     renderClick () {
       console.log('renderClick')

@@ -14,12 +14,12 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 library.add(faCheckSquare, faSquare, faMinusSquare)
 export default {
   name: 'm-check-box',
-  components: {FontAwesomeIcon},
+  components: { FontAwesomeIcon },
   props: {
-    value: {type: Boolean}
+    value: { type: Boolean }
   },
   data () {
-    return {check: this.value}
+    return { check: this.value }
   },
   watch: {
     value (newVal) {
@@ -32,7 +32,7 @@ export default {
       else if (this.check === false) return ['far', 'square']
       else return ['fas', 'minus-square']
     },
-    imageStyle: {get () { return {visibility: (this.show ? 'visible' : 'hidden')} }}
+    imageStyle: { get () { return { visibility: (this.show ? 'visible' : 'hidden') } } }
   },
   methods: {
     handClick () {

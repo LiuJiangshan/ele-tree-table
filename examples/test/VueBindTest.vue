@@ -13,7 +13,7 @@ import VueItem from './VueItem.vue'
 
 export default {
   name: 'VueBindTest',
-  components: {VueCheckBox, VueItem},
+  components: { VueCheckBox, VueItem },
   data () {
     return {
       selectAll: false,
@@ -30,8 +30,8 @@ export default {
     }
   },
   created () {
-    for (let i = 0; i < 100; i++) this.datas.push({check: false})
-    for (let i = 0; i < 2; i++) this.columns.push({index: i})
+    for (let i = 0; i < 100; i++) this.datas.push({ check: false })
+    for (let i = 0; i < 2; i++) this.columns.push({ index: i })
   }
 }
 </script>

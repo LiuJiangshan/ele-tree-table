@@ -9,9 +9,9 @@ import MCheckBox from '../../packages/m-check-box/m-check-box'
 
 export default {
   name: 'test',
-  components: {MCheckBox},
+  components: { MCheckBox },
   data () {
-    return {columns: []}
+    return { columns: [] }
   }
 }
 </script>
