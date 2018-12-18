@@ -1,7 +1,9 @@
-export interface Column {
+export class Column {
   prop?: string
   label?: string
+  minWidth?: number
   width?: number
+  realWidth?: number
 }
 
 export interface TreeNodeProps {
