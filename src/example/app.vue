@@ -1,6 +1,6 @@
 <template>
   <div class="app">
-    <ljs-tree-table :columns="columns" :data="data"/>
+    <ljs-tree-table class="m-tree-table" :columns="columns" :data="data"/>
     <el-table :data="data">
       <el-table-column v-for="(column,key) in columns" :key="key" v-bind="column"/>
     </el-table>
@@ -42,6 +42,10 @@ export default class App extends Vue {
   .app {
     @include wh100;
     overflow-y: scroll;
+
+    .m-tree-table {
+      overflow: auto;
+    }
   }
 </style>
 <style lang="scss">
