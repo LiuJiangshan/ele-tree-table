@@ -1,6 +1,7 @@
 <template>
-  <div class="ljs-tree-table" ref="tableRef">
-    <table border="0" cellpadding="0" cellspacing="0" class="table-header" v-bind="tableHeadProp">
+  <div class="ljs-tree-table" ref="tableWrapRef">
+    <table :style="tableHeadStyle" ref="tableHeadRef" border="0" cellpadding="0" cellspacing="0" class="table-header"
+           v-bind="tableHeadProp">
       <ColGroup :columns="columns"/>
       <tr>
         <th v-for="(column,tdKey) in columns" :key="tdKey">
@@ -8,7 +9,8 @@
         </th>
       </tr>
     </table>
-    <table border="0" cellpadding="0" cellspacing="0" class="table-body" v-bind="tableBodyProp">
+    <table :style="tableBodyStyle" ref="tableBodyRef" border="0" cellpadding="0" cellspacing="0" class="table-body"
+           v-bind="tableBodyProp">
       <ColGroup :columns="columns"/>
       <tr v-for="(itData,trKey) in data" :key="trKey">
         <td v-for="(column,tdKey) in columns" :key="tdKey">
@@ -21,8 +23,7 @@
 <script lang="tsx">
 import { Component, Prop, Vue } from 'vue-property-decorator'
 import { Column } from '@/package/treeNode'
-import TableStore, { TableStoreProps } from '@/package/tableStore'
-import TableLayout from '@/package/tableLayout'
+import TableStore from '@/package/tableStore'
 import Render from '@/package/render'
 import ColGroup from '@/package/colGroup.vue'
 
@@ -33,6 +34,19 @@ import ColGroup from '@/package/colGroup.vue'
     data: { type: Array },
     tableBodyProp: { type: Object },
     tableHeadProp: { type: Object }
+  },
+  computed: {
+    tableWidthStyle () {
+      const style = {} as CSSStyleDeclaration
+      style.width = this.tableStore.width ? `${this.tableStore.width}px` : 'inherit'
+      return style
+    },
+    tableHeadStyle () {
+      return this.tableWidthStyle
+    },
+    tableBodyStyle () {
+      return this.tableWidthStyle
+    }
   }
 })
 
@@ -46,20 +60,19 @@ export default class LjsTreeTable extends Vue {
   @Prop()
   private tableHeadProp!: any
   private tableStore!: TableStore
-  private tableLayout!: TableLayout
 
-  mounted () {
+  created () {
     this.tableStore = new TableStore({
       columns: this.columns,
-      data: this.data,
-      tableRef: this.$refs.tableRef as Element
-    } as TableStoreProps) as TableStore
-    this.tableLayout = new TableLayout({ store: this.tableStore }) as TableLayout
-    this.tableLayout.mounted()
+      data: this.data
+    })
   }
 
-  destroy () {
-    this.tableLayout.destroy()
+  mounted () {
+    const { tableStore, $refs } = this
+    tableStore.setTableWrapRef($refs.tableWrapRef as HTMLElement)
+    tableStore.setTableHeadRef($refs.tableHeadRef as HTMLElement)
+    tableStore.setTableBodyRef($refs.tableBodyRef as HTMLElement)
   }
 }
 
@@ -69,6 +82,7 @@ export default class LjsTreeTable extends Vue {
     font-size: 14px;
     line-height: 23px;
     width: 100%;
+    overflow: auto;
 
     td, th {
       padding: 12px 0;

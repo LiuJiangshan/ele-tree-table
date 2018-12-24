@@ -1,7 +1,6 @@
-export class Column {
+export interface Column {
   prop?: string
   label?: string
-  minWidth?: number
   width?: number
   realWidth?: number
 }
@@ -17,15 +16,15 @@ export default class TreeNode {
   private props: TreeNodeProps
   public childs = new Array<TreeNode>()
 
-  constructor (props: TreeNodeProps) {
+  constructor(props: TreeNodeProps) {
     this.props = props
   }
 
-  public isRoot (): boolean {
+  public isRoot(): boolean {
     return !this.props.parent
   }
 
-  public isLeaf (): boolean {
+  public isLeaf(): boolean {
     return !this.childs
   }
 }

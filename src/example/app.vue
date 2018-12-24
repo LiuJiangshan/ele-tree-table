@@ -20,16 +20,17 @@ export default class App extends Vue {
     {
       prop: 'id',
       label: '编号',
-      width: 90
+      width: 200
     },
     {
       prop: 'name',
       label: '姓名',
-      width: 90
+      width: 200
     },
     {
       prop: 'job',
-      label: '职位'
+      label: '职位',
+      width: 200
     }] as Array<Column>
   data = [1, 2, 3, 4, 5].map(index => {
     return { id: index, name: `name${index}`, job: `job${index}` }

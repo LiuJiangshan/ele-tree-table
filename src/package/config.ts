@@ -1,3 +1,3 @@
 export default class Config {
-  public static minColumnWidth = 80
+  public static deafultColumnWidth = 80
 }
