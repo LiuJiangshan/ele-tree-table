@@ -1,5 +1,6 @@
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Prop, Vue } from 'vue-property-decorator'
 import { VNode } from 'vue'
+import { Tsx } from '@/package/treeNode'
 
 @Component({
   components: {},
@@ -9,8 +10,10 @@ import { VNode } from 'vue'
   }
 })
 export default class Render extends Vue {
+  @Prop()
   private context: any
-  private tsx!: (h: any, context: any) => VNode
+  @Prop()
+  private tsx!: Tsx
 
   render (h: any): VNode {
     return this.tsx(h, this.context)

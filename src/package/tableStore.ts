@@ -1,5 +1,5 @@
-import {Column} from '@/package/treeNode'
-import config from "@/package/config";
+import { Column } from '@/package/treeNode'
+import config from '@/package/config'
 
 export interface TableStoreProps {
   columns: Array<Column>
@@ -14,7 +14,7 @@ export default class TableStore {
   tableHeadRef?: HTMLElement
   tableBodyRef?: HTMLElement
 
-  constructor(props: TableStoreProps) {
+  constructor (props: TableStoreProps) {
     this.columns = props.columns
     this.data = props.data
 
@@ -31,15 +31,15 @@ export default class TableStore {
     })
   }
 
-  public setTableHeadRef(tableHeadRef: HTMLElement) {
+  public setTableHeadRef (tableHeadRef: HTMLElement) {
     this.tableHeadRef = tableHeadRef
   }
 
-  public setTableBodyRef(tableBodyRef: HTMLElement) {
+  public setTableBodyRef (tableBodyRef: HTMLElement) {
     this.tableBodyRef = tableBodyRef
   }
 
-  public setTableWrapRef(tableWrapRef: HTMLElement) {
+  public setTableWrapRef (tableWrapRef: HTMLElement) {
     this.tableWrapRef = tableWrapRef
   }
 }

@@ -1,8 +1,13 @@
+import { CreateElement, VNode } from 'vue'
+
+export type Tsx = (h: CreateElement, context: any) => VNode
+
 export interface Column {
   prop?: string
   label?: string
   width?: number
   realWidth?: number
+  render?: Tsx
 }
 
 export interface TreeNodeProps {
@@ -16,15 +21,15 @@ export default class TreeNode {
   private props: TreeNodeProps
   public childs = new Array<TreeNode>()
 
-  constructor(props: TreeNodeProps) {
+  constructor (props: TreeNodeProps) {
     this.props = props
   }
 
-  public isRoot(): boolean {
+  public isRoot (): boolean {
     return !this.props.parent
   }
 
-  public isLeaf(): boolean {
+  public isLeaf (): boolean {
     return !this.childs
   }
 }

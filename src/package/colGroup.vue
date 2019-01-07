@@ -10,7 +10,7 @@ import { Column } from '@/package/treeNode'
 import Config from '@/package/config'
 
 @Component({
-  components: { },
+  components: {},
   props: { columns: { type: Array } }
 })
 export default class ColGroup extends Vue {

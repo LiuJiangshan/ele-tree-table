@@ -14,7 +14,10 @@
       <ColGroup :columns="columns"/>
       <tr v-for="(itData,trKey) in data" :key="trKey">
         <td v-for="(column,tdKey) in columns" :key="tdKey">
-          <div class="cell">{{itData[column.prop]}}</div>
+          <div class="cell">
+            <Render v-if="column.render"  :tsx="column.render" :context="{ column,data:itData }"/>
+            <template v-else>{{itData[column.prop]}}</template>
+          </div>
         </td>
       </tr>
     </table>
@@ -38,13 +41,13 @@ import { Column } from '@/package/treeNode'
 })
 export default class LjsTreeTable extends Vue {
   private tableStore!: TableStore
-  @Prop({ default: [] })
+  @Prop({ default: () => [] })
   columns!: Array<Column>
-  @Prop({ default: [] })
+  @Prop({ default: () => [] })
   data!: Array<any>
-  @Prop({ default: {} })
+  @Prop({ default: () => {} })
   tableBodyProp!: object
-  @Prop({ default: {} })
+  @Prop({ default: () => {} })
   tableHeadProp!: object
 
   get tableWidthStyle () {
@@ -62,7 +65,6 @@ export default class LjsTreeTable extends Vue {
   }
 
   created () {
-    console.log(this)
     this.tableStore = new TableStore({
       columns: this.columns,
       data: this.data

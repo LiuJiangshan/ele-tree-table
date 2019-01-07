@@ -7,7 +7,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="tsx">
 import { Component, Vue } from 'vue-property-decorator'
 import LjsTreeTable from '@/package/ljsTreeTable.vue'
 import { Column } from '@/package/treeNode'
@@ -30,7 +30,10 @@ export default class App extends Vue {
     {
       prop: 'job',
       label: '职位',
-      width: 200
+      width: 200,
+      render: (h, ctx) => {
+        return <div>hello</div>
+      }
     }] as Array<Column>
   data = [1, 2, 3, 4, 5].map(index => {
     return { id: index, name: `name${index}`, job: `job${index}` }
