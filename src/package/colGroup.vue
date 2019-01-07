@@ -10,19 +10,17 @@ import { Column } from '@/package/treeNode'
 import Config from '@/package/config'
 
 @Component({
-  components: {},
-  props: {
-    columns: { type: Array }
-  }
+  components: { },
+  props: { columns: { type: Array } }
 })
 export default class ColGroup extends Vue {
   @Prop()
   private columns!: Array<Column>
-  public minColumnWidth = Config.minColumnWidth
+  public deafultColumnWidth = Config.deafultColumnWidth
 
   private getWidth (column: Column) {
-    const { minColumnWidth } = this
-    return column.realWidth || column.width || minColumnWidth
+    const { deafultColumnWidth } = this
+    return column.realWidth || column.width || deafultColumnWidth
   }
 }
 

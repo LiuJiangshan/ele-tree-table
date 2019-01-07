@@ -22,10 +22,10 @@
 </template>
 <script lang="tsx">
 import { Component, Prop, Vue } from 'vue-property-decorator'
-import { Column } from '@/package/treeNode'
 import TableStore from '@/package/tableStore'
 import Render from '@/package/render'
 import ColGroup from '@/package/colGroup.vue'
+import { Column } from '@/package/treeNode'
 
 @Component({
   components: { ColGroup, Render },
@@ -34,34 +34,35 @@ import ColGroup from '@/package/colGroup.vue'
     data: { type: Array },
     tableBodyProp: { type: Object },
     tableHeadProp: { type: Object }
-  },
-  computed: {
-    tableWidthStyle () {
-      const style = {} as CSSStyleDeclaration
-      style.width = this.tableStore.width ? `${this.tableStore.width}px` : 'inherit'
-      return style
-    },
-    tableHeadStyle () {
-      return this.tableWidthStyle
-    },
-    tableBodyStyle () {
-      return this.tableWidthStyle
-    }
   }
 })
-
 export default class LjsTreeTable extends Vue {
-  @Prop()
-  private columns!: Array<Column>
-  @Prop()
-  private data!: Array<any>
-  @Prop()
-  private tableBodyProp!: any
-  @Prop()
-  private tableHeadProp!: any
   private tableStore!: TableStore
+  @Prop({ default: [] })
+  columns!: Array<Column>
+  @Prop({ default: [] })
+  data!: Array<any>
+  @Prop({ default: {} })
+  tableBodyProp!: object
+  @Prop({ default: {} })
+  tableHeadProp!: object
+
+  get tableWidthStyle () {
+    const style = {} as CSSStyleDeclaration
+    style.width = this.tableStore.width ? `${this.tableStore.width}px` : 'inherit'
+    return style
+  }
+
+  get tableHeadStyle () {
+    return this.tableWidthStyle
+  }
+
+  get tableBodyStyle () {
+    return this.tableWidthStyle
+  }
 
   created () {
+    console.log(this)
     this.tableStore = new TableStore({
       columns: this.columns,
       data: this.data
