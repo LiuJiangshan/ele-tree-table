@@ -15,7 +15,7 @@
       <tr v-for="(itData,trKey) in data" :key="trKey">
         <td v-for="(column,tdKey) in columns" :key="tdKey">
           <div class="cell">
-            <Render v-if="column.render"  :tsx="column.render" :context="{ column,data:itData }"/>
+            <Render v-if="column.render" :tsx="column.render" :context="{ column,data:itData }"/>
             <template v-else>{{itData[column.prop]}}</template>
           </div>
         </td>
@@ -83,48 +83,40 @@ export default class LjsTreeTable extends Vue {
 <style lang="scss" scoped>
   .ljs-tree-table {
     font-size: 14px;
-    line-height: 23px;
     width: 100%;
     overflow: auto;
 
+    table {
+      border-collapse: collapse;
+    }
+
     td, th {
-      padding: 12px 0;
+      border: 1px solid rgb(212, 212, 212);
+      line-height: 30px;
+      vertical-align: middle;
+      text-align: left;
     }
 
     .cell {
-      padding-left: 10px;
-      padding-right: 10px;
       word-wrap: normal;
       white-space: normal;
-      word-break: break-all;
+      word-break: keep-all;
     }
 
     > .table-header {
       width: 100%;
-      border-collapse: separate;
-      border-spacing: 2px;
 
       th {
-        font-weight: bold;
-        color: #909399;
-        border: none;
-        border-bottom: 1px solid rgb(235, 238, 245);
-        text-align: left;
-        vertical-align: middle;
+        color: #3e3e3e;
+        background: #f2f2f2;
       }
     }
 
     > .table-body {
       width: 100%;
-      border-collapse: separate;
-      border-spacing: 2px;
 
       td {
-        color: #606266;
-        border: none;
-        vertical-align: middle;
-        border-bottom: 1px solid rgb(235, 238, 245);
-        text-align: left;
+        color: #686868;
       }
     }
   }
