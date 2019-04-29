@@ -1,5 +1,5 @@
 <template>
-  <div class="app">
+  <div class="home">
     <el-menu mode="horizontal" router :default-active="activeItem" @select="onMenuSelect"
              background-color="#545c64"
              text-color="#fff"
@@ -30,7 +30,7 @@ export default class App extends Vue {
 <style lang="scss" scoped>
   @import "~ljs-sass/src/mixin";
 
-  .app {
+  .home {
     @include wh100;
     overflow: hidden;
   }

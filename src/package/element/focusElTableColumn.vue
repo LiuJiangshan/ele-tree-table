@@ -23,16 +23,19 @@ export default class FocusElTableColumn extends Vue {
     const { columnConfig, table, states } = this
     const renderCell = columnConfig.renderCell
     // hook cell render
-    columnConfig.renderCell = (h: CreateElement, data: any) => {
-      const cell = renderCell(h, data)
-      return h(CellWrap, {
-        on: {
-          currentFocus (rowIndex: number) {
-            const { data } = states
-            table.setCurrentRow(data[rowIndex])
+    const { fixed } = this.$props
+    if (!fixed) {
+      columnConfig.renderCell = (h: CreateElement, data: any) => {
+        const cell = renderCell(h, data)
+        return h(CellWrap, {
+          on: {
+            currentFocus (rowIndex: number) {
+              const { data } = states
+              table.setCurrentRow(data[rowIndex])
+            }
           }
-        }
-      }, [cell])
+        }, [cell])
+      }
     }
   }
 }
