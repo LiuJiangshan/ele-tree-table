@@ -7,7 +7,7 @@
   },
   "scripts": {
     "example": "vue-cli-service serve src/example/index.ts",
-    "build": "vue-cli-service build",
+    "build:example": "vue-cli-service build --report src/example/index.ts",
     "lint": "vue-cli-service lint",
     "test:unit": "vue-cli-service test:unit"
   },
@@ -50,6 +50,7 @@
     "@vue/test-utils": "^1.0.0-beta.20",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
+    "babel-plugin-component": "^1.1.1",
     "eslint": "^5.8.0",
     "eslint-plugin-vue": "^5.0.0-0",
     "node-sass": "^4.9.0",

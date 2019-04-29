@@ -1,0 +1,13 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: node:11
+    steps:
+      - checkout
+      - run:
+          name: 安装依赖
+          command: yarn
+      - run:
+          name: 生产环境模式编译
+          command: npm run build:example
