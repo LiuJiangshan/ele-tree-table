@@ -2,7 +2,7 @@
 import { Component, Vue } from 'vue-property-decorator'
 import { Table, TableColumn } from 'element-ui'
 import { CreateElement } from 'vue'
-import CellWrap from '@/package/cellWrap.vue'
+import CellWrap from '@/package/element/cellWrap.vue'
 
 @Component({ mixins: [TableColumn] })
 export default class FocusElTableColumn extends Vue {

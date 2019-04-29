@@ -57,7 +57,7 @@ export default class Simple extends Vue {
 
   constructor () {
     super()
-    for (let index = 0; index < 50; index++) {
+    for (let index = 0; index < 30; index++) {
       this.data.push({
         id: index,
         name: `name${index}`,

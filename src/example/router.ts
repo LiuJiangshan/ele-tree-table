@@ -1,21 +1,28 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Simple from '@/example/view/simple.vue'
+import Home from '@/example/view/home.vue'
 import BaseElement from '@/example/view/baseElement.vue'
+import Simple from '@/example/view/simple.vue'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
     {
-      path: '/simple',
-      name: 'simple',
-      component: Simple
-    },
-    {
-      path: '/base-element',
-      name: 'baseElement',
-      component: BaseElement
+      path: '/',
+      name: '/',
+      component: Home,
+      children: [
+        {
+          path: '/base-element',
+          name: 'baseElement',
+          component: BaseElement
+        },
+        {
+          path: '/simple',
+          name: 'simple',
+          component: Simple
+        }]
     }
   ]
 })

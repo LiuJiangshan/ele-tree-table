@@ -19,7 +19,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import FocusElTableColumn from '@/package/focusElTableColumn.vue'
+import FocusElTableColumn from '@/package/element/focusElTableColumn.vue'
 
 @Component({
   components: { FocusElTableColumn }
@@ -29,7 +29,7 @@ export default class BaseElement extends Vue {
 
   constructor () {
     super()
-    for (let index = 0; index < 50; index++) {
+    for (let index = 0; index < 30; index++) {
       this.data.push({
         id: index,
         name: `name${index}`,
