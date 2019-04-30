@@ -3,10 +3,12 @@
     <table>
       <tr>
         <td>
+          <div class="edit"></div>
         </td>
       </tr>
       <tr>
         <td>
+          <div class="edit"></div>
         </td>
       </tr>
     </table>
@@ -26,5 +28,8 @@ export default class AutoSizeTest extends Vue {
 
   .auto-size-test {
     @include wh100;
+
+    .edit {
+    }
   }
 </style>
