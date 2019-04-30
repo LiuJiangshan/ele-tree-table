@@ -1,7 +1,9 @@
 <template>
-  <div v-if="edit" class="focus-border text-edit" contenteditable="true" @keydown="handKeyDown" @blur="handEditBlur"
+  <div ref="edit" v-if="edit" class="focus-border text-edit" contenteditable="true" @keydown="handKeyDown"
+       @blur="handEditBlur"
        @focus="handEditFocus" @input="handEditInput"></div>
-  <div v-else class="focus-border cell-wrap" contenteditable="false" tabindex="0" @focus="handPreViewFocus"
+  <div ref="preview" v-else class="focus-border cell-wrap" contenteditable="false" tabindex="0"
+       @focus="handPreViewFocus"
        @blur="handPreViewBlur"
        @dblclick="handPreViewDbClick" @keydown="handKeyDown">
     <slot/>
@@ -20,18 +22,27 @@ export default class CellWrap extends Vue {
     if (!edit) {
       const { td, el } = this
       el.style.width = `${td.clientWidth}px`
-      el.style.minHeight = `${td.clientHeight}px`
     }
   }
 
+  get editRef () {
+    return this.$refs.edit
+  }
+
+  get previewRef () {
+    return this.$refs.preview
+  }
+
   mounted () {
-    const { td, cell, edit } = this
-    if (!edit) {
+    const { td, cell, cells, edit, previewRef } = this
+    if (previewRef) {
       td.style.paddingTop = '0'
       td.style.paddingBottom = '0'
 
       cell.style.paddingLeft = '0'
       cell.style.paddingRight = '0'
+
+      cell.style.height = '100%'
     }
   }
 
@@ -58,12 +69,20 @@ export default class CellWrap extends Vue {
     return this.$el as HTMLElement
   }
 
+  get tds () {
+    return this.tr.childNodes as unknown as Array<HTMLElement>
+  }
+
   get td () {
     return this.$el.parentNode as HTMLElement
   }
 
   get cell () {
     return this.td.childNodes[0] as HTMLElement
+  }
+
+  get cells () {
+    return this.tds.map(td => td.childNodes[0] as HTMLElement)
   }
 
   get tr () {
@@ -159,25 +178,26 @@ export default class CellWrap extends Vue {
 
   .focus-border {
     outline: none;
-    border: #0000 1px solid;
     resize: none;
     box-sizing: border-box;
+    vertical-align: middle;
+    display: table-cell;
+    line-height: 35px;
+    min-height: 35px;
+    @include wh100;
 
     &:focus {
-      border: #42fa35 1px solid;
+      outline: #42fa35 1px solid;
+      outline-offset: -1px;
     }
   }
 
   .cell-wrap {
     padding-left: 10px;
     padding-right: 10px;
-    @include wh100;
-    display: flex;
-    align-items: center;
   }
 
   .text-edit {
-    @include wh100;
     padding: 0;
     overflow: hidden;
     word-break: break-all;
