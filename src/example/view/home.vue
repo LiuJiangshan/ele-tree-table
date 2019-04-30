@@ -5,6 +5,7 @@
              text-color="#fff"
              active-text-color="#ffd04b">
       <el-menu-item index="/base-element">基于Element</el-menu-item>
+      <el-menu-item index="/autosize-test">autosize-test</el-menu-item>
       <el-menu-item index="/simple">简单展示</el-menu-item>
     </el-menu>
     <router-view/>
@@ -12,7 +13,7 @@
 </template>
 
 <script lang="tsx">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue, Watch } from 'vue-property-decorator'
 import LjsTreeTable from '@/package/ljsTreeTable.vue'
 
 @Component({
@@ -24,6 +25,18 @@ export default class App extends Vue {
   onMenuSelect (index: any) {
     this.activeItem = index
     this.$router.push(index)
+  }
+
+  @Watch('activeItem')
+  watchActiveItem (newVal: any) {
+    this.$router.push(newVal)
+  }
+
+  mounted () {
+    this.activeItem = this.$route.path
+    if (!this.activeItem || this.activeItem === '/') {
+      this.activeItem = '/base-element'
+    }
   }
 }
 </script>
