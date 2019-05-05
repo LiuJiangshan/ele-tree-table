@@ -1,5 +1,13 @@
 <template>
-  <table>
+  <table style="width: 100px;">
+    <colgroup>
+      <col width="50"/>
+      <col width="50"/>
+    </colgroup>
+    <tr>
+      <th>1</th>
+      <th>1</th>
+    </tr>
     <tr>
       <td>
         <div contenteditable="true">
@@ -8,7 +16,7 @@
       </td>
       <td>
         <div contenteditable="true">
-          <div>ABCDEFG</div>
+          <div>ABCDEFGABCDEFGABCDEFGABCDEFGABCDEFGABCDEFGABCDEFGABCDEFGABCDEFG</div>
         </div>
       </td>
     </tr>
@@ -44,12 +52,16 @@ export default class AutoSizeTest extends Vue {
     td {
       border: 1px deeppink solid;
 
-      div {
+      > div {
+        @include wh100;
+        position: relative;
+
         &:focus {
           outline: 1px green solid;
         }
 
-        div {
+        > div {
+          @include wh100;
           padding-top: 12px;
           padding-bottom: 12px;
         }

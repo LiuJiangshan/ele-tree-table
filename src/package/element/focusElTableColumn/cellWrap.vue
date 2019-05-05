@@ -6,8 +6,7 @@
     </div>
     <div ref="preview" v-show="!edit" class="preview focus-border" contenteditable="false" tabindex="0"
          @focus="handPreViewFocus"
-         @blur="handPreViewBlur"
-         @dblclick="handPreViewDbClick" @keydown="handKeyDown">
+         @blur="handPreViewBlur" @keydown="handKeyDown">
       <slot/>
     </div>
   </div>
@@ -38,8 +37,19 @@ export default class CellWrap extends Vue {
     return this.$refs.preview as HTMLElement
   }
 
+  setTdFocusStyle () {
+    const { td } = this
+    td.style.outline = '#42fa35 1px solid'
+    td.style.outlineOffset = '-1px'
+  }
+
+  setTdBlurStyle () {
+    const { td } = this
+    td.style.outline = 'none'
+  }
+
   mounted () {
-    const { td, cell, previewRef } = this
+    const { td, cell, previewRef, handTdDbClick } = this
     if (previewRef) {
       td.style.paddingTop = '0'
       td.style.paddingBottom = '0'
@@ -49,6 +59,7 @@ export default class CellWrap extends Vue {
 
       cell.style.height = '100%'
     }
+    td.addEventListener('dblclick', handTdDbClick)
   }
 
   //
@@ -136,20 +147,24 @@ export default class CellWrap extends Vue {
 
   handPreViewFocus () {
     this.$emit('currentFocus', this.y)
+    this.setTdFocusStyle()
   }
 
   handPreViewBlur () {
+    this.setTdBlurStyle()
   }
 
-  handPreViewDbClick () {
+  handTdDbClick () {
     const { editable } = this.$props
     if (editable) this.edit = true
   }
 
   handEditFocus () {
+    this.setTdFocusStyle()
   }
 
   handEditBlur () {
+    this.setTdBlurStyle()
     this.edit = false
     const { data } = this.$props
     const { row, column: { property } } = data
@@ -174,19 +189,7 @@ export default class CellWrap extends Vue {
       @include wh100;
       line-height: 35px;
       min-height: 35px;
-    }
-  }
-
-  .focus-border {
-    outline: none;
-    resize: none;
-    box-sizing: border-box;
-    vertical-align: middle;
-    @include wh100;
-
-    &:focus {
-      outline: #42fa35 1px solid;
-      outline-offset: -1px;
+      outline: none;
     }
   }
 
