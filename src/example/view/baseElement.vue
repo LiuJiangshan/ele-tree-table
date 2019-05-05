@@ -1,17 +1,17 @@
 <template>
   <el-table :indent="5" size="mini" highlight-current-row lazy :load='load' :data="data" max-height="500"
-            style="width:100%;" border row-key="id">
-    <focus-el-table-column width="250" fixed="left"/>
+            style="width:100%;" border row-key="id" @textChange="handTextChange">
+    <focus-el-table-column width="250"/>
     <focus-el-table-column type="selection" width="50"/>
-    <focus-el-table-column type="编号" prop="id" width="100"/>
-    <focus-el-table-column label="品牌" prop="logo" width="200"/>
-    <focus-el-table-column label="商品名称" prop="name" width="200"/>
-    <focus-el-table-column label="规格型号" prop="type" width="200"/>
-    <focus-el-table-column label="物料编码" prop="number1" width="200"/>
-    <focus-el-table-column label="物料编码" prop="number2" width="200"/>
-    <focus-el-table-column label="物料编码" prop="number3" width="200"/>
-    <focus-el-table-column label="物料编码" prop="number4" width="200"/>
-    <focus-el-table-column label="物料编码" prop="number5" width="200"/>
+    <focus-el-table-column label="编号" prop="id" width="200"/>
+    <focus-el-table-column label="品牌" prop="logo" width="200" editable/>
+    <focus-el-table-column label="商品名称" prop="name" width="200" editable/>
+    <focus-el-table-column label="规格型号" prop="type" width="200" editable/>
+    <focus-el-table-column label="物料编码" prop="number1" width="200" editable/>
+    <focus-el-table-column label="物料编码" prop="number2" width="200" editable/>
+    <focus-el-table-column label="物料编码" prop="number3" width="200" editable/>
+    <focus-el-table-column label="物料编码" prop="number4" width="200" editable/>
+    <focus-el-table-column label="物料编码" prop="number5" width="200" editable/>
   </el-table>
 </template>
 
@@ -41,6 +41,10 @@ export default class BaseElement extends Vue {
         hasChildren: true
       })
     }
+  }
+
+  handTextChange ({ row, column: { property } }: any, newText: string) {
+    row[property] = newText
   }
 
   load (tree: any, treeNode: any, resolve: any) {

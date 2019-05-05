@@ -4,7 +4,13 @@ import { Table, TableColumn } from 'element-ui'
 import { CreateElement } from 'vue'
 import CellWrap from '@/package/element/focusElTableColumn/cellWrap.vue'
 
-@Component({ mixins: [TableColumn] })
+/**
+ * 事件:textChange
+ * */
+@Component({
+  mixins: [TableColumn],
+  props: { editable: { type: Boolean } }
+})
 export default class FocusElTableColumn extends Vue {
   get store () {
     return (this as any).owner.store
@@ -23,12 +29,14 @@ export default class FocusElTableColumn extends Vue {
     const { columnConfig, table, states } = this
     const renderCell = columnConfig.renderCell
     // hook cell render
-    const { fixed } = this.$props
+    const { fixed, editable } = this.$props
     if (!fixed) {
       columnConfig.renderCell = (h: CreateElement, data: any) => {
         const cell = renderCell(h, data)
         return h(CellWrap, {
+          props: { editable, data },
           on: {
+            textChange: table.$listeners.textChange,
             currentFocus (rowIndex: number) {
               const { data } = states
               table.setCurrentRow(data[rowIndex])

@@ -1,18 +1,30 @@
 <template>
-  <div class="auto-size-test">
-    <table>
-      <tr>
-        <td>
-          <div class="edit"></div>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <div class="edit"></div>
-        </td>
-      </tr>
-    </table>
-  </div>
+  <table>
+    <tr>
+      <td>
+        <div contenteditable="true">
+          <div>ABCDEFG</div>
+        </div>
+      </td>
+      <td>
+        <div contenteditable="true">
+          <div>ABCDEFG</div>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <div contenteditable="true">
+          <div>ABCDEFG</div>
+        </div>
+      </td>
+      <td>
+        <div contenteditable="true">
+          <div>ABCDEFG</div>
+        </div>
+      </td>
+    </tr>
+  </table>
 </template>
 
 <script lang="ts">
@@ -26,10 +38,22 @@ export default class AutoSizeTest extends Vue {
 <style lang="scss" scoped>
   @import "~ljs-sass/src/mixin";
 
-  .auto-size-test {
-    @include wh100;
+  table {
+    border-collapse: collapse;
 
-    .edit {
+    td {
+      border: 1px deeppink solid;
+
+      div {
+        &:focus {
+          outline: 1px green solid;
+        }
+
+        div {
+          padding-top: 12px;
+          padding-bottom: 12px;
+        }
+      }
     }
   }
 </style>
