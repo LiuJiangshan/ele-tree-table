@@ -49,7 +49,7 @@ export default class CellWrap extends Vue {
   }
 
   mounted () {
-    const { td, cell, previewRef, handTdDbClick } = this
+    const { td, cell, previewRef, handTdDbClick, handTdClick } = this
     if (previewRef) {
       td.style.paddingTop = '0'
       td.style.paddingBottom = '0'
@@ -60,6 +60,7 @@ export default class CellWrap extends Vue {
       cell.style.height = '100%'
     }
     td.addEventListener('dblclick', handTdDbClick)
+    td.addEventListener('click', handTdClick)
   }
 
   //
@@ -157,6 +158,11 @@ export default class CellWrap extends Vue {
   handTdDbClick () {
     const { editable } = this.$props
     if (editable) this.edit = true
+  }
+
+  handTdClick () {
+    const { edit, previewRef } = this
+    if (!edit) previewRef.focus()
   }
 
   handEditFocus () {
