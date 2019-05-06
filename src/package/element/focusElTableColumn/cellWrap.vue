@@ -160,7 +160,12 @@ export default class CellWrap extends Vue {
   }
 
   handEditFocus () {
-    this.setTdFocusStyle()
+    const { setTdFocusStyle, editRef } = this
+    setTdFocusStyle()
+    // 光标移至最后
+    const range = window.getSelection()
+    range.selectAllChildren(editRef)
+    range.collapseToEnd()
   }
 
   handEditBlur () {
@@ -183,23 +188,23 @@ export default class CellWrap extends Vue {
   @import "~ljs-sass/src/mixin";
 
   .cell-wrap {
-    @include wh100;
 
     > div {
-      @include wh100;
-      line-height: 35px;
-      min-height: 35px;
+      line-height: 23px;
+      min-height: 23px;
       outline: none;
+      word-break: break-all;
+      overflow: hidden;
+      width: auto;
+      height: auto;
     }
   }
 
   .preview {
-    padding: 6px 10px;
+    padding: 6px 0;
   }
 
   .text-edit {
-    padding: 0;
-    overflow: hidden;
-    word-break: break-all;
+    padding: 6px 10px;
   }
 </style>
