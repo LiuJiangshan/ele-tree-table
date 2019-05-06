@@ -1,7 +1,7 @@
 <template>
   <el-table :indent="5" size="mini" highlight-current-row lazy :load='load' :data="data" max-height="500"
             style="width:100%;" border row-key="id" @textChange="handTextChange">
-    <focus-el-table-column width="250"/>
+    <focus-el-table-column width="250" fixed="left"/>
     <focus-el-table-column type="selection" width="50"/>
     <focus-el-table-column label="编号" prop="id" width="200"/>
     <focus-el-table-column label="品牌" prop="logo" width="200" editable/>

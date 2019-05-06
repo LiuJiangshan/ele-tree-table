@@ -146,7 +146,7 @@ export default class CellWrap extends Vue {
   }
 
   handPreViewFocus () {
-    this.$emit('currentFocus', this.y)
+    this.$emit('currentFocus')
     this.setTdFocusStyle()
   }
 
