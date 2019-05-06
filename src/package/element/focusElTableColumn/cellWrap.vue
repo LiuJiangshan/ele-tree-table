@@ -2,7 +2,7 @@
   <div class="cell-wrap">
     <div ref="edit" v-show="edit" class="text-edit focus-border" contenteditable="true" @keydown="handKeyDown"
          @blur="handEditBlur"
-         @focus="handEditFocus" @input="handEditInput">{{cellText}}
+         @focus="handEditFocus" @input="handEditInput" v-text="cellText">
     </div>
     <div ref="preview" v-show="!edit" class="preview focus-border" contenteditable="false" tabindex="0"
          @focus="handPreViewFocus"
@@ -19,14 +19,11 @@ import { Component, Vue } from 'vue-property-decorator'
 export default class CellWrap extends Vue {
   edit = false
 
+  cellText = ''
+
   updated () {
     const { edit, editRef } = this
     if (edit) editRef.focus()
-  }
-
-  get cellText () {
-    const { data: { row, column: { property } } } = this.$props
-    return row[property]
   }
 
   get editRef () {
@@ -61,6 +58,9 @@ export default class CellWrap extends Vue {
     }
     td.addEventListener('dblclick', handTdDbClick)
     td.addEventListener('click', handTdClick)
+    // 初始化单元格文本
+    const { data: { row, column: { property } } } = this.$props
+    this.cellText = row[property]
   }
 
   //
@@ -117,9 +117,7 @@ export default class CellWrap extends Vue {
       const targetTr = tBody.childNodes[y]
       const targetTd = targetTr.childNodes[x]
       const targetPreviewCell = targetTd.childNodes[0].childNodes[1] as HTMLElement
-      console.log(targetPreviewCell.className)
       if (targetPreviewCell.className.includes('preview')) {
-        console.log('可焦点')
         targetPreviewCell.focus()
         return true
       }
@@ -134,7 +132,8 @@ export default class CellWrap extends Vue {
   }
 
   handKeyDown (e: any) {
-    const { move } = this
+    const { move, $props } = this
+    const { editable } = $props
     const { key } = e
     let moved = false
     switch (key) {
@@ -150,6 +149,15 @@ export default class CellWrap extends Vue {
       case 'ArrowRight':
         moved = move(1, 0)
         break
+      case 'Enter':
+        moved = move(0, 1)
+        e.preventDefault()
+        break
+    }
+    // 开始字符输入
+    if (key.length === 1 && editable && !this.edit) {
+      this.edit = true
+      this.cellText = key
     }
     if (moved) e.view.event.preventDefault()
   }
@@ -193,6 +201,7 @@ export default class CellWrap extends Vue {
 
   handEditInput (e: any) {
     const { data } = e
+    if (!data) {}
   }
 }
 
