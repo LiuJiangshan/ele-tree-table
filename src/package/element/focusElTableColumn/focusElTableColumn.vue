@@ -36,7 +36,7 @@ export default class FocusElTableColumn extends Vue {
         return h(CellWrap, {
           props: { editable, data },
           on: {
-            textChange: table.$listeners.textChange,
+            textChange: table.$listeners.textChange || table.$listeners['text-change'],
             currentFocus () {
               const { row } = data
               table.setCurrentRow(row)

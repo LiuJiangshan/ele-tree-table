@@ -116,34 +116,42 @@ export default class CellWrap extends Vue {
     try {
       const targetTr = tBody.childNodes[y]
       const targetTd = targetTr.childNodes[x]
-      const targetCell = targetTd.childNodes[0].childNodes[1] as HTMLElement
-      targetCell.focus()
+      const targetPreviewCell = targetTd.childNodes[0].childNodes[1] as HTMLElement
+      console.log(targetPreviewCell.className)
+      if (targetPreviewCell.className.includes('preview')) {
+        console.log('可焦点')
+        targetPreviewCell.focus()
+        return true
+      }
     } catch (e) {
     }
+    return false
   }
 
   move (moveX: number, moveY: number) {
     const { x, y } = this
-    this.moveTo(x + moveX, y + moveY)
+    return this.moveTo(x + moveX, y + moveY)
   }
 
   handKeyDown (e: any) {
     const { move } = this
     const { key } = e
+    let moved = false
     switch (key) {
       case 'ArrowUp':
-        move(0, -1)
+        moved = move(0, -1)
         break
       case 'ArrowDown':
-        move(0, 1)
+        moved = move(0, 1)
         break
       case 'ArrowLeft':
-        move(-1, 0)
+        moved = move(-1, 0)
         break
       case 'ArrowRight':
-        move(1, 0)
+        moved = move(1, 0)
         break
     }
+    if (moved) e.view.event.preventDefault()
   }
 
   handPreViewFocus () {

@@ -1,6 +1,6 @@
 <template>
   <el-table :indent="5" size="mini" highlight-current-row lazy :load='load' :data="data" max-height="500"
-            style="width:100%;" border row-key="id" @textChange="handTextChange">
+            style="width:100%;" border row-key="id" @text-change="handTextChange">
     <focus-el-table-column width="250" fixed="left"/>
     <focus-el-table-column type="selection" width="50"/>
     <focus-el-table-column label="编号" prop="id" width="200"/>
