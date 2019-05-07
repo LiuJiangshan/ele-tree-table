@@ -1,12 +1,12 @@
 <template>
   <div class="cell-wrap">
-    <div ref="edit" v-show="edit" class="text-edit focus-border" contenteditable="true" @keydown="handKeyDown"
+    <div ref="edit" v-show="edit" class="text-edit focus-border" contenteditable="true" @keydown="handEditKeyDown"
          @blur="handEditBlur"
          @focus="handEditFocus" @input="handEditInput" v-text="cellText">
     </div>
-    <div ref="preview" v-show="!edit" class="preview focus-border" contenteditable="false" tabindex="0"
+    <div ref="preview" v-show="!edit" class="preview focus-border" contenteditable="true" tabindex="0"
          @focus="handPreViewFocus"
-         @blur="handPreViewBlur" @keydown="handKeyDown">
+         @blur="handPreViewBlur" @keydown="handPreviewKeyDown">
       <slot/>
     </div>
   </div>
@@ -131,9 +131,8 @@ export default class CellWrap extends Vue {
     return this.moveTo(x + moveX, y + moveY)
   }
 
-  handKeyDown (e: any) {
-    const { move, $props } = this
-    const { editable } = $props
+  handMove (e: any) {
+    const { move } = this
     const { key } = e
     let moved = false
     switch (key) {
@@ -151,15 +150,33 @@ export default class CellWrap extends Vue {
         break
       case 'Enter':
         moved = move(0, 1)
-        e.preventDefault()
         break
     }
+    if (moved) e.view.event.preventDefault()
+    return moved
+  }
+
+  handCharInput (e: any) {
+    const { $props } = this
+    const { editable, data } = $props
+    const { key } = e
     // 开始字符输入
     if (key.length === 1 && editable && !this.edit) {
+      // this.$emit('textChange', data, key)
+      // this.previewRef.innerText = ''
       this.edit = true
-      this.cellText = key
+      this.editRef.innerText = ''
     }
-    if (moved) e.view.event.preventDefault()
+  }
+
+  handPreviewKeyDown (e: any) {
+    const { handMove, handCharInput } = this
+    handMove(e) || handCharInput(e)
+  }
+
+  handEditKeyDown (e: any) {
+    const { handMove } = this
+    handMove(e)
   }
 
   handPreViewFocus () {
