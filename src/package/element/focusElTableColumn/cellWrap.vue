@@ -1,12 +1,12 @@
 <template>
   <div class="cell-wrap">
-    <div ref="edit" v-show="edit" class="text-edit focus-border" contenteditable="true" @keydown="handEditKeyDown"
-         @blur="handEditBlur"
+    <div v-if="editable" ref="focus" class="text-edit focus-border" contenteditable="true" @keydown="handEditKeyDown"
+         @blur="handEditBlur" :style="editStyle"
          @focus="handEditFocus" @input="handEditInput" v-text="cellText">
     </div>
-    <div ref="preview" v-show="!edit" class="preview focus-border" contenteditable="true" tabindex="0"
-         @focus="handPreViewFocus"
-         @blur="handPreViewBlur" @keydown="handPreviewKeyDown">
+    <div v-else ref="focus" class="no-edit focus-border" contenteditable="false" tabindex="0"
+         @focus="handNoEditFocus"
+         @blur="handNoEditBlur" @keydown="handNoEditKeyDown">
       <slot/>
     </div>
   </div>
@@ -22,16 +22,12 @@ export default class CellWrap extends Vue {
   cellText = ''
 
   updated () {
-    const { edit, editRef } = this
-    if (edit) editRef.focus()
+    const { edit, focusRef } = this
+    if (edit) focusRef.focus()
   }
 
-  get editRef () {
-    return this.$refs.edit as HTMLElement
-  }
-
-  get previewRef () {
-    return this.$refs.preview as HTMLElement
+  get focusRef () {
+    return this.$refs.focus as HTMLElement
   }
 
   setTdFocusStyle () {
@@ -45,9 +41,14 @@ export default class CellWrap extends Vue {
     td.style.outline = 'none'
   }
 
+  get editStyle () {
+    const { edit } = this
+    return edit ? { color: '#000' } : { color: 'transparent', textShadow: '0 0 0 #000' }
+  }
+
   mounted () {
-    const { td, cell, previewRef, handTdDbClick, handTdClick } = this
-    if (previewRef) {
+    const { td, cell, focusRef, handTdDbClick, handTdClick } = this
+    if (focusRef) {
       td.style.paddingTop = '0'
       td.style.paddingBottom = '0'
 
@@ -116,8 +117,8 @@ export default class CellWrap extends Vue {
     try {
       const targetTr = tBody.childNodes[y]
       const targetTd = targetTr.childNodes[x]
-      const targetPreviewCell = targetTd.childNodes[0].childNodes[1] as HTMLElement
-      if (targetPreviewCell.className.includes('preview')) {
+      const targetPreviewCell = targetTd.childNodes[0].childNodes[0] as HTMLElement
+      if (targetPreviewCell.className.includes('focus-border')) {
         targetPreviewCell.focus()
         return true
       }
@@ -158,33 +159,26 @@ export default class CellWrap extends Vue {
 
   handCharInput (e: any) {
     const { $props } = this
-    const { editable, data } = $props
+    const { editable } = $props
     const { key } = e
     // 开始字符输入
     if (key.length === 1 && editable && !this.edit) {
-      // this.$emit('textChange', data, key)
-      // this.previewRef.innerText = ''
       this.edit = true
-      this.editRef.innerText = ''
+      this.focusRef.innerText = ''
     }
   }
 
-  handPreviewKeyDown (e: any) {
-    const { handMove, handCharInput } = this
-    handMove(e) || handCharInput(e)
-  }
-
-  handEditKeyDown (e: any) {
+  handNoEditKeyDown (e: any) {
     const { handMove } = this
     handMove(e)
   }
 
-  handPreViewFocus () {
-    this.$emit('currentFocus')
-    this.setTdFocusStyle()
+  handEditKeyDown (e: any) {
+    const { handMove, handCharInput } = this
+    handMove(e) || handCharInput(e)
   }
 
-  handPreViewBlur () {
+  handNoEditBlur () {
     this.setTdBlurStyle()
   }
 
@@ -194,16 +188,27 @@ export default class CellWrap extends Vue {
   }
 
   handTdClick () {
-    const { edit, previewRef } = this
-    if (!edit) previewRef.focus()
+    const { edit, focusRef } = this
+    if (!edit) focusRef.focus()
+  }
+
+  handFocus () {
+    const { setTdFocusStyle } = this
+    setTdFocusStyle()
+    this.$emit('currentFocus')
+  }
+
+  handNoEditFocus () {
+    const { handFocus } = this
+    handFocus()
   }
 
   handEditFocus () {
-    const { setTdFocusStyle, editRef } = this
-    setTdFocusStyle()
+    const { handFocus, focusRef } = this
+    handFocus()
     // 光标移至最后
     const range = window.getSelection()
-    range.selectAllChildren(editRef)
+    range.selectAllChildren(focusRef)
     range.collapseToEnd()
   }
 
@@ -212,7 +217,7 @@ export default class CellWrap extends Vue {
     this.edit = false
     const { data } = this.$props
     const { row, column: { property } } = data
-    const newText = this.editRef.innerText
+    const newText = this.focusRef.innerText
     if (row[property] !== newText) this.$emit('textChange', data, newText)
   }
 
@@ -237,14 +242,14 @@ export default class CellWrap extends Vue {
       overflow: hidden;
       width: auto;
       height: auto;
+      /*padding: 6px 10px;*/
+      padding: 3px 5px;
     }
   }
 
-  .preview {
-    padding: 6px 0;
+  .no-edit {
   }
 
   .text-edit {
-    padding: 6px 10px;
   }
 </style>
