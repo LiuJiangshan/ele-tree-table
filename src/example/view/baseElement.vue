@@ -31,7 +31,7 @@ export default class BaseElement extends Vue {
       this.data.push({
         id: `${index}`,
         name: `name${index}`,
-        logo: `logo${index}`,
+        logo: index === 0 ? '床前明月光，疑似地上霜。举头望明月，低头思故乡。' : `logo${index}`,
         type: `type${index}`,
         number1: `number1${index}`,
         number2: `number2${index}`,

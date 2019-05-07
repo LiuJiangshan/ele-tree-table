@@ -21,8 +21,23 @@ export default class CellWrap extends Vue {
 
   cellText = ''
 
+  get cellTextFromProp () {
+    // 初始化单元格文本
+    const { $props } = this
+    const { data: { row, column: { property } } } = $props
+    return row[property]
+  }
+
   updated () {
-    const { edit, focusRef } = this
+    const { edit, focusRef, $props, cellTextFromProp, cellText } = this
+    const { editable } = $props
+
+    if (editable) {
+      if (cellTextFromProp !== cellText) this.cellText = cellTextFromProp
+      // if (cellTextFromProp !== focusRef.innerText) {
+      //   focusRef.innerText = cellTextFromProp
+      // }
+    }
     if (edit) focusRef.focus()
   }
 
@@ -47,7 +62,7 @@ export default class CellWrap extends Vue {
   }
 
   mounted () {
-    const { td, cell, focusRef, handTdDbClick, handTdClick } = this
+    const { td, cell, focusRef, handTdDbClick, handTdClick, cellTextFromProp } = this
     if (focusRef) {
       td.style.paddingTop = '0'
       td.style.paddingBottom = '0'
@@ -59,9 +74,7 @@ export default class CellWrap extends Vue {
     }
     td.addEventListener('dblclick', handTdDbClick)
     td.addEventListener('click', handTdClick)
-    // 初始化单元格文本
-    const { data: { row, column: { property } } } = this.$props
-    this.cellText = row[property]
+    this.cellText = cellTextFromProp
   }
 
   //
