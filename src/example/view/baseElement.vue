@@ -1,6 +1,7 @@
 <template>
-  <el-table :indent="5" size="mini" highlight-current-row lazy :load='load' :data="data" max-height="500"
-            style="width:100%;" border row-key="id" @text-change="handTextChange">
+  <el-table :indent="5" size="mini" lazy :load='load' :data="data" max-height="500"
+            style="width:100%;" row-key="id" @text-change="handTextChange" class="ljs-tree-table-default-theme"
+            :header-cell-style="{textAlign:'center',color:'#555555'}" :header-row-style="{backgroundColor:'#eeeeee'}">
     <focus-el-table-column width="250" fixed="left"/>
     <focus-el-table-column type="selection" width="50"/>
     <focus-el-table-column label="编号" prop="id" width="200"/>
@@ -65,6 +66,6 @@ export default class BaseElement extends Vue {
 }
 </script>
 
-<style scoped>
-
+<style lang="scss">
+  @import "~@/package/element/default-theme.scss";
 </style>

@@ -58,11 +58,12 @@ export default class CellWrap extends Vue {
 
   get editStyle () {
     const { edit } = this
-    return edit ? { color: '#000' } : { color: 'transparent', textShadow: '0 0 0 #000' }
+    return edit ? { color: '#666666' } : { color: 'transparent', textShadow: '0 0 0 #666666' }
   }
 
   mounted () {
-    const { td, cell, focusRef, handTdDbClick, handTdClick, cellTextFromProp } = this
+    const { td, cell, focusRef, handTdDbClick, handTdClick, cellTextFromProp, $props } = this
+    const { editable } = $props
     if (focusRef) {
       td.style.paddingTop = '0'
       td.style.paddingBottom = '0'
@@ -72,6 +73,7 @@ export default class CellWrap extends Vue {
 
       cell.style.height = '100%'
     }
+    td.classList.add(editable ? 'editable' : 'no-editable')
     td.addEventListener('dblclick', handTdDbClick)
     td.addEventListener('click', handTdClick)
     this.cellText = cellTextFromProp
@@ -235,8 +237,6 @@ export default class CellWrap extends Vue {
   }
 
   handEditInput (e: any) {
-    const { data } = e
-    if (!data) {}
   }
 }
 
@@ -258,11 +258,11 @@ export default class CellWrap extends Vue {
       /*padding: 6px 10px;*/
       padding: 3px 5px;
     }
-  }
 
-  .no-edit {
-  }
+    /*.no-edit {*/
+    /*}*/
 
-  .text-edit {
+    /*.text-edit {*/
+    /*}*/
   }
 </style>

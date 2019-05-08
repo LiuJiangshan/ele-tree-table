@@ -26,7 +26,7 @@ export default class FocusElTableColumn extends Vue {
 
   mounted () {
     // @ts-ignore
-    const { columnConfig, table, states } = this
+    const { columnConfig, table } = this
     const renderCell = columnConfig.renderCell
     // hook cell render
     const { fixed, editable } = this.$props
