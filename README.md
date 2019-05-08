@@ -1,6 +1,18 @@
-<a href="LICENSE">
-  <img src="https://img.shields.io/badge/License-MIT-yellow.svg">
-</a>
+<p align="center">
+  <a href="https://circleci.com/gh/LiuJiangshan/ljs-tree-table/tree/element">
+    <img src="https://img.shields.io/circleci/project/github/LiuJiangshan/ljs-tree-table/element.svg" alt="Build Status">
+  </a>
+  <a href="https://npmcharts.com/compare/ljs-tree-table?minimal=true">
+    <img src="https://img.shields.io/npm/dm/ljs-tree-table.svg" alt="Downloads">
+  </a>
+  <a href="https://www.npmjs.com/package/ljs-tree-table">
+    <img src="https://img.shields.io/npm/v/ljs-tree-table.svg" alt="Version">
+  </a>
+  <a href="https://www.npmjs.com/package/ljs-tree-table">
+    <img src="https://img.shields.io/npm/l/ljs-tree-table.svg" alt="License">
+  </a>
+  <br>
+</p>
 
 ### 介绍
 基于element-ui中的table组件,扩展了一些功能：键盘焦点控制、双击编辑
