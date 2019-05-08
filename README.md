@@ -14,6 +14,11 @@
   <br>
 </p>
 
+### 预览
+![avatar](preview1.png)
+
+![avatar](preview2.png)
+
 ### 介绍
 基于element-ui中的table组件,扩展了一些功能：键盘焦点控制、双击编辑
 
