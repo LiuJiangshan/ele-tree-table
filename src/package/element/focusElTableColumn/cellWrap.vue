@@ -47,13 +47,14 @@ export default class CellWrap extends Vue {
 
   setTdFocusStyle () {
     const { td } = this
-    td.style.outline = '#42fa35 1px solid'
-    td.style.outlineOffset = '-2px'
+    td.style.outline = 'none'
+    td.style.boxShadow = '0 0 1px 1px #42fa35 inset'
   }
 
   setTdBlurStyle () {
     const { td } = this
     td.style.outline = 'none'
+    td.style.boxShadow = 'none'
   }
 
   get editStyle () {
@@ -257,7 +258,7 @@ export default class CellWrap extends Vue {
       width: auto;
       height: auto;
       /*padding: 6px 10px;*/
-      padding: 3px 5px;
+      padding: 0 5px;
     }
 
     .no-edit {
