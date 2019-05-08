@@ -1,6 +1,6 @@
 {
   "name": "ljs-tree-table",
-  "version": "0.0.1-beta-4",
+  "version": "0.0.1-beta-5",
   "repository": {
     "type": "git",
     "url": "https://github.com/LiuJiangshan/ljs-tree-table.git"
@@ -30,14 +30,14 @@
   "license": "MIT",
   "dependencies": {
     "element-ui": "^2.8.2",
-    "ljs-sass": "^0.0.1",
+    "ljs-sass": "^0.0.1"
+  },
+  "devDependencies": {
     "register-service-worker": "^1.5.2",
     "vue": "^2.5.17",
     "vue-class-component": "^6.0.0",
     "vue-property-decorator": "^7.0.0",
-    "vue-router": "^3.0.1"
-  },
-  "devDependencies": {
+    "vue-router": "^3.0.1",
     "@types/jest": "^23.1.4",
     "@vue/cli-plugin-babel": "^3.0.5",
     "@vue/cli-plugin-eslint": "^3.0.5",
