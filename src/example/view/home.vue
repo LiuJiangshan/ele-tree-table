@@ -6,7 +6,6 @@
              active-text-color="#ffd04b">
       <el-menu-item index="/base-element">基于Element</el-menu-item>
       <el-menu-item index="/autosize-test">autosize-test</el-menu-item>
-      <el-menu-item index="/simple">简单展示</el-menu-item>
     </el-menu>
     <div style="width:100%;height:calc(100% - 61px)">
       <router-view/>
@@ -16,10 +15,9 @@
 
 <script lang="tsx">
 import { Component, Vue, Watch } from 'vue-property-decorator'
-import LjsTreeTable from '@/package/ljsTreeTable.vue'
 
 @Component({
-  components: { LjsTreeTable }
+  components: {}
 })
 export default class App extends Vue {
   activeItem = ''
