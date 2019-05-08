@@ -48,7 +48,7 @@ export default class CellWrap extends Vue {
   setTdFocusStyle () {
     const { td } = this
     td.style.outline = '#42fa35 1px solid'
-    td.style.outlineOffset = '-1px'
+    td.style.outlineOffset = '-2px'
   }
 
   setTdBlurStyle () {
@@ -166,6 +166,7 @@ export default class CellWrap extends Vue {
         break
       case 'Enter':
         moved = move(0, 1)
+        e.view.event.preventDefault()
         break
     }
     if (moved) e.view.event.preventDefault()
@@ -259,10 +260,10 @@ export default class CellWrap extends Vue {
       padding: 3px 5px;
     }
 
-    /*.no-edit {*/
-    /*}*/
+    .no-edit {
+    }
 
-    /*.text-edit {*/
-    /*}*/
+    .text-edit {
+    }
   }
 </style>

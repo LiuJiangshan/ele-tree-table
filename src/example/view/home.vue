@@ -8,7 +8,9 @@
       <el-menu-item index="/autosize-test">autosize-test</el-menu-item>
       <el-menu-item index="/simple">简单展示</el-menu-item>
     </el-menu>
-    <router-view/>
+    <div style="width:100%;height:calc(100% - 61px)">
+      <router-view/>
+    </div>
   </div>
 </template>
 
