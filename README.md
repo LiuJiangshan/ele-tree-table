@@ -46,7 +46,7 @@ npm install ele-tree-table
 or
 yarn add ele-tree-table
 
-// 模块未编译,vue.config.js中需配置
+// 模块未编译为commonjs,vue.config.js中需配置
 transpileDependencies: ['ele-tree-table']
 ```
 

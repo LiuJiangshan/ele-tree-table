@@ -1,19 +1,20 @@
 {
   "name": "ele-tree-table",
-  "version": "0.0.1",
+  "version": "0.0.1-beta-1",
   "repository": {
     "type": "git",
     "url": "https://github.com/LiuJiangshan/ele-tree-table.git"
   },
   "scripts": {
-    "example": "vue-cli-service serve src/example/index.ts",
-    "build:example": "vue-cli-service build --report src/example/index.ts",
-    "build:lib": "vue-cli-service build --target lib --dest lib --report src/index.ts",
+    "example": "vue-cli-service serve example/index.ts",
+    "build:example": "vue-cli-service build --report example/index.ts",
+    "build:lib": "vue-cli-service build --report --target lib --dest lib --formats commonjs src/index.ts",
     "build": "npm run build:example && npm run build:lib",
     "lint": "vue-cli-service lint",
     "test:unit": "vue-cli-service test:unit"
   },
   "main": "src/index.ts",
+  "typings": "src/index.ts",
   "author": {
     "name": "liujiangshan",
     "email": "ljs234@qq.com"
@@ -31,17 +32,11 @@
   "description": "treetable by vue",
   "license": "MIT",
   "dependencies": {
-    "ljs-sass": "^0.0.1"
+    "ljs-sass": "^0.0.1",
+    "vue-snotify": "^3.2.1"
   },
   "devDependencies": {
-    "element-ui": "^2.8.2",
-    "register-service-worker": "^1.5.2",
-    "vue": "^2.5.17",
-    "vue-class-component": "^6.0.0",
-    "vue-property-decorator": "^7.0.0",
-    "vue-router": "^3.0.1",
     "@types/jest": "^23.1.4",
-    "ele-tree-table": "file:./",
     "@vue/cli-plugin-babel": "^3.0.5",
     "@vue/cli-plugin-eslint": "^3.0.5",
     "@vue/cli-plugin-pwa": "^3.0.5",
@@ -54,12 +49,19 @@
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
     "babel-plugin-component": "^1.1.1",
+    "ele-tree-table": "file:./",
+    "element-ui": "^2.8.2",
     "eslint": "^5.8.0",
     "eslint-plugin-vue": "^5.0.0-0",
     "node-sass": "^4.9.0",
+    "register-service-worker": "^1.5.2",
     "sass-loader": "^7.0.1",
     "ts-jest": "^23.0.0",
     "typescript": "~3.1.1",
+    "vue": "^2.5.17",
+    "vue-class-component": "^6.0.0",
+    "vue-property-decorator": "^7.0.0",
+    "vue-router": "^3.0.1",
     "vue-template-compiler": "^2.5.17"
   }
 }

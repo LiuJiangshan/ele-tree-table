@@ -7,8 +7,8 @@ function resolve (dir) {
 module.exports = {
   resolve: {
     alias: {
-      '@': resolve('src'),
-      '@e2e': resolve('tests/e2e/')
+      '@src': resolve('src'),
+      '@example': resolve('example')
     }
   }
 }

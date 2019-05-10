@@ -4,8 +4,7 @@
              background-color="#545c64"
              text-color="#fff"
              active-text-color="#ffd04b">
-      <el-menu-item index="/base-element">基于Element</el-menu-item>
-      <el-menu-item index="/autosize-test">autosize-test</el-menu-item>
+      <el-menu-item index="/base-element">基于element-ui表格</el-menu-item>
     </el-menu>
     <div style="width:100%;height:calc(100% - 61px)">
       <router-view/>
