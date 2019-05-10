@@ -21,8 +21,12 @@
     }
 
     .cell-wrap {
+      padding-top: 6px;
+      padding-bottom: 6px;
+
       > div {
-        line-height: 36px;
+        line-height: 14px;
+        min-height: 14px;
       }
     }
   }

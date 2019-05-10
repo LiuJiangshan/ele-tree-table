@@ -250,8 +250,7 @@ export default class CellWrap extends Vue {
   .cell-wrap {
 
     > div {
-      line-height: 23px;
-      min-height: 23px;
+      /*line-height: 20px;*/
       outline: none;
       word-break: break-all;
       overflow: hidden;

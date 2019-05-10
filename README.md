@@ -45,14 +45,18 @@ props:
 npm install ljs-tree-table
 or
 yarn add ljs-tree-table
+
+// 模块未编译,vue.config.js中需配置
+transpileDependencies: ['ljs-tree-table']
 ```
 
 ### 使用
 ```bash
 详见 src/example/view/baseElement.vue
 ```
-### 其他
-```javascript
-// 模块未编译,vue.config.js需配置
-transpileDependencies: ['ljs-tree-table']
-```
+### 运行
+
+| 命令              | 介绍     |
+| ----------------- | -------- |
+| npm run example   | 运行demo |
+| npm build:example | 编译组件 |
