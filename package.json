@@ -1,9 +1,9 @@
 {
-  "name": "ljs-tree-table",
-  "version": "0.0.1-beta-6",
+  "name": "ele-tree-table",
+  "version": "0.0.1",
   "repository": {
     "type": "git",
-    "url": "https://github.com/LiuJiangshan/ljs-tree-table.git"
+    "url": "https://github.com/LiuJiangshan/ele-tree-table.git"
   },
   "scripts": {
     "example": "vue-cli-service serve src/example/index.ts",
@@ -26,13 +26,13 @@
     "typescript"
   ],
   "description": "treetable by vue",
-  "main": "src/lib.js",
+  "main": "src/index.js",
   "license": "MIT",
   "dependencies": {
-    "element-ui": "^2.8.2",
     "ljs-sass": "^0.0.1"
   },
   "devDependencies": {
+    "element-ui": "^2.8.2",
     "register-service-worker": "^1.5.2",
     "vue": "^2.5.17",
     "vue-class-component": "^6.0.0",

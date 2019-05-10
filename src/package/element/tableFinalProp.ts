@@ -1,7 +1,7 @@
 const tableFinamProp = {
   indent: 5,
   size: 'mini',
-  class: 'ljs-tree-table-default-theme',
+  class: 'ele-tree-table-default-theme',
   headerCellStyle: { textAlign: 'center', color: '#555555' },
   headerRowStyle: { backgroundColor: '#eeeeee' }
 }

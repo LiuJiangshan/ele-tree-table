@@ -1,15 +1,15 @@
 <p align="center">
-  <a href="https://circleci.com/gh/LiuJiangshan/ljs-tree-table/tree/element">
-    <img src="https://img.shields.io/circleci/project/github/LiuJiangshan/ljs-tree-table/element.svg" alt="Build Status">
+  <a href="https://circleci.com/gh/LiuJiangshan/ele-tree-table/tree/element">
+    <img src="https://img.shields.io/circleci/project/github/LiuJiangshan/ele-tree-table/element.svg" alt="Build Status">
   </a>
-  <a href="https://npmcharts.com/compare/ljs-tree-table?minimal=true">
-    <img src="https://img.shields.io/npm/dm/ljs-tree-table.svg" alt="Downloads">
+  <a href="https://npmcharts.com/compare/ele-tree-table?minimal=true">
+    <img src="https://img.shields.io/npm/dm/ele-tree-table.svg" alt="Downloads">
   </a>
-  <a href="https://www.npmjs.com/package/ljs-tree-table">
-    <img src="https://img.shields.io/npm/v/ljs-tree-table.svg" alt="Version">
+  <a href="https://www.npmjs.com/package/ele-tree-table">
+    <img src="https://img.shields.io/npm/v/ele-tree-table.svg" alt="Version">
   </a>
-  <a href="https://www.npmjs.com/package/ljs-tree-table">
-    <img src="https://img.shields.io/npm/l/ljs-tree-table.svg" alt="License">
+  <a href="https://www.npmjs.com/package/ele-tree-table">
+    <img src="https://img.shields.io/npm/l/ele-tree-table.svg" alt="License">
   </a>
   <br>
 </p>
@@ -42,12 +42,12 @@ props:
 ### 安装
 
 ```bash
-npm install ljs-tree-table
+npm install ele-tree-table
 or
-yarn add ljs-tree-table
+yarn add ele-tree-table
 
 // 模块未编译,vue.config.js中需配置
-transpileDependencies: ['ljs-tree-table']
+transpileDependencies: ['ele-tree-table']
 ```
 
 ### 使用
