@@ -26,8 +26,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import FocusElTableColumn from '@/package/element/focusElTableColumn'
-import TableFinalProp from '@/package/element/tableFinalProp'
+import { FocusElTableColumn, TableFinalProp } from 'ele-tree-table'
 
 @Component({
   components: { FocusElTableColumn }
@@ -77,5 +76,5 @@ export default class BaseElement extends Vue {
 </script>
 
 <style lang="scss">
-  @import "~@/package/element/default-theme.scss";
+  @import "~ele-tree-table/src/default-theme";
 </style>

@@ -59,4 +59,5 @@ transpileDependencies: ['ele-tree-table']
 | 命令              | 介绍     |
 | ----------------- | -------- |
 | npm run example   | 运行demo |
-| npm build:example | 编译组件 |
+| npm build:example | 编译实例 |
+| npm build:lib | 编译组件 |

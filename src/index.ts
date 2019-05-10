@@ -1,6 +1,5 @@
-import TableFinalProp from '@/package/element/tableFinalProp'
-import FocusElTableColumn from '@/package/element/focusElTableColumn'
+import tableFinalProp from './tableFinalProp'
+import focusElTableColumn from './focusElTableColumn.vue'
 
-export const tableFinalProp = TableFinalProp
-
-export default FocusElTableColumn
+export const TableFinalProp = tableFinalProp
+export const FocusElTableColumn = focusElTableColumn

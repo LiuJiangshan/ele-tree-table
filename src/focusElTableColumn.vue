@@ -2,7 +2,7 @@
 import { Component, Vue } from 'vue-property-decorator'
 import { Table, TableColumn } from 'element-ui'
 import { CreateElement } from 'vue'
-import CellWrap from '@/package/element/focusElTableColumn/cellWrap.vue'
+import CellWrap from './cellWrap.vue'
 
 /**
  * 事件:textChange
@@ -33,10 +33,11 @@ export default class FocusElTableColumn extends Vue {
     if (!fixed) {
       columnConfig.renderCell = (h: CreateElement, data: any) => {
         const cell = renderCell(h, data)
+        const textChange = table.$listeners.textChange || table.$listeners['text-change']
         return h(CellWrap, {
           props: { editable, data },
           on: {
-            textChange: table.$listeners.textChange || table.$listeners['text-change'],
+            textChange,
             currentFocus () {
               const { row } = data
               table.setCurrentRow(row)
@@ -48,6 +49,3 @@ export default class FocusElTableColumn extends Vue {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-</style>

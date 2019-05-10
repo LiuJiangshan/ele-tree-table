@@ -8,9 +8,12 @@
   "scripts": {
     "example": "vue-cli-service serve src/example/index.ts",
     "build:example": "vue-cli-service build --report src/example/index.ts",
+    "build:lib": "vue-cli-service build --target lib --dest lib --report src/index.ts",
+    "build": "npm run build:example && npm run build:lib",
     "lint": "vue-cli-service lint",
     "test:unit": "vue-cli-service test:unit"
   },
+  "main": "src/index.ts",
   "author": {
     "name": "liujiangshan",
     "email": "ljs234@qq.com"
@@ -26,7 +29,6 @@
     "typescript"
   ],
   "description": "treetable by vue",
-  "main": "src/index.js",
   "license": "MIT",
   "dependencies": {
     "ljs-sass": "^0.0.1"
@@ -39,6 +41,7 @@
     "vue-property-decorator": "^7.0.0",
     "vue-router": "^3.0.1",
     "@types/jest": "^23.1.4",
+    "ele-tree-table": "file:./",
     "@vue/cli-plugin-babel": "^3.0.5",
     "@vue/cli-plugin-eslint": "^3.0.5",
     "@vue/cli-plugin-pwa": "^3.0.5",

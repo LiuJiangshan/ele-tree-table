@@ -243,27 +243,3 @@ export default class CellWrap extends Vue {
 }
 
 </script>
-
-<style lang="scss" scoped>
-  @import "~ljs-sass/src/mixin";
-
-  .cell-wrap {
-
-    > div {
-      /*line-height: 20px;*/
-      outline: none;
-      word-break: break-all;
-      overflow: hidden;
-      width: auto;
-      height: auto;
-      /*padding: 6px 10px;*/
-      padding: 0 5px;
-    }
-
-    .no-edit {
-    }
-
-    .text-edit {
-    }
-  }
-</style>
