@@ -2,7 +2,7 @@
 import { Component, Vue } from 'vue-property-decorator'
 import { Table, TableColumn } from 'element-ui'
 import { CreateElement } from 'vue'
-import CellWrap from '@src/cell-wrap.vue'
+import CellWrap from './cell-wrap.vue'
 
 /**
  * 事件:textChange
