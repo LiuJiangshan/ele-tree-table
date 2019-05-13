@@ -32,8 +32,7 @@
   "description": "treetable by vue",
   "license": "MIT",
   "dependencies": {
-    "ljs-sass": "^0.0.1",
-    "vue-snotify": "^3.2.1"
+    "ljs-sass": "^0.0.1"
   },
   "devDependencies": {
     "@types/jest": "^23.1.4",
